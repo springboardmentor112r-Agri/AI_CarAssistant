@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Lease Extractor</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="page">
+        <div class="app-top">
+            <div class="hero-badge">AI Lease Extractor</div>
+            <button class="ghost logout" type="button" onclick="logout()">Log out</button>
+        </div>
+        <header class="hero">
+            <h1>Extract lease insights in seconds</h1>
+            <p class="hero-subtitle">Upload a PDF or image and get structured car lease information output instantly.</p>
+        </header>
+
+        <section class="card">
+            <div class="upload-row">
+                <label class="file-pill" for="fileInput">Choose PDF/Image</label>
+                <input type="file" id="fileInput" accept=".pdf,image/*" style="display:none;" />
+                <button class="primary" onclick="uploadFile()">Upload & Extract</button>
+            </div>
+
+            <div class="result-panel">
+                <div class="result-header">
+                    <span>Output</span>
+                </div>
+                <div id="loading" class="loading-spinner" style="display:none;">
+                    <div class="spinner"></div>
+                    <p>Extracting data...</p>
+                </div>
+                <pre id="result" class="result-content"></pre>
+            </div>
+
+            <div id="chatSection" class="chat-section" style="display:none;">
+                <div class="chat-header">
+                    <span>Ask About Your Lease</span>
+                    <span class="chat-hint">AI Assistant</span>
+                </div>
+                <div id="chatBox" class="chat-messages"></div>
+                <div class="chat-input-row">
+                    <input 
+                        id="chatInput" 
+                        type="text" 
+                        placeholder="Ask a question about this lease..."
+                        onkeypress="handleChatKeyPress(event)"
+                    />
+                    <button class="chat-send" onclick="sendChat()">Send</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

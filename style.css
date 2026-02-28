@@ -1,0 +1,506 @@
+:root {
+    --ink: #0f172a;
+    --muted: #5b6478;
+    --accent: #0ea5e9;
+    --accent-dark: #0369a1;
+    --surface: #ffffff;
+    --canvas: #eef2f8;
+    --ring: rgba(14, 165, 233, 0.35);
+    --border: rgba(15, 23, 42, 0.1);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Poppins", "Segoe UI", sans-serif;
+    background: radial-gradient(circle at top, #f8fafc 0%, #e8eef7 45%, #dbe6f5 100%);
+    color: var(--ink);
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 20px 64px;
+}
+
+.intro-screen {
+    width: min(1040px, 100%);
+}
+
+.intro-shell {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: 28px;
+    align-items: center;
+}
+
+.intro-copy {
+    display: grid;
+    gap: 16px;
+}
+
+.intro-copy h1 {
+    margin: 0;
+    font-size: clamp(32px, 4vw, 46px);
+    line-height: 1.1;
+}
+
+.intro-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.intro-note {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.intro-card {
+    background: var(--surface);
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    display: grid;
+    gap: 18px;
+}
+
+.intro-tabs {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    background: #f1f5f9;
+    border-radius: 12px;
+    padding: 6px;
+}
+
+.tab-button {
+    border: none;
+    background: transparent;
+    padding: 10px 12px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--muted);
+    transition: all 0.2s ease;
+}
+
+.tab-button.active {
+    background: white;
+    color: var(--ink);
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+}
+
+.intro-panel {
+    display: grid;
+    gap: 12px;
+}
+
+.intro-panel label {
+    display: grid;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.intro-panel input {
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    font-family: "Poppins", "Segoe UI", sans-serif;
+    font-size: 14px;
+}
+
+.password-field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.password-field input {
+    flex: 1;
+}
+
+.peek-button {
+    padding: 8px;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: #f8fafc;
+    color: var(--ink);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.peek-button svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+}
+
+.intro-panel input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--ring);
+}
+
+.fine-print {
+    margin: 0;
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.form-error {
+    min-height: 18px;
+    font-size: 13px;
+    color: #b91c1c;
+}
+
+button.ghost {
+    padding: 12px 18px;
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+button.link {
+    background: transparent;
+    border: none;
+    color: var(--accent-dark);
+    font-weight: 600;
+    text-align: left;
+    padding: 0;
+    cursor: pointer;
+}
+
+.page {
+    width: min(920px, 100%);
+    display: grid;
+    gap: 24px;
+}
+
+.app-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+button.logout {
+    padding: 10px 16px;
+}
+
+.hero {
+    text-align: center;
+    display: grid;
+    gap: 12px;
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-self: center;
+    justify-self: center;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: rgba(14, 165, 233, 0.1);
+    color: var(--accent-dark);
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    font-size: 12px;
+}
+
+.hero h1 {
+    margin: 0;
+    font-size: clamp(28px, 3vw, 40px);
+    font-weight: 700;
+}
+
+.hero-subtitle {
+    margin: 0;
+    color: var(--muted);
+    font-size: 16px;
+}
+
+.card {
+    background: var(--surface);
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: 0 20px 50px rgba(15, 23, 42, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    display: grid;
+    gap: 20px;
+}
+
+.upload-row {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 12px;
+    align-items: center;
+}
+
+.file-pill {
+    background: #e2e8f0;
+    color: var(--ink);
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.file-pill:hover {
+    border-color: var(--accent);
+}
+
+input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    background: #f8fafc;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+}
+
+button.primary {
+    padding: 12px 18px;
+    background: linear-gradient(135deg, var(--accent), #38bdf8);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 12px 24px rgba(14, 165, 233, 0.3);
+}
+
+button.primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 16px 30px rgba(14, 165, 233, 0.35);
+}
+
+.result-panel {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: #0b1220;
+    color: #e2e8f0;
+    overflow: hidden;
+}
+
+.result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: rgba(15, 23, 42, 0.8);
+    font-weight: 600;
+}
+
+.result-hint {
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.result-content {
+    margin: 0;
+    padding: 16px;
+    font-family: "Poppins", "Segoe UI", sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    max-height: 320px;
+    overflow: auto;
+    white-space: pre-wrap;
+}
+
+.result-content:empty::before {
+    content: "Your Doucment information will appear here after uploading and processing the PDF.";
+    color: #64748b;
+}
+
+.loading-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 16px;
+    gap: 16px;
+}
+
+.loading-spinner p {
+    margin: 0;
+    color: #64748b;
+    font-size: 14px;
+}
+
+.spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid rgba(226, 232, 240, 0.2);
+    border-top-color: #38bdf8;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 720px) {
+    .intro-shell {
+        grid-template-columns: 1fr;
+    }
+
+    .upload-row {
+        grid-template-columns: 1fr;
+    }
+
+    .file-pill {
+        width: fit-content;
+    }
+
+    button.primary {
+        width: 100%;
+    }
+}
+
+/* Chat Interface Styles */
+.chat-section {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface);
+    display: flex;
+    flex-direction: column;
+    max-height: 500px;
+    overflow: hidden;
+}
+
+.chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: rgba(15, 23, 42, 0.05);
+    border-bottom: 1px solid var(--border);
+    font-weight: 600;
+}
+
+.chat-hint {
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.message {
+    display: flex;
+    margin-bottom: 8px;
+}
+
+.user-message {
+    justify-content: flex-end;
+}
+
+.user-message span {
+    background: linear-gradient(135deg, var(--accent), #38bdf8);
+    color: white;
+    padding: 10px 14px;
+    border-radius: 12px;
+    max-width: 70%;
+    word-wrap: break-word;
+    font-size: 14px;
+}
+
+.bot-message span {
+    background: #f1f5f9;
+    color: var(--ink);
+    padding: 10px 14px;
+    border-radius: 12px;
+    max-width: 70%;
+    word-wrap: break-word;
+    font-size: 14px;
+}
+
+.message.loading {
+    justify-content: flex-start;
+}
+
+.chat-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(226, 232, 240, 0.8);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+.chat-input-row {
+    display: flex;
+    gap: 8px;
+    padding: 12px 16px;
+    border-top: 1px solid var(--border);
+    background: #f8fafc;
+}
+
+#chatInput {
+    flex: 1;
+    padding: 10px 12px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-family: "Poppins", "Segoe UI", sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+}
+
+#chatInput:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--ring);
+}
+
+.chat-send {
+    padding: 10px 16px;
+    background: linear-gradient(135deg, var(--accent), #38bdf8);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.chat-send:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+}
+
+@media (max-width: 720px) {
+    .chat-section {
+        max-height: 400px;
+    }
+
+    .user-message span,
+    .bot-message span {
+        max-width: 85%;
+    }
+}
