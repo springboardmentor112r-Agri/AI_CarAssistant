@@ -5,9 +5,9 @@ from modules.vin_lookup import get_vehicle_details
 from modules.risk_analysis import analyze_risk
 from modules.ai_summary import generate_summary
 from modules.chatbot import ask_contract_question
+from modules.negotiation_advisor import suggest_negotiation_points
 
 
-# Page config
 st.set_page_config(
     page_title="Car Lease Agreement Analyzer",
     page_icon="🚗",
@@ -15,7 +15,7 @@ st.set_page_config(
 )
 
 
-# Sidebar navigation
+# Sidebar
 st.sidebar.title("🚗 Lease Analyzer")
 
 page = st.sidebar.radio(
@@ -31,15 +31,16 @@ if page == "Home":
     st.title("🚗 Car Lease Agreement Analyzer")
 
     st.markdown("""
-    ## Understand Your Car Lease or Loan Agreement Instantly
+    ## Understand Your Car Lease Agreement Instantly
 
     This AI-powered tool helps you:
 
-    ✔ Extract important financial terms  
-    ✔ Verify vehicle details using VIN  
-    ✔ Detect risky clauses in the contract  
-    ✔ Get a simple explanation of the agreement  
-    ✔ Ask questions about the contract using AI
+    ✔ Extract financial terms from lease contracts  
+    ✔ Verify vehicle information using VIN  
+    ✔ Detect risky clauses automatically  
+    ✔ Generate a simple AI explanation  
+    ✔ Suggest negotiation strategies  
+    ✔ Ask questions about the contract
     """)
 
 
@@ -73,6 +74,9 @@ elif page == "Analyzer":
 
             st.session_state["contract_data"] = contract_data
 
+
+            # ---------------- FINANCIAL OVERVIEW ----------------
+
             st.divider()
             st.subheader("📊 Contract Financial Overview")
 
@@ -99,9 +103,12 @@ elif page == "Analyzer":
                 st.metric("Interest Rate", f"{contract_data.get('Interest_Rate','N/A')}%")
 
 
+            # ---------------- VIN LOOKUP ----------------
+
             vehicle_info = {}
 
             if "VIN" in contract_data:
+
                 vin = contract_data["VIN"]
                 vehicle_info = get_vehicle_details(vin)
 
@@ -124,17 +131,52 @@ elif page == "Analyzer":
                 st.info(f"**Manufacturer:** {vehicle_info.get('Manufacturer','N/A')}")
 
 
-            risks = analyze_risk(contract_data)
+            # ---------------- RISK ANALYSIS ----------------
+
+            risk_result = analyze_risk(contract_data)
+
+            risks = risk_result["risks"]
+            score = risk_result["score"]
+            level = risk_result["level"]
 
             st.divider()
             st.subheader("⚠ Risk Analysis")
 
+            st.metric("Contract Fairness Score", f"{score}/100")
+
+            st.progress(score / 100)
+
+            if level == "LOW":
+                st.success(f"Risk Level: {level}")
+
+            elif level == "MEDIUM":
+                st.warning(f"Risk Level: {level}")
+
+            else:
+                st.error(f"Risk Level: {level}")
+
             if len(risks) == 0:
-                st.success("✅ No major financial risks detected.")
+                st.success("No major financial risks detected.")
             else:
                 for r in risks:
                     st.error(f"⚠ {r}")
 
+
+            # ---------------- NEGOTIATION SUGGESTIONS ----------------
+
+            suggestions = suggest_negotiation_points(contract_data)
+
+            st.divider()
+            st.subheader("💡 Negotiation Suggestions")
+
+            if len(suggestions) == 0:
+                st.success("Terms appear reasonable. Negotiation may not be necessary.")
+            else:
+                for s in suggestions:
+                    st.info(f"• {s}")
+
+
+            # ---------------- AI SUMMARY ----------------
 
             summary = generate_summary(contract_data, vehicle_info, risks)
 
@@ -143,6 +185,8 @@ elif page == "Analyzer":
 
             st.write(summary)
 
+
+    # ---------------- CHATBOT ----------------
 
     st.divider()
     st.subheader("💬 Ask Questions About the Contract")
@@ -172,18 +216,21 @@ elif page == "About":
     st.title("About This Project")
 
     st.markdown("""
-    **Car Lease Agreement Analyzer** is an AI-powered system designed to help users understand
-    complex vehicle lease or loan agreements.
+    **Car Lease Agreement Analyzer**
 
-    Features include:
+    This AI system helps users understand complex vehicle lease agreements by automatically analyzing contracts.
 
-    • OCR-based document reading  
-    • Automatic contract data extraction  
-    • VIN verification using government vehicle APIs  
-    • Financial risk detection  
-    • AI-generated contract explanation  
-    • Interactive chatbot assistant
+    Features:
 
-    This project demonstrates how **AI and document intelligence**
+    • OCR-based contract reading  
+    • Financial clause extraction  
+    • VIN vehicle verification  
+    • Risk detection engine  
+    • Contract fairness scoring  
+    • Negotiation recommendations  
+    • AI-powered contract explanation  
+    • Interactive chatbot
+
+    The system demonstrates how **AI and document intelligence**
     can improve transparency in automotive financing.
     """)
