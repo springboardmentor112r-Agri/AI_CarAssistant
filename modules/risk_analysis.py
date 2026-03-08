@@ -1,26 +1,61 @@
 def analyze_risk(contract_data):
 
     risks = []
+    score = 100
 
-    # Interest rate risk
-    if "Interest_Rate" in contract_data:
-        rate = float(contract_data["Interest_Rate"])
+    down_payment = contract_data.get("Down_Payment")
+    if down_payment:
+        down_payment = int(down_payment)
 
-        if rate > 8:
-            risks.append("High interest rate detected")
+        if down_payment > 5000:
+            risks.append("Very high down payment")
+            score -= 20
+        elif down_payment > 3000:
+            risks.append("High down payment")
+            score -= 10
 
-    # Monthly payment risk
-    if "Monthly_Payment" in contract_data:
-        monthly = float(contract_data["Monthly_Payment"])
+    term = contract_data.get("Loan_Term_Months")
+    if term:
+        term = int(term)
 
-        if monthly > 700:
-            risks.append("Monthly payment is very high")
+        if term > 60:
+            risks.append("Extremely long lease term")
+            score -= 20
+        elif term > 48:
+            risks.append("Long lease term (>48 months)")
+            score -= 10
 
-    # Long loan term
-    if "Loan_Term_Months" in contract_data:
-        term = int(contract_data["Loan_Term_Months"])
+    mileage = contract_data.get("Mileage_Limit")
+    if mileage:
+        mileage = int(mileage)
 
-        if term > 72:
-            risks.append("Loan term is unusually long")
+        if mileage < 10000:
+            risks.append("Very low mileage allowance")
+            score -= 20
+        elif mileage < 12000:
+            risks.append("Low mileage allowance")
+            score -= 10
 
-    return risks
+    termination = contract_data.get("Termination_Fee")
+    if termination:
+        termination = int(termination)
+
+        if termination > 2000:
+            risks.append("Very high early termination fee")
+            score -= 15
+        elif termination > 1000:
+            risks.append("High early termination fee")
+            score -= 10
+
+    if score >= 80:
+        level = "LOW"
+    elif score >= 60:
+        level = "MEDIUM"
+    else:
+        level = "HIGH"
+
+    return {
+        "risks": risks,
+        "score": score,
+        "level": level
+    }
