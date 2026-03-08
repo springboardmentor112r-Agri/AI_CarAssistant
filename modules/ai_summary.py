@@ -1,33 +1,23 @@
 def generate_summary(contract_data, vehicle_info, risks):
 
-    summary = ""
+    down_payment = contract_data.get("Down_Payment", "unknown")
+    monthly_payment = contract_data.get("Monthly_Payment", "unknown")
+    term = contract_data.get("Loan_Term_Months", "unknown")
 
-    if "Vehicle_Model" in contract_data:
-        summary += f"This agreement is for a {contract_data['Vehicle_Model']}.\n\n"
+    make = vehicle_info.get("Make", "")
+    model = vehicle_info.get("Model", "")
+    year = vehicle_info.get("Model_Year", "")
 
-    if "Vehicle_Price" in contract_data:
-        summary += f"The vehicle price is ${contract_data['Vehicle_Price']}"
+    summary = f"""
+This lease agreement is for a {year} {make} {model}.
 
-    if "Down_Payment" in contract_data:
-        summary += f" with a down payment of ${contract_data['Down_Payment']}.\n\n"
-
-    if "Loan_Amount" in contract_data:
-        summary += f"The borrower is financing ${contract_data['Loan_Amount']}"
-
-    if "Loan_Term_Months" in contract_data:
-        summary += f" over {contract_data['Loan_Term_Months']} months"
-
-    if "Monthly_Payment" in contract_data:
-        summary += f" with monthly payments of ${contract_data['Monthly_Payment']}"
-
-    if "Interest_Rate" in contract_data:
-        summary += f" at an interest rate of {contract_data['Interest_Rate']}%.\n\n"
+The contract requires a down payment of ${down_payment} and monthly payments of ${monthly_payment} over {term} months.
+"""
 
     if len(risks) == 0:
-        summary += "No major financial risks were detected in the agreement."
-
+        summary += "\nNo major financial risks were detected."
     else:
-        summary += "The system detected the following potential risks:\n"
+        summary += "\nThe system detected the following risks:\n"
         for r in risks:
             summary += f"- {r}\n"
 
