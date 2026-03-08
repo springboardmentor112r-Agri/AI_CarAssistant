@@ -1,47 +1,32 @@
 import re
 
+
 def extract_contract_data(text):
 
     data = {}
 
-    # VIN
-    vin = re.search(r"VIN:\s*([A-Z0-9]+)", text)
+    vin = re.search(r"VIN\s*([A-Z0-9]{10,17})", text)
     if vin:
         data["VIN"] = vin.group(1)
 
-    # Vehicle model
-    model = re.search(r"Vehicle Make & Model:\s*(.*)", text)
-    if model:
-        data["Vehicle_Model"] = model.group(1)
+    payment = re.search(r"Lease Amount\s*\$?([\d,]+)", text)
+    if payment:
+        data["Monthly_Payment"] = payment.group(1).replace(",", "")
 
-    # Vehicle price
-    price = re.search(r"Vehicle Price:\s*\$([\d,]+)", text)
-    if price:
-        data["Vehicle_Price"] = price.group(1)
-
-    # Down payment
-    down = re.search(r"Down Payment:\s*\$([\d,]+)", text)
+    down = re.search(r"Down Payment\s*\$?([\d,]+)", text)
     if down:
-        data["Down_Payment"] = down.group(1)
+        data["Down_Payment"] = down.group(1).replace(",", "")
 
-    # Loan amount
-    loan = re.search(r"Loan Amount:\s*\$([\d,]+)", text)
-    if loan:
-        data["Loan_Amount"] = loan.group(1)
+    duration = re.search(r"Lease Duration\s*(\d+)", text)
+    if duration:
+        data["Loan_Term_Months"] = duration.group(1)
 
-    # Loan term
-    term = re.search(r"Loan Term:\s*(\d+)\s*Months", text)
-    if term:
-        data["Loan_Term_Months"] = term.group(1)
+    mileage = re.search(r"Mileage Limit\s*([\d,]+)", text)
+    if mileage:
+        data["Mileage_Limit"] = mileage.group(1).replace(",", "")
 
-    # Monthly payment
-    monthly = re.search(r"Monthly Installment:\s*\$([\d,]+)", text)
-    if monthly:
-        data["Monthly_Payment"] = monthly.group(1)
-
-    # Interest rate
-    interest = re.search(r"Interest Rate:\s*([\d\.]+)%", text)
-    if interest:
-        data["Interest_Rate"] = interest.group(1)
+    termination = re.search(r"Early Termination Fee\s*\$?([\d,]+)", text)
+    if termination:
+        data["Termination_Fee"] = termination.group(1).replace(",", "")
 
     return data
