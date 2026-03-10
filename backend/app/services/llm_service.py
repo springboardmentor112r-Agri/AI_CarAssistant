@@ -61,15 +61,33 @@ Contract Context:
 
 User Message: {user_message}
 
-Provide:
-1. A helpful response to their question
-2. A ready-to-send negotiation message they can use with the dealer (professional, assertive, polite)
+IMPORTANT FORMATTING RULES:
+- Always give answers in clear bullet points
+- Use simple everyday language — no complex financial jargon
+- Break down numbers clearly
+- Use emojis to make it friendly and easy to read
+- Make every point short and clear — one idea per point
+- If there are calculations show them step by step
+- End with a simple conclusion
 
 Format your response as JSON:
 {{
-  "response": "your helpful explanation",
-  "suggested_dealer_message": "ready-to-send message for the dealer"
+  "response": "your pointwise friendly response with emojis and clear formatting",
+  "suggested_dealer_message": "ready-to-send professional message for the dealer"
 }}
+
+Example response format:
+💰 Total Payment Breakdown:
+- Down Payment: $12,000
+- Monthly Payment: $1,450 x 24 months = $34,800
+- Total Amount: $46,800
+
+⚠️ Things to Watch Out For:
+- Early termination fee is high at $6,000
+- Mileage limit is only 6,000/year — very low
+
+✅ Bottom Line:
+- This deal is average — you can negotiate better terms
 """
 
 COMPARISON_PROMPT = """
@@ -81,10 +99,16 @@ Deal 1 (Primary):
 Deal 2 (Comparison):
 {deal2}
 
+IMPORTANT FORMATTING RULES:
+- Give answers in clear bullet points
+- Use simple everyday language
+- Use emojis to make it friendly
+- Show clear winner with reasons
+
 Return JSON:
 {{
   "winner": "deal1" or "deal2" or "tie",
-  "analysis": "detailed plain-english comparison",
+  "analysis": "detailed pointwise comparison with emojis and bullet points",
   "savings": number,
   "key_differences": ["list of key differences"]
 }}
@@ -94,7 +118,12 @@ Return JSON:
 def extract_sla_from_text(contract_text: str) -> dict:
     """Use Gemini to extract SLA fields from contract text."""
     prompt = EXTRACTION_PROMPT.format(contract_text=contract_text[:12000])
-    response = model.generate_content(prompt)
+    response = model.generate_content(
+        prompt,
+        generation_config=genai.types.GenerationConfig(
+            max_output_tokens=1000,
+        )
+    )
     raw = response.text.strip()
     raw = re.sub(r"```json|```", "", raw).strip()
     return json.loads(raw)
@@ -106,7 +135,12 @@ def get_negotiation_response(contract_context: str, user_message: str) -> dict:
         contract_context=contract_context[:4000],
         user_message=user_message,
     )
-    response = model.generate_content(prompt)
+    response = model.generate_content(
+        prompt,
+        generation_config=genai.types.GenerationConfig(
+            max_output_tokens=4096,
+        )
+    )
     raw = response.text.strip()
     raw = re.sub(r"```json|```", "", raw).strip()
     try:
@@ -121,7 +155,12 @@ def compare_deals(deal1: dict, deal2: dict) -> dict:
         deal1=json.dumps(deal1, indent=2),
         deal2=json.dumps(deal2, indent=2),
     )
-    response = model.generate_content(prompt)
+    response = model.generate_content(
+        prompt,
+        generation_config=genai.types.GenerationConfig(
+            max_output_tokens=1000,
+        )
+    )
     raw = response.text.strip()
     raw = re.sub(r"```json|```", "", raw).strip()
     try:
