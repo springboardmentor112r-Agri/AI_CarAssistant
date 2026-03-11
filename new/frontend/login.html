@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AutoLease - Log In</title>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="auth-landing auth-page">
+
+    <div class="hero__bg"></div>
+    <div class="hero__grid"></div>
+
+    <header class="auth-page-topbar container">
+        <a class="auth-page-back" href="auth.html">← Back</a>
+    </header>
+
+    <section class="auth-form-screen">
+        <div class="auth-form-container">
+            <div class="hero__logo auth-form-logo">
+                <div class="hero__logo-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-2-2.2-3.3C12.8 5.5 11.5 5 10 5H5.6C4.4 5 3.4 5.8 3.1 6.9L2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>
+                </div>
+                <span class="hero__logo-text">AutoLease</span>
+            </div>
+            <div class="auth-form-header">
+                <h1>Welcome Back</h1>
+                <p>Log in to your AutoLease account</p>
+            </div>
+
+            <form class="auth-form" onsubmit="handleLogin(event)">
+                <label>Email
+                    <input id="loginEmail" type="email" placeholder="you@example.com" required />
+                </label>
+                <label>Password
+                    <div class="password-field">
+                        <input id="loginPassword" type="password" placeholder="Enter your password" required />
+                        <button
+                            class="peek-button"
+                            type="button"
+                            aria-label="Show password"
+                            onmousedown="peekPassword('loginPassword', true)"
+                            onmouseup="peekPassword('loginPassword', false)"
+                            onmouseleave="peekPassword('loginPassword', false)"
+                            ontouchstart="peekPassword('loginPassword', true)"
+                            ontouchend="peekPassword('loginPassword', false)"
+                        >
+                            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                <path d="M12 5c-5.5 0-9.7 4.1-11 6.5 1.3 2.4 5.5 6.5 11 6.5s9.7-4.1 11-6.5C21.7 9.1 17.5 5 12 5zm0 10.5a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0-2.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" />
+                            </svg>
+                        </button>
+                    </div>
+                </label>
+                <div id="loginError" class="form-error" role="alert" aria-live="polite"></div>
+                <button class="btn btn-primary auth-submit" type="submit">Continue</button>
+                <button class="link" type="button" onclick="alert('Password recovery coming soon')">Forgot password?</button>
+            </form>
+
+            <div class="auth-form-footer">
+                <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
+            </div>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>

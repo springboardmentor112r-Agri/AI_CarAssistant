@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AutoLease</title>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="auth-landing main-page">
+
+    <div class="hero__bg"></div>
+    <div class="hero__grid"></div>
+
+    <header class="app-header">
+        <div class="brand-mark" aria-label="AutoLease">
+            <div class="brand-logo" aria-hidden="true">
+                <span class="brand-logo-top"></span>
+                <span class="brand-logo-body"></span>
+                <span class="brand-logo-wheel brand-logo-wheel-left"></span>
+                <span class="brand-logo-wheel brand-logo-wheel-right"></span>
+            </div>
+            <div class="brand-text">
+                <span class="brand-name">AutoLease</span>
+                <span class="brand-tagline">Smart lease insights</span>
+            </div>
+        </div>
+        <button class="btn btn-outline logout" type="button" onclick="logout()">Log out</button>
+    </header>
+
+    <aside class="sidebar-menu">
+        <div class="sidebar-item" id="nav-ai" onclick="showSection('ai')">
+            <div class="sidebar-item-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M12 6v6l4 2.5"/></svg>
+            </div>
+            <span class="sidebar-item-label">AI Lease Analysis</span>
+        </div>
+        <div class="sidebar-item" id="nav-chat" onclick="showSection('chat')">
+            <div class="sidebar-item-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <span class="sidebar-item-label">AI Chat</span>
+        </div>
+        <div class="sidebar-item" id="nav-risk" onclick="showSection('risk')">
+            <div class="sidebar-item-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><path d="M12 3a9 9 0 1 0 0 18 9 9 0 1 0 0-18z"/><path d="M12 7v10"/><path d="M8 12h8"/></svg>
+            </div>
+            <span class="sidebar-item-label">Lease Risk Score</span>
+        </div>
+        <div class="sidebar-item" id="nav-summary" onclick="showSection('summary')">
+            <div class="sidebar-item-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="13" x2="12" y2="17"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+            </div>
+            <span class="sidebar-item-label">Simple Contract Summary</span>
+        </div>
+    </aside>
+
+    <div class="page">
+        <section id="introScreen" class="intro-screen main-hero" style="display: flex;">
+            <div class="intro-shell">
+                <div class="intro-copy">
+                    <div class="hero__logo main-hero-logo">
+                        <div class="hero__logo-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-2-2.2-3.3C12.8 5.5 11.5 5 10 5H5.6C4.4 5 3.4 5.8 3.1 6.9L2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>
+                        </div>
+                        <span class="hero__logo-text">AutoLease</span>
+                    </div>
+                    <h1>Extract Lease Insights<br /><span>in Seconds</span></h1>
+                    <p class="hero__desc">Upload a PDF or image and get structured lease data instantly, then chat with AI to understand costs, clauses, and risks in simple language.</p>
+                    <div class="hero__buttons">
+                        <button class="btn btn-outline" type="button" onclick="showSection('ai')">Get Started</button>
+                    </div>
+                    <div class="intro-note">Secure analysis. Fast extraction. Smart lease answers.</div>
+                    <div class="hero__scanner">
+                        <div class="hero__scanner-line"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div id="section-ai" class="page-content" style="display:none;">
+            <div class="section-back-row">
+                <button class="section-back-btn" onclick="goBack()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                    Back
+                </button>
+            </div>
+            <section class="card">
+                <div class="upload-row">
+                    <label class="file-pill" for="fileInput">Choose PDF/Image</label>
+                    <input type="file" id="fileInput" accept=".pdf,image/*" style="display:none;" />
+                    <button class="btn btn-primary upload-action" onclick="uploadFile()">Upload & Extract</button>
+                </div>
+
+            <div class="result-panel">
+                <div class="result-header">
+                    <span>Output</span>
+                </div>
+                <div id="loading" class="loading-spinner" style="display:none;">
+                    <div class="spinner"></div>
+                    <p>Extracting data...</p>
+                </div>
+                <pre id="result" class="result-content"></pre>
+            </div>
+
+            <div id="uploadSuccessBanner" class="upload-success-banner" style="display:none;">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                <span>Lease extracted successfully! Ask questions in</span>
+                <button class="go-chat-btn" onclick="showSection('chat')">AI Chat &rarr;</button>
+            </div>
+            </section>
+        </div>
+
+        <div id="section-chat" class="page-content" style="display:none;">
+            <div class="section-back-row">
+                <button class="section-back-btn" onclick="goBack()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                    Back
+                </button>
+            </div>
+            <section class="card">
+                <div class="chat-section" style="display:block;">
+                    <div class="chat-header">
+                        <span>Ask About Your Lease</span>
+                        <span class="chat-hint">AI Assistant</span>
+                    </div>
+                    <div id="chatBox" class="chat-messages">
+                        <div class="message bot-message"><span>Hi! Upload a lease document first, then I can answer your questions about it.</span></div>
+                    </div>
+                    <div class="chat-input-row">
+                        <input
+                            id="chatInput"
+                            type="text"
+                            placeholder="Ask a question about this lease..."
+                            onkeypress="handleChatKeyPress(event)"
+                        />
+                        <button class="chat-send" onclick="sendChat()">Send</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div id="section-risk" class="page-content placeholder-section" style="display:none;">
+            <div class="placeholder-card">
+                <div class="placeholder-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                </div>
+                <h2>Lease Risk Score</h2>
+                <p>Coming soon — get an instant risk assessment with a detailed breakdown of potential issues in your lease.</p>
+            </div>
+        </div>
+
+        <div id="section-summary" class="page-content placeholder-section" style="display:none;">
+            <div class="placeholder-card">
+                <div class="placeholder-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                </div>
+                <h2>Simple Contract Summary</h2>
+                <p>Coming soon — convert complex lease documents into clear, easy-to-understand summaries.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,8 +1,43 @@
+function goBack() {
+    // Hide all sections and remove active states
+    ['ai', 'chat', 'risk', 'summary'].forEach(function(s) {
+        var el = document.getElementById('section-' + s);
+        if (el) el.style.display = 'none';
+        var nav = document.getElementById('nav-' + s);
+        if (nav) nav.classList.remove('active');
+    });
+    // Show the hero
+    var hero = document.getElementById('introScreen');
+    if (hero) hero.style.display = 'flex';
+}
+
+function showSection(name) {
+    // Hide hero
+    const hero = document.getElementById('introScreen');
+    if (hero) hero.style.display = 'none';
+
+    // Hide all sections
+    ['ai', 'chat', 'risk', 'summary'].forEach(function(s) {
+        var el = document.getElementById('section-' + s);
+        if (el) el.style.display = 'none';
+        var nav = document.getElementById('nav-' + s);
+        if (nav) nav.classList.remove('active');
+    });
+
+    // Show the selected section (block for content sections, flex for placeholders)
+    var target = document.getElementById('section-' + name);
+    if (target) target.style.display = (name === 'risk' || name === 'summary') ? 'flex' : 'block';
+
+    // Mark active sidebar item
+    var navItem = document.getElementById('nav-' + name);
+    if (navItem) navItem.classList.add('active');
+}
+
 async function uploadFile() {
     const fileInput = document.getElementById("fileInput");
     const result = document.getElementById("result");
     const loading = document.getElementById("loading");
-    const chatSection = document.getElementById("chatSection");
+    const successBanner = document.getElementById("uploadSuccessBanner");
     const chatBox = document.getElementById("chatBox");
 
     if (!fileInput.files.length) {
@@ -32,8 +67,8 @@ async function uploadFile() {
 
     loading.style.display = "flex";
     result.textContent = "";
-    chatSection.style.display = "none";
-    chatBox.innerHTML = "";
+    if (successBanner) successBanner.style.display = "none";
+    if (chatBox) chatBox.innerHTML = "";
 
     try {
         const response = await fetch("http://127.0.0.1:8000/extract-lease/", {
@@ -44,11 +79,12 @@ async function uploadFile() {
         const data = await response.json();
         loading.style.display = "none";
         result.textContent = formatOutput(data);
-        
-        // Show chat section after successful extraction
-        chatSection.style.display = "block";
-        chatBox.innerHTML = '<div class="message bot-message"><span>Hi! I can answer any questions about this lease. What would you like to know?</span></div>';
-        document.getElementById("chatInput").value = "";
+
+        // Prime the chat with a welcome message and show the Go-to-Chat banner
+        if (chatBox) chatBox.innerHTML = '<div class="message bot-message"><span>Hi! I can answer any questions about this lease. What would you like to know?</span></div>';
+        const chatInput = document.getElementById("chatInput");
+        if (chatInput) chatInput.value = "";
+        if (successBanner) successBanner.style.display = "flex";
 
     } catch (error) {
         loading.style.display = "none";
@@ -83,7 +119,8 @@ function showApp() {
     window.location.href = "index.html";
 }
 
-function handleLogin() {
+function handleLogin(event) {
+    if (event) event.preventDefault();
     const emailInput = document.getElementById("loginEmail");
     const passwordInput = document.getElementById("loginPassword");
     const errorBox = document.getElementById("loginError");
@@ -104,10 +141,11 @@ function handleLogin() {
     }
 
     emailInput.value = emailResult.normalized;
-    showApp();
+    window.location.href = "index.html";
 }
 
-function handleSignup() {
+function handleSignup(event) {
+    if (event) event.preventDefault();
     const nameInput = document.getElementById("signupName");
     const emailInput = document.getElementById("signupEmail");
     const passwordInput = document.getElementById("signupPassword");
@@ -129,7 +167,7 @@ function handleSignup() {
     }
 
     emailInput.value = emailResult.normalized;
-    showApp();
+    window.location.href = "index.html";
 }
 
 function validateEmail(rawEmail) {

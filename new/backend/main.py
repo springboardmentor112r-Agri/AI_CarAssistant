@@ -15,7 +15,7 @@ import uvicorn
 load_dotenv()
 
 # Initialize FastAPI app
-app = FastAPI(title="AI Lease Extractor API")
+app = FastAPI(title="Lease Extractor API")
 
 # Enable CORS (for frontend requests)
 app.add_middleware(
