@@ -14,6 +14,37 @@ const STARTER_PROMPTS = [
   'What should I ask before signing?',
 ]
 
+// Simple markdown renderer
+const SimpleMarkdown = ({ text, className = '' }: { text: string; className?: string }) => {
+  const lines = text.split('\n')
+  return (
+    <div className={className}>
+      {lines.map((line, i) => {
+        const boldLine = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        if (line.startsWith('### ')) {
+          return <p key={i} className="font-bold text-base mt-2 mb-1" dangerouslySetInnerHTML={{ __html: line.replace('### ', '') }} />
+        }
+        if (line.startsWith('## ')) {
+          return <p key={i} className="font-bold text-base mt-2 mb-1" dangerouslySetInnerHTML={{ __html: line.replace('## ', '') }} />
+        }
+        if (line.startsWith('# ')) {
+          return <p key={i} className="font-bold text-lg mt-2 mb-1" dangerouslySetInnerHTML={{ __html: line.replace('# ', '') }} />
+        }
+        if (line.startsWith('- ') || line.startsWith('• ') || line.startsWith('* ')) {
+          return (
+            <div key={i} className="flex items-start gap-2 my-0.5">
+              <span className="mt-1 shrink-0">•</span>
+              <span dangerouslySetInnerHTML={{ __html: boldLine.replace(/^[-•*] /, '') }} />
+            </div>
+          )
+        }
+        if (line.trim() === '') return <div key={i} className="h-2" />
+        return <p key={i} className="my-0.5" dangerouslySetInnerHTML={{ __html: boldLine }} />
+      })}
+    </div>
+  )
+}
+
 export default function NegotiatePage() {
   const [searchParams] = useSearchParams()
   const contractId = searchParams.get('contractId') ? Number(searchParams.get('contractId')) : undefined
@@ -101,7 +132,11 @@ export default function NegotiatePage() {
                   ? 'bg-primary-600 text-white rounded-tr-sm'
                   : 'bg-white border border-slate-200 text-slate-800 rounded-tl-sm'
               }`}>
-                {msg.body}
+                {msg.sender_role === 'user' ? (
+                  <p>{msg.body}</p>
+                ) : (
+                  <SimpleMarkdown text={msg.body} className="text-sm" />
+                )}
               </div>
               {msg.suggested_text && (
                 <div className="mt-2 p-3 bg-green-50 border border-green-200 rounded-xl">
@@ -114,7 +149,7 @@ export default function NegotiatePage() {
                       <Copy size={12} /> Copy
                     </button>
                   </div>
-                  <p className="text-sm text-green-800 italic">{msg.suggested_text}</p>
+                  <SimpleMarkdown text={msg.suggested_text} className="text-sm text-green-800 italic" />
                 </div>
               )}
             </div>

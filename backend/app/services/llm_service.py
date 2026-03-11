@@ -69,11 +69,12 @@ IMPORTANT FORMATTING RULES:
 - Make every point short and clear — one idea per point
 - If there are calculations show them step by step
 - End with a simple conclusion
+- ALWAYS return response as a single string, never as a list or array
 
 Format your response as JSON:
 {{
-  "response": "your pointwise friendly response with emojis and clear formatting",
-  "suggested_dealer_message": "ready-to-send professional message for the dealer"
+  "response": "your pointwise friendly response with emojis and clear formatting as a single string",
+  "suggested_dealer_message": "ready-to-send professional message for the dealer as a single string"
 }}
 
 Example response format:
@@ -104,29 +105,64 @@ IMPORTANT FORMATTING RULES:
 - Use simple everyday language
 - Use emojis to make it friendly
 - Show clear winner with reasons
+- ALWAYS return analysis as a single string, never as a list or array
 
-Return JSON:
+Return ONLY valid JSON:
 {{
   "winner": "deal1" or "deal2" or "tie",
-  "analysis": "detailed pointwise comparison with emojis and bullet points",
+  "analysis": "detailed pointwise comparison with emojis and bullet points as a single string",
   "savings": number,
-  "key_differences": ["list of key differences"]
+  "key_differences": ["list of key differences as strings"]
 }}
 """
 
 
 def extract_sla_from_text(contract_text: str) -> dict:
     """Use Gemini to extract SLA fields from contract text."""
-    prompt = EXTRACTION_PROMPT.format(contract_text=contract_text[:12000])
+    prompt = EXTRACTION_PROMPT.format(contract_text=contract_text[:8000])
     response = model.generate_content(
         prompt,
         generation_config=genai.types.GenerationConfig(
-            max_output_tokens=1000,
+            max_output_tokens=8192,
         )
     )
     raw = response.text.strip()
     raw = re.sub(r"```json|```", "", raw).strip()
-    return json.loads(raw)
+
+    try:
+        return json.loads(raw)
+    except json.JSONDecodeError:
+        try:
+            last_comma = raw.rfind(',')
+            if last_comma > 0:
+                fixed = raw[:last_comma] + '\n}'
+                return json.loads(fixed)
+        except Exception:
+            pass
+
+        return {
+            "contract_type": "lease",
+            "apr_percent": None,
+            "term_months": None,
+            "monthly_payment": None,
+            "down_payment": None,
+            "fees_total": None,
+            "residual_value": None,
+            "msrp": None,
+            "cap_cost": None,
+            "mileage_allowance_yr": None,
+            "mileage_overage_fee": None,
+            "early_termination_fee": None,
+            "vehicle_vin": None,
+            "vehicle_year": None,
+            "vehicle_make": None,
+            "vehicle_model": None,
+            "red_flags": ["Could not fully parse contract — please re-upload"],
+            "negotiation_points": [],
+            "fairness_score": 50,
+            "fairness_explanation": "Could not fully analyze contract",
+            "plain_summary": "Contract could not be fully analyzed. Please try re-uploading."
+        }
 
 
 def get_negotiation_response(contract_context: str, user_message: str) -> dict:
@@ -144,7 +180,13 @@ def get_negotiation_response(contract_context: str, user_message: str) -> dict:
     raw = response.text.strip()
     raw = re.sub(r"```json|```", "", raw).strip()
     try:
-        return json.loads(raw)
+        result = json.loads(raw)
+        # Make sure response is always a string not a list
+        if isinstance(result.get("response"), list):
+            result["response"] = "\n".join(result["response"])
+        if isinstance(result.get("suggested_dealer_message"), list):
+            result["suggested_dealer_message"] = "\n".join(result["suggested_dealer_message"])
+        return result
     except json.JSONDecodeError:
         return {"response": raw, "suggested_dealer_message": ""}
 
@@ -158,12 +200,16 @@ def compare_deals(deal1: dict, deal2: dict) -> dict:
     response = model.generate_content(
         prompt,
         generation_config=genai.types.GenerationConfig(
-            max_output_tokens=1000,
+            max_output_tokens=4096,
         )
     )
     raw = response.text.strip()
     raw = re.sub(r"```json|```", "", raw).strip()
     try:
-        return json.loads(raw)
+        result = json.loads(raw)
+        # Make sure analysis is always a string not a list
+        if isinstance(result.get("analysis"), list):
+            result["analysis"] = "\n".join(result["analysis"])
+        return result
     except json.JSONDecodeError:
         return {"winner": "unknown", "analysis": raw, "savings": 0, "key_differences": []}

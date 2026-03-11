@@ -219,5 +219,14 @@ def delete_contract(
     contract = db.query(Contract).filter(Contract.id == contract_id, Contract.user_id == current_user.id).first()
     if not contract:
         raise HTTPException(status_code=404, detail="Contract not found")
-    db.delete(contract)
+    
+    # Delete related records manually first
+    from sqlalchemy import text
+    db.execute(text(f"DELETE FROM negotiation_messages WHERE thread_id IN (SELECT id FROM negotiation_threads WHERE contract_id = {contract_id})"))
+    db.execute(text(f"DELETE FROM negotiation_threads WHERE contract_id = {contract_id}"))
+    db.execute(text(f"DELETE FROM extracted_clauses WHERE contract_id = {contract_id}"))
+    db.execute(text(f"DELETE FROM extractions WHERE contract_id = {contract_id}"))
+    db.execute(text(f"DELETE FROM contract_sla WHERE contract_id = {contract_id}"))
+    db.execute(text(f"DELETE FROM contract_files WHERE contract_id = {contract_id}"))
+    db.execute(text(f"DELETE FROM contracts WHERE id = {contract_id}"))
     db.commit()

@@ -1,11 +1,10 @@
-import { useParams, Link } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
-import { ArrowLeft, AlertTriangle, MessageSquare, RefreshCw, Lightbulb, FileText } from 'lucide-react'
-import { contractsApi } from '../api'
+import { useParams, Link, useNavigate } from 'react-router-dom'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { ArrowLeft, AlertTriangle, MessageSquare, RefreshCw, Lightbulb, FileText, Trash2 } from 'lucide-react'
+import { contractsApi, negotiationApi } from '../api'
 import FairnessScore from '../components/ui/FairnessScore'
 import Spinner from '../components/ui/Spinner'
 import { useState } from 'react'
-import { negotiationApi } from '../api'
 import toast from 'react-hot-toast'
 import { NegotiationMessage } from '../types'
 
@@ -19,13 +18,54 @@ const SLARow = ({ label, value }: { label: string; value: string }) => (
   </div>
 )
 
+// Simple markdown renderer — no external library needed
+const SimpleMarkdown = ({ text, className = '' }: { text: string; className?: string }) => {
+  const lines = text.split('\n')
+  return (
+    <div className={className}>
+      {lines.map((line, i) => {
+        // Bold: **text**
+        const boldLine = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        // Headers: ## text
+        if (line.startsWith('### ')) {
+          return <p key={i} className="font-bold text-base mt-2 mb-1" dangerouslySetInnerHTML={{ __html: line.replace('### ', '') }} />
+        }
+        if (line.startsWith('## ')) {
+          return <p key={i} className="font-bold text-base mt-2 mb-1" dangerouslySetInnerHTML={{ __html: line.replace('## ', '') }} />
+        }
+        if (line.startsWith('# ')) {
+          return <p key={i} className="font-bold text-lg mt-2 mb-1" dangerouslySetInnerHTML={{ __html: line.replace('# ', '') }} />
+        }
+        // Bullet points: - text or • text
+        if (line.startsWith('- ') || line.startsWith('• ')) {
+          return (
+            <div key={i} className="flex items-start gap-2 my-0.5">
+              <span className="mt-1 shrink-0">•</span>
+              <span dangerouslySetInnerHTML={{ __html: boldLine.replace(/^[-•] /, '') }} />
+            </div>
+          )
+        }
+        // Empty line
+        if (line.trim() === '') {
+          return <div key={i} className="h-2" />
+        }
+        // Normal line
+        return <p key={i} className="my-0.5" dangerouslySetInnerHTML={{ __html: boldLine }} />
+      })}
+    </div>
+  )
+}
+
 export default function ContractDetailPage() {
   const { id } = useParams<{ id: string }>()
   const contractId = Number(id)
+  const navigate = useNavigate()
+  const queryClient = useQueryClient()
   const [chatInput, setChatInput] = useState('')
   const [chatLoading, setChatLoading] = useState(false)
   const [threadId, setThreadId] = useState<number | undefined>()
   const [messages, setMessages] = useState<NegotiationMessage[]>([])
+  const [deleting, setDeleting] = useState(false)
 
   const { data: contract, isLoading: cLoading, refetch } = useQuery({
     queryKey: ['contract', contractId],
@@ -44,6 +84,26 @@ export default function ContractDetailPage() {
     queryFn: () => contractsApi.getClauses(contractId),
     enabled: contract?.doc_status === 'extracted',
   })
+
+  const handleDelete = async () => {
+    if (!window.confirm('Are you sure you want to delete this contract?')) return
+    setDeleting(true)
+    try {
+      await contractsApi.delete(contractId)
+      queryClient.invalidateQueries({ queryKey: ['contracts'] })
+      toast.success('Contract deleted')
+      navigate('/contracts')
+    } catch {
+      toast.error('Failed to delete contract')
+    } finally {
+      setDeleting(false)
+    }
+  }
+
+  const handleRefresh = () => {
+    refetch()
+    toast.success('Refreshed!')
+  }
 
   const sendChat = async (text: string) => {
     if (!text.trim()) return
@@ -79,7 +139,6 @@ export default function ContractDetailPage() {
 
   const isProcessing = contract.doc_status === 'processing' || contract.doc_status === 'uploaded'
 
-  // Parse negotiation points from notes field
   let negotiationPoints: string[] = []
   try {
     const parsed = JSON.parse(contract.notes || '{}')
@@ -108,8 +167,16 @@ export default function ContractDetailPage() {
             </span>
           </div>
         </div>
-        <button onClick={() => refetch()} className="btn-secondary">
+        <button onClick={handleRefresh} className="btn-secondary">
           <RefreshCw size={14} /> Refresh
+        </button>
+        <button
+          onClick={handleDelete}
+          disabled={deleting}
+          className="btn-secondary text-red-500 hover:bg-red-50"
+        >
+          {deleting ? <Spinner className="w-4 h-4" /> : <Trash2 size={14} />}
+          Delete
         </button>
       </div>
 
@@ -286,19 +353,23 @@ export default function ContractDetailPage() {
             )}
 
             {/* Messages */}
-            <div className="space-y-3 mb-4 max-h-80 overflow-y-auto">
+            <div className="space-y-3 mb-4 max-h-96 overflow-y-auto">
               {messages.map((msg) => (
                 <div key={msg.id} className={`flex gap-2 ${msg.sender_role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                  <div className={`max-w-[80%] rounded-xl px-4 py-2.5 text-sm ${
+                  <div className={`max-w-[85%] rounded-xl px-4 py-3 text-sm ${
                     msg.sender_role === 'user'
                       ? 'bg-primary-600 text-white'
                       : 'bg-slate-100 text-slate-800'
                   }`}>
-                    {msg.body}
+                    {msg.sender_role === 'user' ? (
+                      <p>{msg.body}</p>
+                    ) : (
+                      <SimpleMarkdown text={msg.body} className="text-sm" />
+                    )}
                     {msg.suggested_text && (
-                      <div className="mt-2 p-2 bg-green-100 rounded-lg border border-green-200">
+                      <div className="mt-3 p-3 bg-green-100 rounded-lg border border-green-200">
                         <p className="text-xs font-semibold text-green-700 mb-1">📨 Suggested dealer message:</p>
-                        <p className="text-xs text-green-800 italic">{msg.suggested_text}</p>
+                        <SimpleMarkdown text={msg.suggested_text} className="text-xs text-green-800" />
                       </div>
                     )}
                   </div>
