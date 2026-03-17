@@ -8,6 +8,10 @@ from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import os
 
+from dotenv import load_dotenv
+import os
+load_dotenv()
+print("GEMINI KEY LOADED:", os.getenv("GEMINI_API_KEY"))
 # Import our modules
 from backend.app.api import get_market_fair_price, chat_negotiation
 

@@ -4,7 +4,7 @@ Implements VIN decoding using the NHTSA (National Highway Traffic Safety Adminis
 Includes result caching to optimize performance and reduce API calls.
 """
 
-import requests
+import requests 
 import functools
 import logging
 from typing import Dict, Optional, Any

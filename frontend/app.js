@@ -1,4 +1,6 @@
 // app.js - Connected to Backend API with Chat History
+// ── Auth Guard ───────────────────────────────────────────
+
 
 // API Base URL
 const API_BASE = 'http://localhost:5000';
@@ -444,14 +446,14 @@ async function loadChatHistory(sessionId, vehicleDetails, marketValue, currency,
 
 
 // File Attachment Handler (ChatGPT-style)
+// File Attachment Handler (ChatGPT-style)
 const fileInput = document.getElementById('fileInput');
 const attachmentPreview = document.getElementById('attachmentPreview');
 const attachedFileName = document.getElementById('attachedFileName');
 const removeAttachment = document.getElementById('removeAttachment');
 
-let attachedFile = null; // Store the attached file
+let attachedFile = null;
 
-// When user selects a file, show preview chip instead of auto-uploading
 fileInput.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -460,53 +462,43 @@ fileInput.addEventListener('change', (e) => {
     attachedFileName.textContent = `📄 ${file.name}`;
     attachmentPreview.classList.remove('hidden');
     
-    // Enable the input so user can type their question
     document.getElementById('userMessage').disabled = false;
     document.getElementById('sendBtn').disabled = false;
     
-    // Clear the input so the same file can be re-selected if needed
     fileInput.value = '';
 });
 
-// Remove attachment
 removeAttachment.addEventListener('click', () => {
     attachedFile = null;
     attachmentPreview.classList.add('hidden');
     attachedFileName.textContent = '';
     
-    // Re-disable input if no VIN is loaded
     if (!currentVIN) {
         document.getElementById('userMessage').disabled = true;
         document.getElementById('sendBtn').disabled = true;
     }
 });
 
-// Modify sendMessage to handle file + prompt
 const originalSendMessage = sendMessage;
 sendMessage = async function() {
     const userInput = document.getElementById('userMessage');
     const message = userInput.value.trim();
     
-    // If there's an attached file, process it with the prompt
     if (attachedFile) {
-        // Show user's message with file indicator
         const displayMsg = message ? `📄 ${attachedFile.name}: "${message}"` : `📄 Analyzing: ${attachedFile.name}`;
         addMessage(displayMsg, true, true);
         
-        // Show loading
         const loadingId = 'loading-' + Date.now();
         const typingIndicator = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
         addMessage(typingIndicator, false, true);
         const loadingMsg = chatHistory.lastElementChild;
         loadingMsg.id = loadingId;
         
-        // Clear input and attachment
         userInput.value = '';
         const fileToSend = attachedFile;
         attachedFile = null;
         attachmentPreview.classList.add('hidden');
         
-        // Send file + prompt to backend
         const formData = new FormData();
         formData.append('file', fileToSend);
         if (message) {
@@ -520,16 +512,13 @@ sendMessage = async function() {
             });
             const data = await response.json();
             
-            // Remove loading
             const msgToRemove = document.getElementById(loadingId);
             if (msgToRemove) msgToRemove.remove();
             
             if (data.success) {
-                // Check if it's a conversation response or structured analysis
                 if (data.is_conversation) {
                     addMessage(data.response, false, false);
                 } else if (data.analysis) {
-                    // Format structured analysis
                     const analysis = data.analysis;
                     let output = `<strong>📄 ${analysis.document_type || 'Document Analysis'}</strong><br><br>`;
                     
@@ -552,11 +541,12 @@ sendMessage = async function() {
                     
                     addMessage(output, false, true);
                     
-                    // Auto-fill VIN if found
                     if (analysis.vehicle && analysis.vehicle.vin && !currentVIN) {
                         addMessage(`💡 Found VIN: <strong>${analysis.vehicle.vin}</strong>. Click Analyze VIN to get full valuation!`, false, true);
                         vinInput.value = analysis.vehicle.vin;
                     }
+                } else {
+                    addMessage(data.response || "Analysis complete.", false, false);
                 }
             } else {
                 addMessage(`❌ Error: ${data.error || 'Unknown error'}`, false, false);
@@ -571,9 +561,6 @@ sendMessage = async function() {
         return;
     }
     
-    // No file attached - use original send logic
     if (!message) return;
     await originalSendMessage();
 };
-
-
