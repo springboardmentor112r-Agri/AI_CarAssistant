@@ -9,7 +9,7 @@ An advanced AI-powered assistant to review car lease/loan contracts using **Comp
 
 ### 🤖 AI Negotiation Chatbot (Milestone 3)
 - **Interactive Web Interface**: Premium dark-mode chat interface for real-time negotiation help.
-- **Context-Aware AI**: Powered by **Google Gemini 2.5 Flash** (via `google-generativeai`).
+- **Context-Aware AI**: Powered by **Google Gemini 2.5 Flash** (via `google-generativeai`),groq.
   - Reads processed VIN data + Market Value.
   - Suggests counter-offers and detects dealer tricks (fees/addons).
 - **Dual-Mode Logic**:
