@@ -10,7 +10,7 @@ AI-powered full-stack web application that analyzes car lease contracts and help
 
 ⚖️ Fairness score and red flag detection
 
-📊 Comparison with estimated market lease prices
+📊 Comparison between contracts with estimated market lease prices
 
 🚘 VIN lookup for vehicle details and recalls (NHTSA)
 
@@ -22,7 +22,6 @@ React • Vite • Node.js • Express • MongoDB
 
 <h4>DEMO :</h4>
 https://carlease-tau.vercel.app
-
 
 https://github.com/user-attachments/assets/441b97d6-d5c1-477a-a201-af8d4e776139
 
