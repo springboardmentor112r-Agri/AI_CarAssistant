@@ -345,8 +345,283 @@ async function sendChat() {
     }
 }
 
-function handleChatKeyPress(event) {
-    if (event.key === "Enter") {
-        sendChat();
+/**
+ * Generate Lease Risk Score based on extracted data
+ */
+async function generateRiskScore() {
+    const riskResults = document.getElementById("risk-results");
+    const riskEmpty = document.getElementById("risk-empty");
+    const riskLoading = document.getElementById("risk-loading");
+    const generateBtn = document.getElementById("risk-generate-btn");
+    const regenerateBtn = document.getElementById("risk-regenerate-btn");
+    
+    // Show loading state
+    riskEmpty.style.display = "none";
+    riskResults.style.display = "none";
+    riskLoading.style.display = "flex";
+    if (generateBtn) generateBtn.disabled = true;
+    if (regenerateBtn) regenerateBtn.disabled = true;
+    
+    try {
+        const response = await fetch("http://127.0.0.1:8000/calculate-risk/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+        
+        const data = await response.json();
+        riskLoading.style.display = "none";
+        
+        if (data.status === "error") {
+            // Show empty state with error message
+            const emptyMessage = riskEmpty.querySelector(".risk-empty-message");
+            if (emptyMessage) {
+                emptyMessage.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    <p>${data.message}</p>
+                    <button class="btn btn-primary" onclick="showSection('ai')">Upload Document</button>
+                `;
+            }
+            riskEmpty.style.display = "flex";
+            if (generateBtn) generateBtn.style.display = "none";
+            if (regenerateBtn) regenerateBtn.style.display = "none";
+        } else {
+            // Display risk results
+            displayRiskScore(data);
+            riskResults.style.display = "grid";
+            if (generateBtn) generateBtn.style.display = "none";
+            if (regenerateBtn) regenerateBtn.style.display = "block";
+        }
+        
+    } catch (error) {
+        riskLoading.style.display = "none";
+        const emptyMessage = riskEmpty.querySelector(".risk-empty-message p");
+        if (emptyMessage) {
+            emptyMessage.textContent = "Error: " + error.message;
+        }
+        riskEmpty.style.display = "flex";
+    } finally {
+        if (generateBtn) generateBtn.disabled = false;
+        if (regenerateBtn) regenerateBtn.disabled = false;
     }
+}
+
+/**
+ * Display the risk score and breakdown on the page
+ */
+function displayRiskScore(data) {
+    const riskScore = data.risk_score || 0;
+    const riskLevel = data.risk_level || "Unknown";
+    const breakdown = data.breakdown || {};
+    const missingFields = data.missing_fields || [];
+    const notes = data.notes || "";
+    
+    const badge = document.getElementById("risk-score-badge");
+    const scoreNumber = document.getElementById("risk-score-number");
+    const scoreLabel = document.getElementById("risk-score-label");
+    const scoreNotes = document.getElementById("risk-score-notes");
+    
+    // Update risk badge styling based on level
+    badge.className = "risk-badge " + riskLevel.toLowerCase();
+    scoreNumber.textContent = riskScore;
+    scoreLabel.textContent = riskLevel + " Risk";
+    
+    // Format notes as separate lines
+    if (notes) {
+        const noteLines = notes.split("\n");
+        scoreNotes.innerHTML = noteLines.map(line => {
+            return `<div class="risk-note-line">${line}</div>`;
+        }).join("");
+    }
+    
+    // Update factor breakdown
+    updateRiskFactor("termination", breakdown["Early Termination Fee"]);
+    updateRiskFactor("mileage", breakdown["Allowed Mileage"]);
+    updateRiskFactor("excess-fee", breakdown["Excess Mileage Fee"]);
+    updateRiskFactor("payment", breakdown["Monthly Payment"]);
+    updateRiskFactor("interest", breakdown["Interest Rate"]);
+    
+    // Show missing fields alert if any
+    const missingFieldsDiv = document.getElementById("risk-missing-fields");
+    const missingList = document.getElementById("risk-missing-list");
+    if (missingFields.length > 0) {
+        missingList.textContent = "Please clarify: " + missingFields.join(", ");
+        missingFieldsDiv.style.display = "flex";
+    } else {
+        missingFieldsDiv.style.display = "none";
+    }
+}
+
+/**
+ * Update a single risk factor display
+ */
+function updateRiskFactor(factorId, factorData) {
+    if (!factorData) return;
+    
+    const score = factorData.score || 0;
+    const severity = factorData.severity || "Unknown";
+    const value = factorData.value || "N/A";
+    
+    const valueEl = document.getElementById(`risk-factor-${factorId}-value`);
+    const barEl = document.getElementById(`risk-factor-${factorId}-bar`);
+    const scoreEl = document.getElementById(`risk-factor-${factorId}-score`);
+    const severityEl = document.getElementById(`risk-factor-${factorId}-severity`);
+    
+    if (valueEl) valueEl.textContent = value;
+    if (barEl) {
+        barEl.style.width = score + "%";
+        barEl.className = "risk-factor-bar-fill " + severity.toLowerCase();
+    }
+    if (scoreEl) scoreEl.textContent = score + "/100";
+    if (severityEl) {
+        severityEl.textContent = severity;
+        severityEl.className = "risk-severity risk-severity-" + severity.toLowerCase();
+    }
+}
+
+/**
+ * Toggle risk breakdown visibility
+ */
+function toggleRiskBreakdown() {
+    const content = document.getElementById("risk-breakdown-content");
+    const btn = document.querySelector(".risk-toggle-btn");
+    
+    if (content.style.display === "grid") {
+        content.style.display = "none";
+        if (btn) btn.classList.add("collapsed");
+    } else {
+        content.style.display = "grid";
+        if (btn) btn.classList.remove("collapsed");
+    }
+}
+
+/**
+ * Initialize risk section when extract is successful
+ */
+function initializeRiskSection(fromUpload = false) {
+    const riskEmpty = document.getElementById("risk-empty");
+    const generateBtn = document.getElementById("risk-generate-btn");
+    
+    if (riskEmpty) riskEmpty.style.display = "flex";
+    if (generateBtn) generateBtn.style.display = "block";
+}
+
+// Update uploadFile to initialize risk section
+const originalUploadFile = uploadFile;
+window.uploadFile = async function() {
+    const result = await originalUploadFile.apply(this, arguments);
+    // Initialize risk section after successful upload
+    setTimeout(() => {
+        initializeRiskSection(true);
+        initializeSummarySection(true);
+    }, 500);
+    return result;
+};
+
+/**
+ * Generate Simple Contract Summary
+ */
+async function generateSummary() {
+    const summaryResults = document.getElementById("summary-results");
+    const summaryEmpty = document.getElementById("summary-empty");
+    const summaryLoading = document.getElementById("summary-loading");
+    const generateBtn = document.getElementById("summary-generate-btn");
+    const regenerateBtn = document.getElementById("summary-regenerate-btn");
+    
+    // Show loading state
+    summaryEmpty.style.display = "none";
+    summaryResults.style.display = "none";
+    summaryLoading.style.display = "flex";
+    if (generateBtn) generateBtn.disabled = true;
+    if (regenerateBtn) regenerateBtn.disabled = true;
+    
+    try {
+        const response = await fetch("http://127.0.0.1:8000/generate-summary/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+        
+        const data = await response.json();
+        summaryLoading.style.display = "none";
+        
+        if (data.status === "error") {
+            // Show empty state with error message
+            const emptyMessage = summaryEmpty.querySelector(".summary-empty-message");
+            if (emptyMessage) {
+                emptyMessage.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    <p>${data.message}</p>
+                    <button class="btn btn-primary" onclick="showSection('ai')">Upload Document</button>
+                `;
+            }
+            summaryEmpty.style.display = "flex";
+            if (generateBtn) generateBtn.style.display = "none";
+            if (regenerateBtn) regenerateBtn.style.display = "none";
+        } else {
+            // Display summary results
+            displaySummary(data);
+            summaryResults.style.display = "block";
+            if (generateBtn) generateBtn.style.display = "none";
+            if (regenerateBtn) regenerateBtn.style.display = "block";
+        }
+        
+    } catch (error) {
+        summaryLoading.style.display = "none";
+        const emptyMessage = summaryEmpty.querySelector(".summary-empty-message p");
+        if (emptyMessage) {
+            emptyMessage.textContent = "Error: " + error.message;
+        }
+        summaryEmpty.style.display = "flex";
+    } finally {
+        if (generateBtn) generateBtn.disabled = false;
+        if (regenerateBtn) regenerateBtn.disabled = false;
+    }
+}
+
+/**
+ * Display the summary on the page
+ */
+function displaySummary(data) {
+    const summaryText = document.getElementById("summary-text");
+    
+    if (data.summary) {
+        // Format the summary text with proper line breaks
+        const formattedSummary = data.summary
+            .split('\n')
+            .map(line => {
+                if (line.trim() === '') {
+                    return '<div class="summary-paragraph-break"></div>';
+                }
+                // Check if line starts with ** (heading)
+                if (line.includes('**')) {
+                    return '<div class="summary-section-heading">' + 
+                        line.replace(/\*\*/g, '').trim() + 
+                        '</div>';
+                }
+                // Check if line starts with - (bullet point)
+                if (line.trim().startsWith('-')) {
+                    return '<div class="summary-bullet">' + 
+                        line.replace(/^-\s*/, '').trim() + 
+                        '</div>';
+                }
+                return '<div class="summary-paragraph">' + line.trim() + '</div>';
+            })
+            .join('');
+        
+        summaryText.innerHTML = formattedSummary;
+    }
+}
+
+/**
+ * Initialize summary section when extract is successful
+ */
+function initializeSummarySection(fromUpload = false) {
+    const summaryEmpty = document.getElementById("summary-empty");
+    const generateBtn = document.getElementById("summary-generate-btn");
+    
+    if (summaryEmpty) summaryEmpty.style.display = "flex";
+    if (generateBtn) generateBtn.style.display = "block";
 }

@@ -10,6 +10,7 @@ from openai import OpenAI
 from pypdf import PdfReader
 import easyocr
 import uvicorn
+from risk_scorer import LeaseRiskScorer
 
 # Load environment variables
 load_dotenv()
@@ -229,6 +230,85 @@ User Question:
 
     answer = response.choices[0].message.content
     return {"status": "success", "answer": answer}
+
+
+@app.post("/generate-summary/")
+async def generate_summary():
+    """
+    Generate a simple, easy-to-understand summary of the lease agreement.
+    Converts complex lease documents into plain language.
+    """
+    if not document_memory["text"]:
+        return {"status": "error", "message": "No lease document uploaded yet. Please upload a lease document first."}
+    
+    prompt = f"""You are an expert at explaining complex legal documents in simple, easy-to-understand language.
+
+A user has uploaded a car lease agreement. Your job is to create a SHORT, CLEAR summary that explains:
+
+1. **The Vehicle**: What car is being leased (make, model, year, VIN if available)
+2. **Lease Duration**: How long the lease lasts
+3. **Monthly Payment**: How much the customer pays each month
+4. **Mileage Allowance**: How many miles they can drive per year
+5. **Overage Charges**: What they pay for extra miles beyond the limit
+6. **Early Termination**: What it costs to end the lease early
+7. **Maintenance & Insurance**: Who pays for what
+8. **Important Penalties**: Any other major fees or rules
+
+FORMATTING RULES:
+- Use a heading for each section
+- Write in simple, plain English (avoid legal jargon)
+- Use short sentences and bullet points when helpful
+- Be SPECIFIC: include numbers, amounts, percentages, and dates
+- Keep it to 200-300 words maximum
+- Make it easy for a non-lawyer to understand
+
+TONE: Friendly, clear, and helpful - like explaining to a friend
+
+Lease Document:
+{document_memory['text']}
+"""
+    
+    try:
+        response = client.chat.completions.create(
+            model="arcee-ai/trinity-mini:free",
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are an expert at explaining complex legal documents in simple, plain English."
+                },
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ],
+            temperature=0.3
+        )
+        
+        summary = response.choices[0].message.content
+        return {
+            "status": "success",
+            "summary": summary
+        }
+    except Exception as e:
+        return {"status": "error", "message": f"Error generating summary: {str(e)}"}
+
+
+@app.post("/calculate-risk/")
+async def calculate_risk():
+    """
+    Calculate lease risk score based on previously extracted data.
+    Uses the structured JSON data from the last uploaded document.
+    """
+    if not document_memory["structured_data"]:
+        return {"status": "error", "message": "No lease data extracted yet. Please upload and extract a lease document first."}
+    
+    try:
+        risk_result = LeaseRiskScorer.calculate_lease_risk(
+            document_memory["structured_data"]
+        )
+        return risk_result
+    except Exception as e:
+        return {"status": "error", "message": f"Error calculating risk score: {str(e)}"}
 
 
 if __name__ == "__main__":

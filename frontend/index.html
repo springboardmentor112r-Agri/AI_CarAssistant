@@ -138,24 +138,187 @@
             </section>
         </div>
 
-        <div id="section-risk" class="page-content placeholder-section" style="display:none;">
-            <div class="placeholder-card">
-                <div class="placeholder-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-                </div>
-                <h2>Lease Risk Score</h2>
-                <p>Coming soon — get an instant risk assessment with a detailed breakdown of potential issues in your lease.</p>
+        <div id="section-risk" class="page-content" style="display:none;">
+            <div class="section-back-row">
+                <button class="section-back-btn" onclick="goBack()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                    Back
+                </button>
             </div>
+            <section class="card">
+                <div class="risk-section">
+                    <div class="risk-header">
+                        <span>Lease Risk Assessment</span>
+                    </div>
+                    
+                    <div id="risk-empty" class="risk-empty-state" style="display:flex;">
+                        <div class="risk-empty-message">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                            <p>Upload and extract a lease document first to analyze its risk level.</p>
+                            <button class="btn btn-primary" onclick="showSection('ai')">Upload Document</button>
+                        </div>
+                    </div>
+                    
+                    <div id="risk-results" class="risk-results" style="display:none;">
+                        <div class="risk-results-grid">
+                            <div class="risk-left-column">
+                                <div class="risk-score-container">
+                                    <div class="risk-score-left">
+                                        <div id="risk-score-badge" class="risk-badge low">
+                                            <div class="risk-score-number" id="risk-score-number">—</div>
+                                            <div class="risk-score-label" id="risk-score-label">—</div>
+                                        </div>
+                                    </div>
+                                    <div class="risk-advisory-box">
+                                        <div class="risk-advisory-header">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                                            <span>Risk Advisory</span>
+                                        </div>
+                                        <p id="risk-score-notes" class="risk-notes"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="risk-right-column">
+                                <div class="risk-breakdown">
+                                    <div class="risk-breakdown-header">
+                                        <span>Factor Breakdown</span>
+                                        <button class="risk-toggle-btn" onclick="toggleRiskBreakdown()">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                                        </button>
+                                    </div>
+                                    <div id="risk-breakdown-content" class="risk-breakdown-content" style="display:grid;">
+                                        <div class="risk-factor">
+                                            <div class="risk-factor-name">Early Termination Fee</div>
+                                            <div class="risk-factor-value" id="risk-factor-termination-value">—</div>
+                                            <div class="risk-factor-bar">
+                                                <div class="risk-factor-bar-fill" id="risk-factor-termination-bar" style="width:0%"></div>
+                                            </div>
+                                            <div class="risk-factor-meta">
+                                                <span id="risk-factor-termination-score">—</span>
+                                                <span id="risk-factor-termination-severity" class="risk-severity">—</span>
+                                                <span class="risk-factor-weight">40%</span>
+                                            </div>
+                                        </div>
+                                        <div class="risk-factor">
+                                            <div class="risk-factor-name">Allowed Mileage</div>
+                                            <div class="risk-factor-value" id="risk-factor-mileage-value">—</div>
+                                            <div class="risk-factor-bar">
+                                                <div class="risk-factor-bar-fill" id="risk-factor-mileage-bar" style="width:0%"></div>
+                                            </div>
+                                            <div class="risk-factor-meta">
+                                                <span id="risk-factor-mileage-score">—</span>
+                                                <span id="risk-factor-mileage-severity" class="risk-severity">—</span>
+                                                <span class="risk-factor-weight">30%</span>
+                                            </div>
+                                        </div>
+                                        <div class="risk-factor">
+                                            <div class="risk-factor-name">Excess Mileage Fee</div>
+                                            <div class="risk-factor-value" id="risk-factor-excess-fee-value">—</div>
+                                            <div class="risk-factor-bar">
+                                                <div class="risk-factor-bar-fill" id="risk-factor-excess-fee-bar" style="width:0%"></div>
+                                            </div>
+                                            <div class="risk-factor-meta">
+                                                <span id="risk-factor-excess-fee-score">—</span>
+                                                <span id="risk-factor-excess-fee-severity" class="risk-severity">—</span>
+                                                <span class="risk-factor-weight">20%</span>
+                                            </div>
+                                        </div>
+                                        <div class="risk-factor">
+                                            <div class="risk-factor-name">Monthly Payment</div>
+                                            <div class="risk-factor-value" id="risk-factor-payment-value">—</div>
+                                            <div class="risk-factor-bar">
+                                                <div class="risk-factor-bar-fill" id="risk-factor-payment-bar" style="width:0%"></div>
+                                            </div>
+                                            <div class="risk-factor-meta">
+                                                <span id="risk-factor-payment-score">—</span>
+                                                <span id="risk-factor-payment-severity" class="risk-severity">—</span>
+                                                <span class="risk-factor-weight">5%</span>
+                                            </div>
+                                        </div>
+                                        <div class="risk-factor">
+                                            <div class="risk-factor-name">Interest Rate</div>
+                                            <div class="risk-factor-value" id="risk-factor-interest-value">—</div>
+                                            <div class="risk-factor-bar">
+                                                <div class="risk-factor-bar-fill" id="risk-factor-interest-bar" style="width:0%"></div>
+                                            </div>
+                                            <div class="risk-factor-meta">
+                                                <span id="risk-factor-interest-score">—</span>
+                                                <span id="risk-factor-interest-severity" class="risk-severity">—</span>
+                                                <span class="risk-factor-weight">5%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="risk-missing-fields" class="risk-missing-fields" style="display:none;">
+                            <div class="risk-alert-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                            </div>
+                            <div>
+                                <p class="risk-alert-title">Missing Information</p>
+                                <p id="risk-missing-list" class="risk-alert-text"></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="risk-loading" class="risk-loading" style="display:none;">
+                        <div class="spinner"></div>
+                        <p>Analyzing lease risk...</p>
+                    </div>
+                    
+                    <div class="risk-action-row">
+                        <button class="btn btn-primary" id="risk-generate-btn" onclick="generateRiskScore()" style="display:none;">Generate Risk Score</button>
+                        <button class="btn btn-outline" id="risk-regenerate-btn" onclick="generateRiskScore()" style="display:none;">Re-analyze</button>
+                    </div>
+                </div>
+            </section>
         </div>
 
-        <div id="section-summary" class="page-content placeholder-section" style="display:none;">
-            <div class="placeholder-card">
-                <div class="placeholder-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-                </div>
-                <h2>Simple Contract Summary</h2>
-                <p>Coming soon — convert complex lease documents into clear, easy-to-understand summaries.</p>
+        <div id="section-summary" class="page-content" style="display:none;">
+            <div class="section-back-row">
+                <button class="section-back-btn" onclick="goBack()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                    Back
+                </button>
             </div>
+            <section class="card">
+                <div class="summary-section">
+                    <div class="summary-header">
+                        <span>Simple Contract Summary</span>
+                    </div>
+                    
+                    <div id="summary-empty" class="summary-empty-state" style="display:flex;">
+                        <div class="summary-empty-message">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                            <p>Upload and extract a lease document first to generate a plain-language summary.</p>
+                            <button class="btn btn-primary" onclick="showSection('ai')">Upload Document</button>
+                        </div>
+                    </div>
+                    
+                    <div id="summary-results" class="summary-results" style="display:none;">
+                        <div class="summary-content-box">
+                            <div class="summary-intro">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                                <span>Easy-to-Understand Summary</span>
+                            </div>
+                            <div id="summary-text" class="summary-text"></div>
+                        </div>
+                    </div>
+                    
+                    <div id="summary-loading" class="summary-loading" style="display:none;">
+                        <div class="spinner"></div>
+                        <p>Generating easy-to-understand summary...</p>
+                    </div>
+                    
+                    <div class="summary-action-row">
+                        <button class="btn btn-primary" id="summary-generate-btn" onclick="generateSummary()" style="display:none;">Generate Summary</button>
+                        <button class="btn btn-outline" id="summary-regenerate-btn" onclick="generateSummary()" style="display:none;">Regenerate</button>
+                    </div>
+                </div>
+            </section>
         </div>
     </div>
 
