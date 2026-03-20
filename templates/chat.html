@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Negotiation Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        body{
+            background:#020617;
+            color:white;
+            font-family:Arial;
+        }
+
+        .chat-container{
+            width:60%;
+            margin:100px auto;
+            background:#1e293b;
+            border-radius:15px;
+            padding:20px;
+            box-shadow:0 0 20px rgba(56,189,248,0.3);
+        }
+
+        .messages{
+            height:400px;
+            overflow-y:auto;
+            margin-bottom:15px;
+        }
+
+        .user{
+            text-align:right;
+            margin:10px;
+        }
+
+        .bot{
+            text-align:left;
+            margin:10px;
+        }
+
+        .input-box{
+            display:flex;
+        }
+
+        input{
+            flex:1;
+            padding:10px;
+            border-radius:10px;
+            border:none;
+        }
+
+        button{
+            margin-left:10px;
+            padding:10px 15px;
+            background:#38bdf8;
+            border:none;
+            border-radius:10px;
+            cursor:pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+{% include "navbar.html" %}
+
+<div class="chat-container">
+
+    <h2>💬 Negotiation Assistant</h2>
+
+    <div id="messages" class="messages"></div>
+
+    <div class="input-box">
+        <input id="userInput" placeholder="Ask about your deal...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+</div>
+
+<script>
+
+function sendMessage(){
+    let input = document.getElementById("userInput");
+    let msg = input.value;
+
+    let messages = document.getElementById("messages");
+    messages.scrollTop = messages.scrollHeight;
+    messages.innerHTML += `
+        <div class="message user-message">
+            <div class="bubble user-bubble">🧑 ${msg}</div>
+        </div>
+`       ;
+    let typingDiv = document.createElement("div");
+    typingDiv.className = "message bot-message";
+    typingDiv.id = "typing";
+
+    typingDiv.innerHTML = `
+        <div class="bubble bot-bubble">🤖 Typing...</div>
+    `;
+
+    messages.appendChild(typingDiv);
+    messages.scrollTop = messages.scrollHeight;
+    fetch("/chat_api", {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({message:msg})
+    })
+    .then(res => res.json())
+    .then(data=>{
+       if(data.reply){
+        document.getElementById("typing").remove();
+        let formattedReply = data.reply
+            .replace(/\n/g, "<br>")
+            .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>");
+
+        messages.innerHTML += `
+            <div class="message bot-message">
+                <div class="bubble bot-bubble">🤖 ${formattedReply}</div>
+            </div>
+            `;
+            messages.scrollTop = messages.scrollHeight;
+        }
+         else {
+            messages.innerHTML += `<div class="bot">⚠️ No response from server</div>`;
+        }
+    })
+    .catch(err=>{
+        messages.innerHTML += `<div class="bot">⚠️ Server error</div>`;
+        console.log("Error:", err);
+    });
+
+    input.value = "";
+}
+
+</script>
+
+</body>
+</html>

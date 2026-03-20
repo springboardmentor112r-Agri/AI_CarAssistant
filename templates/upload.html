@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Upload Contract</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<style>
+
+body{
+    background:#020617;
+    color:white;
+    font-family:'Segoe UI', sans-serif;
+}
+
+/* Title */
+h1{
+    text-align:center;
+    margin-top:40px;
+    font-size:32px;
+}
+
+/* Card */
+.upload-card{
+    width:50%;
+    margin:auto;
+    margin-top:40px;
+    background:#1e293b;
+    padding:40px;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 0 30px rgba(56,189,248,0.3);
+}
+
+/* Upload Box */
+.upload-box{
+    border:2px dashed rgba(56,189,248,0.6);
+    padding:40px;
+    border-radius:15px;
+    margin-bottom:25px;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    text-align:center;
+    transition:0.3s;
+    cursor:pointer;
+}
+
+/* Hover Glow */
+.upload-box:hover{
+    background:#020617;
+    box-shadow:0 0 25px rgba(56,189,248,0.8);
+    border-color:#38bdf8;
+}
+
+/* Remove weird focus outline */
+.upload-box:focus,
+.upload-box:active{
+    outline:none;
+}
+
+/* Hide input */
+.upload-box input{
+    display:none;
+}
+
+/* File Name */
+.file-name{
+    margin-top:10px;
+    font-size:14px;
+    color:#38bdf8;
+}
+
+/* Button */
+.analyze-btn{
+    margin-top:20px;
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    background:#38bdf8;
+    color:#020617;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    box-shadow:0 0 20px #38bdf8;
+    transition:0.3s;
+}
+
+.analyze-btn:hover{
+    transform:scale(1.03);
+    box-shadow:0 0 35px #38bdf8;
+}
+
+</style>
+
+</head>
+
+<body>
+<a href="/dashboard" class="back-btn">← Back to Dashboard</a>
+
+<h1>Upload Lease Contract</h1>
+
+<div class="upload-card">
+
+<form action="/upload" method="POST" enctype="multipart/form-data">
+
+    <!-- Upload Box -->
+    <label class="upload-box" for="fileInput">
+
+        <div style="font-size:40px; margin-bottom:10px;">📄</div>
+
+        <p style="font-size:16px; opacity:0.8;">
+            Drag & Drop your file here <br> or click to upload
+        </p>
+
+        <input type="file" name="contract" id="fileInput" required>
+
+    </label>
+
+    <!-- File Name -->
+    <div id="fileName" class="file-name"></div>
+
+    <!-- Button -->
+    <button type="submit" class="analyze-btn">
+        Analyze Contract
+    </button>
+
+</form>
+
+</div>
+
+<script>
+
+// Show file name after selection
+document.getElementById("fileInput").addEventListener("change", function(){
+    let file = this.files[0];
+    document.getElementById("fileName").innerText = file ? "✔ " + file.name : "";
+});
+
+</script>
+
+</body>
+</html>

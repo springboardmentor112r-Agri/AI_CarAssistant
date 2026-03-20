@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Dashboard</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+</head>
+
+<body class="dashboard-body">
+
+
+<!-- Top Navigation -->
+
+<div class="topbar">
+
+<h2 class="logo">AI Lease Assistant</h2>
+
+<a href="/logout" class="logout-btn">Logout</a>
+
+</div>
+
+
+<!-- Welcome Text -->
+
+<h1 class="welcome-text">Welcome, {{name}}</h1>
+
+
+<!-- Feature Cards -->
+
+<div class="dashboard-container">
+
+<!-- Upload -->
+<a href="/upload" style="text-decoration:none;color:white">
+<div class="feature-card">
+    <div class="icon">📄</div>
+    <h3>Upload Contract</h3>
+    <p>Upload lease agreements and analyze key terms using AI.</p>
+</div>
+</a>
+
+
+<!-- ✅ VIN LOOKUP (UPDATED) -->
+<a href="/vin" style="text-decoration:none;color:white">
+<div class="feature-card">
+    <div class="icon">🚗</div>
+    <h3>VIN Lookup</h3>
+    <p>Retrieve vehicle information and recall history.</p>
+</div>
+</a>
+
+
+<!-- Negotiation -->
+<div class="feature-card">
+    <div class="icon">🤖</div>
+    <h3>Negotiation Assistant</h3>
+    <p>Get AI suggestions to negotiate better lease deals.</p>
+</div>
+
+
+
+
+</div>
+
+</body>
+</html>

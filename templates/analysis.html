@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>AI Deal Analysis</title>
+
+<style>
+
+body{
+    background: radial-gradient(circle at top, #020617, #020617);
+    color:white;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Title */
+h1{
+    text-align:center;
+    margin-top:30px;
+    font-size:32px;
+}
+
+/* Layout */
+.container{
+    width:85%;
+    margin:auto;
+    margin-top:40px;
+}
+
+.row{
+    display:flex;
+    gap:25px;
+}
+
+/* Card */
+.card{
+    flex:1;
+    background:#1e293b;
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0 0 25px rgba(56,189,248,0.25);
+    transition:0.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 0 35px rgba(56,189,248,0.5);
+}
+
+/* Score Circle */
+.circle{
+    width:150px;
+    height:150px;
+    border-radius:50%;
+    border:10px solid #334155;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:auto;
+    font-size:35px;
+    font-weight:bold;
+    color:#38bdf8;
+    box-shadow:0 0 20px #38bdf8;
+}
+
+/* Risk */
+.risk{
+    padding:12px;
+    border-radius:12px;
+    text-align:center;
+    font-weight:bold;
+    margin-bottom:15px;
+}
+
+.safe{ background:#16a34a; }
+.medium{ background:#f59e0b; }
+.danger{ background:#ef4444; }
+
+/* VIN */
+.vin-box{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#020617;
+    padding:12px;
+    border-radius:10px;
+}
+
+.copy-btn{
+    background:#38bdf8;
+    border:none;
+    padding:6px 10px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:12px;
+}
+
+/* Flags */
+.flags li{
+    margin:8px 0;
+    color:#f87171;
+}
+
+/* Glow text */
+.glow{
+    color:#38bdf8;
+}
+
+</style>
+
+</head>
+
+<body>
+    <head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    </head>
+<a href="/dashboard" class="back-btn">← Back to Dashboard</a>
+<!-- 🔥 NAVBAR -->
+<div class="navbar">
+
+    <div class="nav-left">
+        <div class="logo">AI Car Lease Contract Assistant</div>
+    </div>
+
+    <div class="nav-center">
+        <a href="/upload" class="nav-item active">📄 Extract</a>
+        <a href="/vin" class="nav-item">🚗 VIN Lookup</a>
+        <a href="/chat" class="nav-item">🤖 Negotiate</a>
+        
+    </div>
+
+    <div class="nav-right">
+        <span class="user">{{name}}</span>
+        <a href="/logout" class="logout">Logout</a>
+    </div>
+
+</div>
+<h1>AI Deal Analysis</h1>
+
+<div class="container">
+
+<div class="row">
+
+<!-- Score -->
+<div class="card">
+    <h3 class="glow">Fairness Score</h3>
+
+    <div class="circle">
+        {{ analysis.score }}
+    </div>
+
+</div>
+
+<!-- Risk -->
+<div class="card">
+
+    <h3 class="glow">Risk Assessment</h3>
+
+    <div class="risk 
+    {% if analysis.risk == 'SAFE' %}safe{% endif %}
+    {% if analysis.risk == 'MEDIUM' %}medium{% endif %}
+    {% if analysis.risk == 'DANGER' %}danger{% endif %}
+    ">
+        {{ analysis.risk }}
+    </div>
+
+    <p><b>Extracted VIN</b></p>
+
+    <div class="vin-box">
+        <span id="vin">{{ analysis.vin }}</span>
+        <button class="copy-btn" onclick="copyVIN()">Copy</button>
+    </div>
+
+</div>
+
+</div>
+
+<!-- Red Flags -->
+<div class="card">
+
+    <h3 class="glow">Red Flags</h3>
+
+    <ul class="flags">
+        {% for flag in analysis.red_flags %}
+        <li>⚠ {{ flag }}</li>
+        {% endfor %}
+    </ul>
+
+</div>
+
+</div>
+
+<script>
+
+function copyVIN(){
+    let vin = document.getElementById("vin").innerText;
+    navigator.clipboard.writeText(vin);
+    alert("VIN Copied!");
+}
+
+</script>
+
+</body>
+</html>

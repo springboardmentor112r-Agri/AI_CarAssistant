@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Contract Analysis</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        body{
+            background:#020617;
+            color:white;
+            font-family:Arial;
+        }
+
+        h1{
+            text-align:center;
+            margin-top:30px;
+        }
+
+        .toggle-buttons{
+            text-align:center;
+            margin-top:20px;
+        }
+
+        .toggle-buttons button{
+            margin:10px;
+            padding:10px 20px;
+            border:none;
+            border-radius:10px;
+            cursor:pointer;
+            background:#38bdf8;
+            color:#020617;
+            font-weight:bold;
+            box-shadow:0 0 20px #38bdf8;
+        }
+
+        .toggle-buttons button:hover{
+            transform:scale(1.05);
+        }
+
+        .analyze-btn{
+            background:#ef4444 !important;
+            color:white !important;
+            box-shadow:0 0 20px #ef4444 !important;
+        }
+
+        .result-box{
+            width:70%;
+            margin:auto;
+            margin-top:30px;
+            background:#1e293b;
+            padding:25px;
+            border-radius:15px;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+        }
+
+        td{
+            padding:12px;
+            border-bottom:1px solid #334155;
+        }
+
+        td:first-child{
+            font-weight:bold;
+            color:#38bdf8;
+        }
+
+        .hidden{
+            display:none;
+        }
+
+        pre{
+            white-space:pre-wrap;
+        }
+
+    </style>
+
+</head>
+
+<body>
+<a href="/dashboard" class="back-btn">← Back to Dashboard</a>
+<!-- 🔥 NAVBAR -->
+<div class="navbar">
+
+    <div class="nav-left">
+        <div class="logo">AI Car Lease Contract Assistant</div>
+    </div>
+
+    <div class="nav-center">
+        <a href="/upload" class="nav-item active">📄 Extract</a>
+        <a href="/vin" class="nav-item">🚗 VIN Lookup</a>
+        <a href="/chat" class="nav-item">🤖 Negotiate</a>
+        
+    </div>
+
+    <div class="nav-right">
+        <span class="user">Hi, {{name}}</span>
+        <a href="/logout" class="logout">Logout</a>
+    </div>
+
+</div>
+<h1>AI Contract Analysis</h1>
+
+<!-- ✅ BUTTONS -->
+<div class="toggle-buttons">
+
+    <button onclick="showJSON()">JSON View</button>
+    <button onclick="showTable()">Table View</button>
+
+    <!-- ✅ ANALYZE BUTTON -->
+    <form action="/analyze" method="POST" style="display:inline;">
+        <input type="hidden" name="data" value='{{ data | tojson | safe }}'>
+        <button type="submit" class="analyze-btn">
+            Analyze
+        </button>
+    </form>
+
+</div>
+
+<!-- JSON -->
+<div id="jsonView" class="result-box">
+    <pre>{{ text }}</pre>
+</div>
+
+<!-- TABLE -->
+<div id="tableView" class="result-box hidden">
+    <table id="dataTable"></table>
+</div>
+
+<script>
+
+// Convert JSON
+let data = JSON.parse('{{ data | tojson | safe }}');
+let table = document.getElementById("dataTable");
+
+// Build table
+for (let key in data){
+    let row = `<tr>
+        <td>${key.replaceAll("_"," ").toUpperCase()}</td>
+        <td>${data[key]}</td>
+    </tr>`;
+    table.innerHTML += row;
+}
+
+// Toggle
+function showJSON(){
+    document.getElementById("jsonView").classList.remove("hidden");
+    document.getElementById("tableView").classList.add("hidden");
+}
+
+function showTable(){
+    document.getElementById("tableView").classList.remove("hidden");
+    document.getElementById("jsonView").classList.add("hidden");
+}
+
+</script>
+
+</body>
+</html>

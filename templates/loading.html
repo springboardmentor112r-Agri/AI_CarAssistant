@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Analyzing Contract</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<style>
+
+.loader-container{
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+height:80vh;
+}
+
+.spinner{
+width:60px;
+height:60px;
+border:6px solid rgba(255,255,255,0.1);
+border-top:6px solid #38bdf8;
+border-radius:50%;
+animation:spin 1s linear infinite;
+margin-bottom:20px;
+}
+
+@keyframes spin{
+0%{transform:rotate(0deg);}
+100%{transform:rotate(360deg);}
+}
+
+.loading-text{
+font-size:20px;
+color:#38bdf8;
+}
+
+</style>
+
+</head>
+<a href="/dashboard" class="back-btn">← Back to Dashboard</a>
+
+<body class="dashboard-body">
+
+<div class="loader-container">
+
+<div class="spinner"></div>
+
+<p class="loading-text">Analyzing your contract with AI...</p>
+
+</div>
+
+<script>
+
+setTimeout(function(){
+window.location.href = "/result"
+}, 3000)
+
+</script>
+
+</body>
+</html>

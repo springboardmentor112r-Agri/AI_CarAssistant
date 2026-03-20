@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>VIN Lookup</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<style>
+
+body{
+    background:#020617;
+    color:white;
+    font-family:'Segoe UI', sans-serif;
+    padding-top:80px;
+}
+
+/* Title */
+h1{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+/* Main Card */
+.container{
+    width:45%;
+    margin:auto;
+    background:#1e293b;
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0 0 30px rgba(56,189,248,0.3);
+}
+
+/* Input */
+input{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    margin-bottom:15px;
+    outline:none;
+}
+
+/* Button */
+button{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    background:#38bdf8;
+    color:#020617;
+    font-weight:bold;
+    cursor:pointer;
+    box-shadow:0 0 20px #38bdf8;
+    transition:0.3s;
+}
+
+button:hover{
+    transform:scale(1.02);
+}
+
+/* Result Cards */
+.result-grid{
+    margin-top:25px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+.result-card{
+    background:#020617;
+    padding:15px;
+    border-radius:12px;
+    border-left:3px solid #38bdf8;
+    box-shadow:0 0 10px rgba(56,189,248,0.2);
+}
+
+.label{
+    font-size:12px;
+    opacity:0.7;
+}
+
+.value{
+    font-size:16px;
+    font-weight:bold;
+    margin-top:5px;
+}
+
+</style>
+
+</head>
+
+<body>
+<a href="/dashboard" class="back-btn">← Back to Dashboard</a>
+<h1>VIN Lookup</h1>
+
+<div class="container">
+
+<form method="POST">
+    <input type="text" name="vin" placeholder="Enter VIN number" required>
+    <button type="submit">Lookup</button>
+</form>
+
+{% if result %}
+
+<div class="result-grid">
+
+    <div class="result-card">
+        <div class="label">Make</div>
+        <div class="value">{{ result.Make }}</div>
+    </div>
+
+    <div class="result-card">
+        <div class="label">Model</div>
+        <div class="value">{{ result.Model }}</div>
+    </div>
+
+    <div class="result-card">
+        <div class="label">Year</div>
+        <div class="value">{{ result.ModelYear }}</div>
+    </div>
+
+    <div class="result-card">
+        <div class="label">Fuel Type</div>
+        <div class="value">{{ result.FuelTypePrimary }}</div>
+    </div>
+
+    <div class="result-card">
+        <div class="label">Body Class</div>
+        <div class="value">{{ result.BodyClass }}</div>
+    </div>
+
+    <div class="result-card">
+        <div class="label">Engine</div>
+        <div class="value">{{ result.EngineModel }}</div>
+    </div>
+
+</div>
+
+{% endif %}
+
+</div>
+
+</body>
+</html>
