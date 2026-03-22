@@ -193,6 +193,57 @@ body {
     right: 18px;
 }
 
+.brand-logo-image {
+    width: 72px;
+    height: 72px;
+    border-radius: 12px;
+    object-fit: cover;
+    display: block;
+    flex-shrink: 0;
+}
+
+.hero-intro-logo {
+    width: 80px;
+    height: 80px;
+    border-radius: 16px;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto 32px;
+}
+
+.hero-logo {
+    width: 90px;
+    height: 90px;
+    border-radius: 18px;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto 40px;
+}
+
+.footer-logo-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.footer-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    object-fit: cover;
+    display: block;
+    flex-shrink: 0;
+}
+
+.form-logo {
+    width: 80px;
+    height: 80px;
+    border-radius: 16px;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto 24px;
+}
+
 .brand-text {
     display: grid;
     gap: 3px;
