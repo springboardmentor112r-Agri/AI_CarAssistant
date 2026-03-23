@@ -1,0 +1,44 @@
+services:
+  - type: web
+    name: contract-ai-backend
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /
+    healthCheckInterval: 15
+    healthCheckTimeoutSeconds: 10
+    healthCheckStartupFailureThresholdCount: 10
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_REFRESH_SECRET
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: QDRANT_URL
+        sync: false
+      - key: QDRANT_API_KEY
+        sync: false
+      - key: BREVO_API_KEY
+        sync: false
+      - key: EMAIL_FROM
+        sync: false
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+      - key: CORS_ADDITIONAL_ORIGINS
+        sync: false
+      - key: CORS_ALLOW_ORIGIN_REGEX
+        sync: false
+      - key: APP_BASE_URL
+        sync: false
+      - key: GOOGLE_CLOUD_CREDENTIALS_JSON
+        sync: false
+      - key: COOKIE_SECURE
+        value: "true"
+      - key: COOKIE_SAMESITE
+        value: "none"
+      - key: PYTHON_VERSION
+        value: "3.11.9"

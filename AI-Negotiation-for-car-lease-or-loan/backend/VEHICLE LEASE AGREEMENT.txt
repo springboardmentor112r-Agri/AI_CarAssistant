@@ -1,0 +1,32 @@
+VEHICLE LEASE AGREEMENT (SLA TEST DATA)
+
+1. PARTIES AND VEHICLE
+Lessee: Test User
+VIN: 1HGBH41JXMN109186
+Make/Model: Honda Civic 2024
+Trim: EX
+
+2. FINANCIAL TERMS
+Monthly Lease Payment: $425.00
+Annual Percentage Rate (APR): 8.9%
+Lease Term: 36 Months
+Down Payment: $3,500.00
+Residual Value: $14,000.00
+Money Factor: 0.00370
+
+3. MILEAGE & USAGE
+Annual Mileage Allowance: 10,000 miles
+Mileage Overage Fee: $0.28 per mile
+
+4. FEES & PENALTIES
+Acquisition Fee: $895.00
+Disposition Fee: $450.00
+Early Termination Fee: $750.00
+Late Payment Penalty: $75.00 or 5% of payment, whichever is greater.
+
+5. SPECIAL CLAUSES
+Maintenance: Lessee is responsible for all routine maintenance.
+GAP Coverage: NOT INCLUDED.
+Auto-Renewal: This contract will automatically renew for 12-month 
+increments unless written notice is provided 60 days prior to 
+the expiration of the lease term.

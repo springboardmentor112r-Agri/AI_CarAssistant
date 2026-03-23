@@ -1,0 +1,20 @@
+# Backend Python env and secrets
+.venv/
+venv/
+.env
+.env.*
+
+# Python caches and artifacts
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Runtime/debug outputs
+*.log
+
+# Local build artifacts
+dist/
+build/
