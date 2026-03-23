@@ -2,7 +2,7 @@
 streamlit_app.py  —  Car Lease Analyzer
 Public app: Sign In / Sign Up for all users.
 Exactly 4 tabs as shown in the video:
-  📄 Extract SLA  |  🔍 VIN Report  |  💬 Negotiate  |  📊 Compare
+  📄 Extract SLA  |  🔍 VIN Report  |  💬 Negotiate 
 """
 
 import streamlit as st
@@ -341,6 +341,9 @@ def render_header():
     # Sign Out in same row via sidebar button — keep header clean
     with st.sidebar:
         render_user_profile()
+    
+
+        
 
 
 # ─── Shared helpers ───────────────────────────────────────────────────────────
@@ -429,11 +432,11 @@ def main():
     n = len(st.session_state.compare_sel)
     compare_label = f"📊 Compare {'(' + str(n) + ')' if n else ''}"
 
-    tab1, tab2, tab3, tab4 = st.tabs([
+    tab1, tab2, tab3 = st.tabs([
         "📄 Extract SLA",
         "🔍 VIN Report",
         "💬 Negotiate",
-        compare_label,
+        # compare_label,
     ])
 
     with tab1:
@@ -442,8 +445,8 @@ def main():
         render_vin_tab()
     with tab3:
         render_negotiate_tab()
-    with tab4:
-        render_compare_tab()
+    # with tab4:
+    #     render_compare_tab()
 
     st.markdown("""
     <div class="divider" style="margin-top:2.5rem;"></div>
