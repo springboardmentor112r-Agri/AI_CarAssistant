@@ -28,17 +28,59 @@ async def upload_file(file: UploadFile):
     apr = re.findall(r'\d+\.?\d*%', text)
     payment = re.findall(r'[\$₹]\s?\d+', text)
     duration = re.findall(r'\d+\s*(months|years)', text, re.IGNORECASE)
+    down_payment = re.findall(r'down payment.*?[\$₹]\s?\d+', text, re.IGNORECASE)
+    mileage = re.findall(r'\d+\s*miles', text, re.IGNORECASE)
     penalty = re.findall(r'penalty.*', text, re.IGNORECASE)
+    termination = re.findall(r'termination.*', text, re.IGNORECASE)
+    buyout = re.findall(r'buyout.*|purchase option.*', text, re.IGNORECASE)
 
-    # Clean Output
-    result = {
+    #  Fairness Score
+    score = 100
+    if apr:
+        if float(apr[0].replace('%','')) > 10:
+            score -= 20
+    if penalty:
+        score -= 10
+    if termination:
+        score -= 10
+    if not mileage:
+        score -= 5
+
+    if score >= 80:
+        rating = "Good Deal"
+    elif score >= 60:
+        rating = "Moderate"
+    else:
+        rating = "Risky"
+
+    #  Negotiation Suggestions
+    suggestions = []
+
+    if apr:
+        suggestions.append("Try negotiating for a lower interest rate (APR).")
+    if penalty:
+        suggestions.append("Ask to reduce or remove late payment penalties.")
+    if mileage:
+        suggestions.append("Request higher mileage allowance.")
+    if termination:
+        suggestions.append("Negotiate flexible early termination terms.")
+    if buyout:
+        suggestions.append("Try negotiating a better buyout price.")
+
+    #  Final Output
+    return {
         "Summary": {
             "APR": apr if apr else ["Not Found"],
             "Monthly Payment": payment if payment else ["Not Found"],
             "Duration": duration if duration else ["Not Found"],
-            "Penalty": penalty if penalty else ["Not Found"]
+            "Down Payment": down_payment if down_payment else ["Not Found"],
+            "Mileage": mileage if mileage else ["Not Found"],
+            "Penalty": penalty if penalty else ["Not Found"],
+            "Termination": termination if termination else ["Not Found"],
+            "Buyout Option": buyout if buyout else ["Not Found"]
         },
-        "Message": "Extraction completed successfully"
+        "Fairness Score": score,
+        "Rating": rating,
+        "Negotiation Tips": suggestions if suggestions else ["No suggestions available"],
+        "Message": "Advanced contract analysis completed"
     }
-
-    return result
