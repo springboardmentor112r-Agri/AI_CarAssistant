@@ -1,0 +1,104 @@
+CAR LEASE AGREEMENT
+(Motor Vehicle Lease Contract – Synthetic,  Legally Styled)
+Agreement  Number: CLA-2025-44812
+Date of Agreement:  February 15, 2025
+1. PARTIES
+Lessor (Leasing Company):
+PrimeDrive  Auto Leasing LLC
+2140 Westwood  Business Park
+Chicago, IL 60616
+Phone: (312) 555-9283
+Lessee (Customer):
+Jakub Nowak
+ul. Kwiatowa  23/4
+Warsaw, Poland 02-658
+Phone: +48 600 854 739
+2. VEHICLE  INFORMATION
+Field        Details
+VIN        NMTBE3JE70R148437
+Brand        Toyota
+Model        Corolla
+Trim/Version         1.6 Premium
+Body Type        Sedan
+Fuel Type        Gasoline
+Color        Silver
+Year of Manufacture         2015
+Country of Registration         Poland
+Current Mileage        150,000–200,000  km
+The vehicle is leased in good mechanical  condition with expected wear for its mileage and 
+age.
+3. LEASE TERM
+Item        Value
+Lease Duration        36 months
+Start Date        March 1, 2025
+End Date        February 28, 2028
+Generated with https://kome.ai
+4. PAYMENT  TERMS
+Payment Type        Amount
+Monthly Lease Payment        $289.00
+Security Deposit        $450.00
+Initial Down Payment        $1,200.00
+Acquisition  Fee        $395.00
+Total Amount Due at Signing        $2,045.00
+Payments  must be made on the 5th of each month.
+5. MILEAGE  ALLOWANCE
+Item        Details
+Annual Mileage Limit        15,000 km per year
+Total Allowed (36 Months)        45,000 km
+Excess Mileage Fee        $0.08 per km
+Mileage already on the car does not count toward allowed lease mileage.
+6. INSURANCE  REQUIREMENTS
+Lessee must maintain:
+Full comprehensive  and collision coverage
+Minimum liability limits required under Polish and EU law
+Deductibles  not exceeding  $1,000
+Proof of insurance  must be provided before delivery.
+7. MAINTENANCE  AND REPAIRS
+Lessee agrees to:
+Perform regular oil changes and inspections
+Maintain proper tire condition and fluid levels
+Use approved Toyota service centers when possible
+Normal maintenance  is Lessee’s responsibility  unless a specific warranty is purchased.
+Generated with https://kome.ai
+8. WARRANTY  STATUS
+The vehicle is out of manufacturer  warranty due to age and mileage.
+Optional “Used Vehicle Mechanical  Protection  Plan” may be purchased  separately.
+9. LATE FEES & PAYMENT  DEFAULT
+Payments  more than 10 days late incur a $30 late fee
+Returned payment fee: $25
+After 45 days of non-payment,  the Lessor may initiate repossession  as allowed by law
+10. EARLY TERMINATION
+Lessee may terminate early with:
+Early termination  fee: $395
+Remaining  balance on lease payoff
+Settlement  of excess mileage or damages
+11. PURCHASE  OPTION (LEASE-END  BUYOUT)
+Lessee may purchase the vehicle at lease end for:
+Item        Amount
+Buyout Price        $7,950.00
+Purchase  Option Fee        $75.00
+Total: $8,025.00
+12. VEHICLE  CONDITION  AT RETURN
+Vehicle must be returned:
+Clean and free of major damage
+With all keys, documents,  and accessories
+Generated with https://kome.ai
+With acceptable  wear as defined by Lessor’s standards
+Charges may apply for:
+Excess wear
+Missing equipment
+Damaged  interior or exterior components
+13. GOVERNING  LAW
+This agreement  is governed by the laws of the State of Illinois, USA, unless otherwise  
+mutually amended in writing.
+14. SIGNATURES
+Lessor Representative:
+Name: Michael Carter
+Title: Lease Manager
+Signature:  
+Date: _
+Lessee:
+Name: Jakub Nowak
+Signature:  
+Date: _
+Generated with https://kome.ai

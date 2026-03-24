@@ -1,0 +1,71 @@
+Vehicle & Loan Agreement Details
+Vehicle Information
+Vehicle Make & Model: Tesla Model 3 Long Range (2023)
+VIN: 5YJ3E1EA8PF123456
+Exterior Color: Pearl White Multi■Coat
+Battery: Long Range Dual Motor
+Odometer at Delivery: 12 Miles
+Loan Summary
+Vehicle Price: $45,800
+Down Payment: $3,800
+Loan Amount: $32,000
+Loan Term: 60 Months
+Monthly Installment: $550
+Interest Rate: 6.5% APR
+Residual Value: $18,500
+
+Service Level Agreement (SLA)
+Response Times
+Customer inquiries acknowledged within 24 hours.
+Critical issues resolved within 72 hours.
+Emergency escalations handled within 6 business hours.
+Escalation Matrix
+Level 1: Customer Support Executive
+Level 2: Loan Account Manager
+Level 3: Regional Operations Manager
+Level 4: Legal & Compliance Team
+System Performance Guarantees
+Loan systems uptime maintained at 99.5%.
+Payment accuracy maintained at 99.9%.
+Borrower data protected under applicable laws.
+
+Additional SLA Clauses
+Late Payment Policy
+5-day grace period applies to monthly installments.
+Late fee of 2% per month applies beyond grace period.
+Early Closure Terms
+Loan can be closed after 12 months.
+Foreclosure charge of 2% on outstanding principal.
+Insurance Requirements
+Comprehensive insurance mandatory.
+Lender listed as first loss payee.
+Termination Conditions
+Agreement may be terminated for fraud, prolonged default, or breach of usage terms.
+
+Borrower Responsibilities
+Payment Obligations
+Timely EMI payments required.
+Payments via approved banking channels only.
+Vehicle Registration
+Vehicle must remain registered to borrower.
+No transfer without lender approval.
+Prohibited Actions
+No illegal use, racing, sub-leasing, or unauthorized commercial usage.
+Reporting Requirements
+Accidents, theft, or total loss reported within 24 hours.
+Address changes reported within 7 days.
+
+Legal Terms & Signatures
+Governing Law
+This agreement is governed by the laws of the State of California, USA.
+Entire Agreement
+This document represents the entire agreement between parties. Amendments require written
+consent.
+Legal Disclosures
+Borrower confirms understanding of interest, penalties, repossession rights, and legal
+consequences of default.
+Signatures
+Lender Authorized Signatory: ___________________________
+Borrower Signature: _________________________________
+Date: ____________________
+

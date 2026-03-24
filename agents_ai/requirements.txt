@@ -1,0 +1,10 @@
+PyPDF2
+pytesseract
+pdf2image
+Pillow
+Flask
+
+
+py -m streamlit run frontend_app.py
+# python backend_app.py
+py -m uvicorn backend_app:app --reload
