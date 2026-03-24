@@ -1,10 +1,13 @@
 import os
 import json
 import tempfile
+from pathlib import Path
 from io import BytesIO
 from typing import Optional
 from fastapi import FastAPI, UploadFile, File, Body
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from dotenv import load_dotenv
 from openai import OpenAI
 from pypdf import PdfReader
@@ -17,6 +20,9 @@ load_dotenv()
 
 # Initialize FastAPI app
 app = FastAPI(title="Lease Extractor API")
+
+BASE_DIR = Path(__file__).resolve().parent
+FRONTEND_DIR = BASE_DIR.parent / "frontend"
 
 # Enable CORS (for frontend requests)
 app.add_middleware(
@@ -311,5 +317,19 @@ async def calculate_risk():
         return {"status": "error", "message": f"Error calculating risk score: {str(e)}"}
 
 
+@app.get("/", include_in_schema=False)
+async def serve_homepage():
+    """Serve the frontend homepage from the FastAPI server."""
+    auth_page = FRONTEND_DIR / "auth.html"
+    if auth_page.exists():
+        return FileResponse(auth_page)
+    return {"status": "error", "message": "Frontend not found. Ensure the frontend folder exists."}
+
+
+# Mount frontend static files so auth/login/signup/index and assets load on port 8000.
+if FRONTEND_DIR.exists():
+    app.mount("/", StaticFiles(directory=str(FRONTEND_DIR), html=True), name="frontend")
+
+
 if __name__ == "__main__":
-    uvicorn.run("main:app", reload=True)
+    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
