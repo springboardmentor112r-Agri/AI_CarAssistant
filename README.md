@@ -16,13 +16,14 @@ Users can upload a lease document and instantly receive:
 🤖 AI-powered answers
 🚘 VIN verification
 🧠 System Architecture
+
 User uploads document (PDF / Image)
         ↓
    OCR Module (OCR / pdfplumber)
         ↓
    Data Extraction Module
         ↓
-   AI Analysis (Gemini API)
+   AI Analysis (Openrouter API)
         ↓
    Decision Logic (Risk Scoring)
         ↓
@@ -87,7 +88,7 @@ AI insights
 Backend
 FastAPI — API framework
 Python — Core logic
-Gemini API — AI analysis
+Openrouter API — AI analysis
 OCR + pdfplumber — Text extraction
 NHTSA API — VIN verification
 Frontend
@@ -135,11 +136,11 @@ Frontend runs at:
 
 | Module | Technology | Purpose |
 |--------|------------|---------|
-| OCR | EasyOCR, PyPDF | Extract text |
-| AI Analysis | Gemini API | Understand lease |
+| OCR | OCR, pdfplumber | Extract text |
+| AI Analysis | Openrouter API | Understand lease |
 | Risk Scoring | Python Logic | Detect risks |
 | VIN Verification | NHTSA API | Validate vehicle |
-| Chatbot | Gemini API | Answer questions |
+| Chatbot | openrouter API | Answer questions |
 | Frontend | HTML, JS | UI |
 | Backend | FastAPI | API |
 
@@ -196,8 +197,8 @@ What I built:
 This PR includes the complete implementation of an AI-powered car lease analysis system.
 
 Modules Implemented:
-✅ OCR Module — EasyOCR + PyPDF for document extraction  
-✅ AI Analysis — Gemini API for lease understanding  
+✅ OCR Module — OCR + pdfplumber for document extraction  
+✅ AI Analysis — Openrouter API for lease understanding  
 ✅ Risk Scoring — Rule-based lease risk detection  
 ✅ VIN Verification — NHTSA API integration  
 ✅ AI Chatbot — Answers user queries  
