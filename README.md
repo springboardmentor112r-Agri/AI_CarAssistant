@@ -18,7 +18,7 @@ Users can upload a lease document and instantly receive:
 🧠 System Architecture
 User uploads document (PDF / Image)
         ↓
-   OCR Module (EasyOCR / PyPDF)
+   OCR Module (OCR / pdfplumber)
         ↓
    Data Extraction Module
         ↓
