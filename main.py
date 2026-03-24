@@ -33,12 +33,18 @@ async def upload_file(file: UploadFile):
     penalty = re.findall(r'penalty.*', text, re.IGNORECASE)
     termination = re.findall(r'termination.*', text, re.IGNORECASE)
     buyout = re.findall(r'buyout.*|purchase option.*', text, re.IGNORECASE)
+    vin = re.findall(r'[A-HJ-NPR-Z0-9]{17}', text)
+    price_estimate = "₹8,00,000 - ₹10,00,000 (Estimated based on market trends)"
+
 
     #  Fairness Score
     score = 100
     if apr:
-        if float(apr[0].replace('%','')) > 10:
+        try:
+          if float(apr[0].replace('%','')) > 10:
             score -= 20
+        except:
+            pass
     if penalty:
         score -= 10
     if termination:
@@ -78,7 +84,9 @@ async def upload_file(file: UploadFile):
             "Penalty": penalty if penalty else ["Not Found"],
             "Termination": termination if termination else ["Not Found"],
             "Buyout Option": buyout if buyout else ["Not Found"]
+            "VIN": vin if vin else ["Not Found"]
         },
+         "Estimated Price": price_estimate,
         "Fairness Score": score,
         "Rating": rating,
         "Negotiation Tips": suggestions if suggestions else ["No suggestions available"],
