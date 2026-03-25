@@ -1,5 +1,7 @@
 # AI Car Lease Analysis Agent
 
+Uploading project (1).mp4…
+
 ## Project Overview
 
 The **Car Lease or Loan Contract Review and Negotiation App** is an AI-driven application designed to help users understand, review, and negotiate car lease or loan contracts with greater confidence. It uses Large Language Models (LLMs) for SLA/contract clause extraction, identifies key terms in lease documents, and improves transparency by cross-verifying vehicle pricing and history using publicly available data sources.
