@@ -14,10 +14,9 @@ The primary goal of this project is to:
 
 Users can upload a lease document and instantly receive:
 
-* 📊 Structured financial data
-* ⚠️ Risk analysis
 * 📝 Simple summaries
-* 🚘 VIN verification
+* ⚠️ Risk analysis
+* 🚘 VIN verification and Report
 * 🤖 AI-powered answers
 
 
