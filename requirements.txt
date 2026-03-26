@@ -1,0 +1,16 @@
+# Core Framework
+Flask
+Flask-SQLAlchemy
+Flask-Login
+
+# AI & API
+groq
+requests
+
+# File Processing
+pdfplumber
+pytesseract
+Pillow
+
+# Environment
+python-dotenv
