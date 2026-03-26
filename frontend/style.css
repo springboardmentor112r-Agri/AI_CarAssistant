@@ -2082,6 +2082,105 @@ body.auth-landing.main-page .feature-item-content p {
     line-height: 1.6;
 }
 
+/* VIN Verification Section */
+.vin-section {
+    display: grid;
+    gap: 18px;
+}
+
+.vin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: rgba(15, 23, 42, 0.05);
+    border-bottom: 1px solid var(--border);
+    font-weight: 600;
+    border-radius: 6px 6px 0 0;
+}
+
+.vin-input-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+}
+
+.vin-input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(100, 255, 218, 0.22);
+    color: var(--auth-fg, #e6f1ff);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 14px;
+    font-family: var(--auth-font-mono, "IBM Plex Mono", monospace);
+    outline: none;
+}
+
+.vin-input:focus {
+    border-color: var(--auth-cyan, #64ffda);
+    box-shadow: 0 0 0 3px rgba(100, 255, 218, 0.15);
+}
+
+.vin-loading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--auth-muted, #8ea1bf);
+}
+
+.vin-loading p {
+    margin: 0;
+}
+
+.vin-error {
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.32);
+    color: #fca5a5;
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 14px;
+}
+
+.vin-results {
+    display: grid;
+    gap: 10px;
+    border: 1px solid rgba(100, 255, 218, 0.2);
+    border-radius: 12px;
+    padding: 14px;
+    background: rgba(100, 255, 218, 0.04);
+}
+
+.vin-result-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px dashed rgba(100, 255, 218, 0.2);
+    padding-bottom: 8px;
+}
+
+.vin-result-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.vin-result-row span {
+    color: var(--auth-muted, #8ea1bf);
+    font-size: 13px;
+    letter-spacing: 0.03em;
+}
+
+.vin-result-row strong {
+    color: var(--auth-fg, #e6f1ff);
+    font-family: var(--auth-font-mono, "IBM Plex Mono", monospace);
+}
+
+@media (max-width: 720px) {
+    .vin-input-row {
+        grid-template-columns: 1fr;
+    }
+}
+
 .risk-results {
     display: grid;
     gap: 24px;

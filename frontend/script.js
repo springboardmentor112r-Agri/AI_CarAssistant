@@ -1,37 +1,123 @@
+function resetSectionView() {
+    // Hide all content sections.
+    var sections = document.querySelectorAll('.page-content');
+    for (var i = 0; i < sections.length; i += 1) {
+        sections[i].style.display = 'none';
+    }
+
+    // Clear active state from every sidebar item.
+    var navItems = document.querySelectorAll('.sidebar-menu .sidebar-item');
+    for (var j = 0; j < navItems.length; j += 1) {
+        navItems[j].classList.remove('active');
+    }
+}
+
 function goBack() {
-    // Hide all sections and remove active states
-    ['ai', 'chat', 'risk', 'summary'].forEach(function(s) {
-        var el = document.getElementById('section-' + s);
-        if (el) el.style.display = 'none';
-        var nav = document.getElementById('nav-' + s);
-        if (nav) nav.classList.remove('active');
-    });
-    // Show the hero
+    resetSectionView();
+
+    // Show hero panel.
     var hero = document.getElementById('introScreen');
     if (hero) hero.style.display = 'flex';
 }
 
 function showSection(name) {
-    // Hide hero
-    const hero = document.getElementById('introScreen');
+    // Hide hero panel first.
+    var hero = document.getElementById('introScreen');
     if (hero) hero.style.display = 'none';
 
-    // Hide all sections
-    ['ai', 'chat', 'risk', 'summary'].forEach(function(s) {
-        var el = document.getElementById('section-' + s);
-        if (el) el.style.display = 'none';
-        var nav = document.getElementById('nav-' + s);
-        if (nav) nav.classList.remove('active');
-    });
+    resetSectionView();
 
-    // Show the selected section (block for content sections, flex for placeholders)
+    // Show selected section and let CSS control its layout mode.
     var target = document.getElementById('section-' + name);
-    if (target) target.style.display = (name === 'risk' || name === 'summary') ? 'flex' : 'block';
+    if (target) {
+        target.style.display = '';
+    } else {
+        return;
+    }
 
-    // Mark active sidebar item
+    // Mark selected nav item as active.
     var navItem = document.getElementById('nav-' + name);
-    if (navItem) navItem.classList.add('active');
+    if (navItem) {
+        navItem.classList.add('active');
+    }
 }
+
+function isValidVin(vin) {
+    // VIN: 17 chars, excludes I, O, Q.
+    return /^[A-HJ-NPR-Z0-9]{17}$/.test(vin);
+}
+
+async function verifyVin() {
+    var vinInput = document.getElementById("vinInput");
+    var vinLoading = document.getElementById("vin-loading");
+    var vinError = document.getElementById("vin-error");
+    var vinResults = document.getElementById("vin-results");
+    var vinMake = document.getElementById("vin-make");
+    var vinModel = document.getElementById("vin-model");
+    var vinYear = document.getElementById("vin-year");
+    var vinStatus = document.getElementById("vin-status");
+
+    if (!vinInput || !vinLoading || !vinError || !vinResults || !vinMake || !vinModel || !vinYear || !vinStatus) {
+        return;
+    }
+
+    var vin = String(vinInput.value || "").trim().toUpperCase();
+    vinInput.value = vin;
+
+    vinError.style.display = "none";
+    vinError.textContent = "";
+    vinResults.style.display = "none";
+
+    if (!isValidVin(vin)) {
+        vinError.textContent = "Invalid VIN. VIN must be 17 characters and must not contain I, O, or Q.";
+        vinError.style.display = "block";
+        return;
+    }
+
+    vinLoading.style.display = "flex";
+
+    try {
+        var response = await fetch("http://127.0.0.1:8000/verify-vin/" + encodeURIComponent(vin), {
+            method: "GET"
+        });
+
+        var data = await response.json();
+        vinLoading.style.display = "none";
+
+        if (!response.ok) {
+            vinError.textContent = data.message || "Error fetching VIN data";
+            vinError.style.display = "block";
+            return;
+        }
+
+        if (data && data.status === "error") {
+            vinError.textContent = data.message || "Error fetching VIN data";
+            vinError.style.display = "block";
+            return;
+        }
+
+        if (!data || data.status !== "Verified" || !data.vin_data) {
+            vinError.textContent = "VIN not found";
+            vinError.style.display = "block";
+            return;
+        }
+
+        vinMake.textContent = data.vin_data.make || "N/A";
+        vinModel.textContent = data.vin_data.model || "N/A";
+        vinYear.textContent = data.vin_data.model_year || "N/A";
+        vinStatus.textContent = data.status || "N/A";
+        vinResults.style.display = "grid";
+    } catch (error) {
+        vinLoading.style.display = "none";
+        vinError.textContent = "Error fetching VIN data";
+        vinError.style.display = "block";
+    }
+}
+
+// Ensure inline onclick handlers always resolve these functions.
+window.goBack = goBack;
+window.showSection = showSection;
+window.verifyVin = verifyVin;
 
 async function uploadFile() {
     const fileInput = document.getElementById("fileInput");

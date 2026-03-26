@@ -28,17 +28,23 @@
             </div>
             <span class="sidebar-item-label">AI Lease Analysis</span>
         </div>
-        <div class="sidebar-item" id="nav-chat" onclick="showSection('chat')">
+        <div class="sidebar-item" id="nav-vin" onclick="showSection('vin')">
             <div class="sidebar-item-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
             </div>
-            <span class="sidebar-item-label">AI Chat</span>
+            <span class="sidebar-item-label">VIN Verification</span>
         </div>
         <div class="sidebar-item" id="nav-risk" onclick="showSection('risk')">
             <div class="sidebar-item-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><path d="M12 3a9 9 0 1 0 0 18 9 9 0 1 0 0-18z"/><path d="M12 7v10"/><path d="M8 12h8"/></svg>
             </div>
             <span class="sidebar-item-label">Lease Risk Score</span>
+        </div>
+        <div class="sidebar-item" id="nav-chat" onclick="showSection('chat')">
+            <div class="sidebar-item-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <span class="sidebar-item-label">AI Chat</span>
         </div>
         <div class="sidebar-item" id="nav-summary" onclick="showSection('summary')">
             <div class="sidebar-item-icon">
@@ -77,7 +83,7 @@
                 <div class="upload-row">
                     <label class="file-pill" for="fileInput">Choose PDF/Image</label>
                     <input type="file" id="fileInput" accept=".pdf,image/*" style="display:none;" />
-                    <button class="btn btn-primary upload-action" onclick="uploadFile()">Upload & Extract</button>
+                    <button class="btn btn-primary upload-action" onclick="uploadFile()">Extract</button>
                 </div>
 
             <div class="result-panel">
@@ -310,8 +316,50 @@
                 </div>
             </section>
         </div>
+
+        <div id="section-vin" class="page-content" style="display:none;">
+            <div class="section-back-row">
+                <button class="section-back-btn" onclick="goBack()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                    Back
+                </button>
+            </div>
+            <section class="card">
+                <div class="vin-section">
+                    <div class="vin-header">
+                        <span>VIN Verification</span>
+                    </div>
+
+                    <div class="vin-input-row">
+                        <input
+                            id="vinInput"
+                            class="vin-input"
+                            type="text"
+                            maxlength="17"
+                            placeholder="Enter 17-character VIN"
+                            onkeypress="if(event.key === 'Enter'){ verifyVin(); }"
+                        />
+                        <button class="btn btn-primary" type="button" onclick="verifyVin()">Verify VIN</button>
+                    </div>
+
+                    <div id="vin-loading" class="vin-loading" style="display:none;">
+                        <div class="spinner"></div>
+                        <p>Verifying VIN...</p>
+                    </div>
+
+                    <div id="vin-error" class="vin-error" style="display:none;"></div>
+
+                    <div id="vin-results" class="vin-results" style="display:none;">
+                        <div class="vin-result-row"><span>Make</span><strong id="vin-make">-</strong></div>
+                        <div class="vin-result-row"><span>Model</span><strong id="vin-model">-</strong></div>
+                        <div class="vin-result-row"><span>Year</span><strong id="vin-year">-</strong></div>
+                        <div class="vin-result-row"><span>Status</span><strong id="vin-status">-</strong></div>
+                    </div>
+                </div>
+            </section>
+        </div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="script.js?v=20260326-3"></script>
 </body>
 </html>

@@ -1,6 +1,9 @@
 import os
 import json
 import tempfile
+import urllib.request
+import urllib.error
+from urllib.parse import quote
 from pathlib import Path
 from io import BytesIO
 from typing import Optional
@@ -100,6 +103,55 @@ def extract_text_from_image(file_bytes: bytes, filename: Optional[str] = None) -
         os.unlink(temp_path)
 
     return "\n".join(fragment.strip() for fragment in text_fragments if fragment and fragment.strip()).strip()
+
+
+def _extract_nhtsa_value(results: list, variable_name: str) -> Optional[str]:
+    for item in results:
+        if item.get("Variable") == variable_name:
+            value = item.get("Value")
+            if value is None:
+                return None
+            cleaned = str(value).strip()
+            return cleaned or None
+    return None
+
+
+@app.get("/verify-vin/{vin}")
+async def verify_vin(vin: str):
+    vin_clean = (vin or "").strip().upper()
+
+    if len(vin_clean) != 17 or any(ch in vin_clean for ch in ["I", "O", "Q"]):
+        return {"status": "error", "message": "Invalid VIN format."}
+
+    if not all(ch.isdigit() or ("A" <= ch <= "Z") for ch in vin_clean):
+        return {"status": "error", "message": "Invalid VIN format."}
+
+    nhtsa_url = f"https://vpic.nhtsa.dot.gov/api/vehicles/decodevin/{quote(vin_clean)}?format=json"
+
+    try:
+        with urllib.request.urlopen(nhtsa_url, timeout=12) as response:
+            payload = response.read().decode("utf-8")
+        data = json.loads(payload)
+        results = data.get("Results", [])
+    except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, json.JSONDecodeError):
+        return {"status": "error", "message": "Error fetching VIN data"}
+
+    make = _extract_nhtsa_value(results, "Make")
+    model = _extract_nhtsa_value(results, "Model")
+    model_year = _extract_nhtsa_value(results, "Model Year")
+
+    if not make and not model and not model_year:
+        return {"status": "error", "message": "VIN not found"}
+
+    return {
+        "vin": vin_clean,
+        "vin_data": {
+            "make": make or "N/A",
+            "model": model or "N/A",
+            "model_year": model_year or "N/A"
+        },
+        "status": "Verified"
+    }
 
 
 @app.post("/extract-lease/")
