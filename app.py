@@ -185,46 +185,66 @@ def chat_api():
 
         print("User:", user_message)
 
+        # 🔹 Get contract data
         contract_data = session.get("contract_data", {})
 
         if not contract_data:
             return jsonify({"reply": "⚠️ Please upload a contract first."})
 
+        # 🔥 NEW: Calculate fairness
+        fairness = calculate_fairness(contract_data)
+
+        print("Fairness:", fairness)
+
+        # 🔥 Risk-based warning (optional but powerful)
+        if fairness["risk"] in ["DANGER", "HIGH RISK"]:
+            warning = "⚠️ This contract is HIGH RISK. Be cautious."
+        else:
+            warning = ""
+
+        # 🔥 UPDATED PROMPT
         prompt = f"""
-        You are an expert car lease assistant.
+You are an expert car lease assistant.
 
-        Talk like a smart human advisor — not like a report.
-        - If user asks a simple question → give short answer
-        - If user asks about risk or advice → give deeper explanation
+Talk like a smart human advisor — not like a report.
 
-        - Make the response feel like ChatGPT or a real consultant talking
+IMPORTANT RULES:
+- Use fairness score and risk level to guide your answer
+- If risk is HIGH/DANGER → clearly warn the user
+- NEVER say "fairly standard" if there are red flags
+- If contract is risky → explain why
+- Answer ONLY what the user asks
 
-        RULES:
-        - Answer naturally like a conversation
-        - Do NOT use headings like "Answer", "Explanation"
-        - Do NOT use bullet points unless needed
-        - Keep it clear and easy to read
-        - Include helpful advice naturally in the response
-        - Keep it 3–5 lines max
+STYLE:
+- Natural conversation (like ChatGPT)
+- Friendly but professional
+- Simple language
+- 3–5 lines max
+- No headings or rigid structure
 
-        STYLE:
-        - Friendly but professional
-        - Simple language
-        - Practical insights
+---
 
-        ---
+Contract Data:
+{contract_data}
 
-        Contract Data:
-        {contract_data}
+Fairness Score: {fairness["score"]}
+Risk Level: {fairness["risk"]}
+Red Flags: {fairness["red_flags"]}
 
-        User Question:
-        {user_message}
-        """
+{warning}
+
+---
+
+User Question:
+{user_message}
+"""
+
+        # 🔹 Call Groq API
         response = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
             messages=[
-                {"role":"system","content":"You are a negotiation expert"},
-                {"role":"user","content":prompt}
+                {"role": "system", "content": "You are a smart financial and negotiation advisor."},
+                {"role": "user", "content": prompt}
             ]
         )
 

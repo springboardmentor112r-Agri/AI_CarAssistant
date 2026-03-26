@@ -11,7 +11,7 @@ body{
     background:#020617;
     color:white;
     font-family:'Segoe UI', sans-serif;
-    padding-top:80px;
+    padding-top:10px;
 }
 
 /* Title */
@@ -90,7 +90,9 @@ button:hover{
 </head>
 
 <body>
-<a href="/dashboard" class="back-btn">← Back to Dashboard</a>
+{% include "navbar.html" %}
+
+
 <h1>VIN Lookup</h1>
 
 <div class="container">

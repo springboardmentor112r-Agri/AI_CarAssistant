@@ -29,10 +29,10 @@ def calculate_fairness(data):
         score -= 25
         red_flags.append("Very high monthly payment")
     elif monthly_payment > 50000:
-        score -= 15
+        score -= 25
         red_flags.append("High monthly payment")
     elif monthly_payment > 30000:
-        score -= 5
+        score -= 25
 
     elif monthly_payment == 0:
         red_flags.append("Monthly payment missing")
@@ -44,7 +44,7 @@ def calculate_fairness(data):
         score -= 20
         red_flags.append("Very high down payment")
     elif down_payment > 150000:
-        score -= 10
+        score -= 20
         red_flags.append("High down payment")
 
     elif down_payment == 0:
@@ -57,7 +57,7 @@ def calculate_fairness(data):
         score -= 20
         red_flags.append("Very low mileage limit")
     elif mileage < 12000:
-        score -= 10
+        score -= 20
         red_flags.append("Low mileage limit")
 
     elif mileage > 20000:
@@ -73,7 +73,7 @@ def calculate_fairness(data):
         score -= 10
         red_flags.append("Too long lease duration")
     elif duration > 48:
-        score -= 5
+        score -= 10
 
     elif duration < 24 and duration != 0:
         score += 5  # short lease is flexible
