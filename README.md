@@ -71,8 +71,17 @@ car_contract_ai/
 cd backend
 pip install -r requirements.txt
 
-Set API key:
+Create an environment variable for your Gemini API key:
+
+**Windows:**
+```
 set GOOGLE_API_KEY=your_api_key
+```
+
+**Mac/Linux:**
+```
+export GOOGLE_API_KEY=your_api_key
+```
 
 Run server:
 uvicorn main:app --reload
