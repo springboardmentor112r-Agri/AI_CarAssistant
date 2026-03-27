@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LeaseGuardAI - Dashboard</title>
+  <style>
+    .suggest-btn {
+  background:#222;
+  color:#ddd;
+  border:1px solid #333;
+  padding:8px 12px;
+  border-radius:20px;
+  margin-right:5px;
+  margin-top:5px;
+  cursor:pointer;
+}
+
+.suggest-btn:hover {
+  background:#333;
+}
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Segoe UI',sans-serif; background:#0f0f0f; color:#fff; min-height:100vh; }
+    .header { display:flex; justify-content:space-between; align-items:center; padding:15px 30px; background:#1a1a1a; }
+    .logo { font-size:26px; font-weight:700; }
+    .logo span { color:#00b4ff; }
+
+    .tabs { display:flex; justify-content:center; gap:8px; padding:15px; background:#1a1a1a; }
+    .tab { padding:12px 30px; border-radius:12px; background:#222; cursor:pointer; }
+    .tab.active { background:#00b4ff; color:white; }
+
+    .content { padding:30px; max-width:1000px; margin:0 auto; }
+
+    .upload-box { background:#1a1a1a; border:2px dashed #555; border-radius:16px; padding:80px 40px; text-align:center; }
+    .upload-box:hover { border-color:#00b4ff; }
+
+    .card { background:#1a1a1a; border-radius:16px; padding:25px; margin-top:20px; }
+    .score-circle {
+      width:160px; height:160px; border-radius:50%; margin:20px auto; display:flex; align-items:center; justify-content:center;
+      font-size:52px; font-weight:bold; border:14px solid;
+    }
+    .redflag { color:#ff5252; }
+    .vehicle-info { display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:15px; margin-top:15px; }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="logo"><span>🔷</span> LeaseGuardAI<span>🤖</span> </div>
+    <button onclick="logout()" style="padding:8px 16px;background:#ff5252;border:none;border-radius:8px;color:white;">Logout</button>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="showTab(0)">📄 Contract Scan</div>
+    <div class="tab" onclick="showTab(1)">🚗 Vehicle Details</div>
+    <div class="tab" onclick="showTab(2)">💬 AI Consultant</div>
+  </div>
+
+  <div class="content">
+
+    <!-- Tab 0: Upload -->
+    <div id="tab0">
+      <div class="upload-box">
+        <div style="font-size:70px;margin-bottom:20px;">📤</div>
+        <h2>Drop your contract PDF here</h2>
+        <input type="file" id="fileInput" accept=".pdf" style="display:none" />
+        <button onclick="document.getElementById('fileInput').click()" style="margin-top:15px;padding:14px 36px;background:#00b4ff;border:none;border-radius:12px;color:white;">
+          Browse Files
+        </button>
+      </div>
+      <div id="rawOutput" class="card" style="display:none; margin-top: 20px; background: #000; border: 1px solid #333;">
+      <h3 style="color: #00b4ff; margin-bottom: 10px;">Raw Analysis Data</h3>
+      <pre id="jsonDisplay" style="white-space: pre-wrap; word-wrap: break-word; font-size: 12px; color: #00ff9d;"></pre>
+      </div>
+    </div>
+      <!-- Tab 1: Vehicle Details -->
+       
+<div id="tab1" style="display:none;">
+  <div class="card">
+    <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:20px; border-bottom:1px solid #333; padding-bottom:15px;">
+      <div>
+        <h2 style="margin-bottom: 5px;">Analysis Overview</h2>
+        <span id="vinBadge" style="padding:4px 12px; border-radius:20px; font-size:12px; font-weight:bold; display:inline-block;"></span>
+      </div>
+      <div id="miniFairness" style="text-align:center; padding:10px 20px; border-radius:12px; background:#222; border:1px solid #444;">
+        <div id="miniScore" style="font-size:32px; font-weight:bold;">--</div>
+        <div id="miniRisk" style="font-size:10px; text-transform:uppercase; letter-spacing:1px; margin-top:2px;">Score</div>
+      </div>
+    </div>
+
+    <div id="vinAnalysis" style="margin-bottom:25px; padding:12px; background:rgba(255,255,255,0.03); border-left:4px solid #00b4ff;">
+      <p id="vinStatusText" style="font-size:14px; color:#ccc;"></p>
+    </div>
+
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px;">
+      <div id="vehicleInfo"></div>
+      <div id="leaseInfo"></div>
+    </div>
+
+    <div id="redFlags" style="margin-top:30px; padding:20px; background:rgba(255,82,82,0.05); border-radius:16px; border:1px solid rgba(255,82,82,0.2);">
+        </div>
+  </div>
+</div>
+
+<div id="tab2" style="display:none;">
+  <div class="chat-box" id="chatBox"
+       style="background:#1a1a1a;border-radius:16px;padding:20px;height:420px;overflow-y:auto;margin-top:20px;">
+  </div>
+
+  <!-- Suggested prompts -->
+  <div id="suggestions" style="margin-top:10px;">
+    <button onclick="useSuggestion('Is this contract risky?')" class="suggest-btn">Is this contract risky?</button>
+    <button onclick="useSuggestion('What hidden fees are in this contract?')" class="suggest-btn">Hidden fees?</button>
+    <button onclick="useSuggestion('Give me a negotiation script')" class="suggest-btn">Negotiation script</button>
+  </div>
+
+  <!-- Input + send button -->
+  <div style="display:flex; gap:10px; margin-top:10px;">
+    <input type="text" id="chatInput"
+           placeholder="Ask about the contract..."
+           style="flex:1;padding:15px;border-radius:12px;border:none;background:#222;color:white;"
+           onkeypress="if(event.key==='Enter') sendMessage()">
+
+    <button onclick="sendMessage()"
+            style="padding:0 20px;border:none;border-radius:12px;background:#00b4ff;color:white;font-weight:bold;">
+      Send
+    </button>
+  </div>
+</div>
+  </div>
+
+  <script>
+    const API_BASE = "http://127.0.0.1:8000";
+    let uploadedContractText = "";
+    let currentAnalysis = null;
+
+    function showTab(n) {
+      document.querySelectorAll('.content > div').forEach(d => d.style.display = 'none');
+      document.getElementById('tab'+n).style.display = 'block';
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab')[n].classList.add('active');
+    }
+
+    // Upload Contract
+document.getElementById('fileInput').addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  try {
+    const res = await fetch(`${API_BASE}/upload`, { method: "POST", body: formData });
+    const data = await res.json();
+
+if (res.ok) {
+    // Note: main.py returns { "status": "success", "analysis": { ... } }
+    currentAnalysis = data.analysis; 
+    
+    // Show Raw JSON in Tab 0 (as requested)
+    document.getElementById("rawOutput").style.display = "block";
+    document.getElementById("jsonDisplay").textContent = JSON.stringify(data, null, 2);
+
+    alert("✅ Contract analyzed successfully!");
+    showTab(1);
+    showFairness();
+    showVehicleDetails();
+}
+  } catch(err) {
+    console.error(err);
+    alert("Upload failed. Check console for details.");
+  }
+});
+
+function showVehicleDetails() {
+  const v = currentAnalysis;
+  console.log("Recall data:", v.recalls);
+  const vinInfo = document.getElementById("vinAnalysis");
+  const vinBadge = document.getElementById("vinBadge");
+  const vinStatusText = document.getElementById("vinStatusText");
+
+  const displayVin = v.vin || v.invalid_vin_detected || "Not found";
+  const isVinValid = displayVin.length === 17;
+
+  vinInfo.style.display = "block";
+
+  if (isVinValid) {
+    vinBadge.textContent = "✓ VALID VIN";
+    vinBadge.style.background = "#16a34a";
+    vinStatusText.innerHTML = `Standard VIN detected.`;
+  } else {
+    vinBadge.textContent = "⚠ INVALID VIN";
+    vinBadge.style.background = "#ff5252";
+    vinStatusText.innerHTML = `VIN detected but not 17 characters: <strong>${displayVin}</strong>`;
+  }
+
+document.getElementById("vehicleInfo").innerHTML = `
+  <h3 style="margin-bottom:10px;">🚗 Vehicle Information</h3>
+
+  <p><strong>Vehicle:</strong> ${v.vehicle || 'N/A'}</p>
+  <p><strong>Contract Type:</strong> ${v.contract_type || 'N/A'}</p>
+  <p><strong>VIN:</strong> ${displayVin}</p>
+  <p><strong>Maintenance Responsibility:</strong> ${v.maintenance_responsibility || 'N/A'}</p>
+
+  <hr style="border-color:#333;margin:15px 0;">
+
+  <h3 style="margin-bottom:10px;">💰 Financial Terms</h3>
+
+  <p><strong>Monthly Installment:</strong> $${v.monthly_installment || 'N/A'}</p>
+  <p><strong>Interest / APR:</strong> ${v.interest_rate_or_apr_percent || 'N/A'}%</p>
+  <p><strong>Loan / Lease Term:</strong> ${v.lease_term_months || 'N/A'} months</p>
+  <p><strong>Initial Payment:</strong> $${v.initial_payment_or_downpayment || 'N/A'}</p>
+  <p><strong>Amount Due at Signing:</strong> $${v.amount_due_at_signing || 'N/A'}</p>
+`;
+document.getElementById("leaseInfo").innerHTML = `
+  <h3 style="margin-bottom:10px;">📊 End-of-Term & Usage Terms</h3>
+
+  <p><strong>Residual Value:</strong> $${v.residual_value || 'N/A'}</p>
+  <p><strong>Buyout Price:</strong> $${v.buyout_price_end_of_term || 'N/A'}</p>
+  <p><strong>Annual Mileage Limit:</strong> ${v.annual_mileage_limit || 'N/A'} miles</p>
+  <p><strong>Excess Mileage Fee:</strong> $${v.excess_mileage_charge || 'N/A'} per mile</p>
+  <p><strong>Early Termination Fee:</strong> $${v.early_termination_fee || 'N/A'}</p>
+  <p><strong>Disposition Fee:</strong> $${v.disposition_fee || 'N/A'}</p>
+`;
+// ----- Red Flags & Recalls Section -----
+
+let recallList = "<p style='color:#bbb;'>No active safety recalls found.</p>";
+
+if (v.recalls && v.recalls.results && v.recalls.results.length > 0) {
+  recallList = `
+    <p><strong>Total Recalls:</strong> ${v.recalls.count}</p>
+    <ul>
+      ${v.recalls.results.map(r => `
+        <li style="margin-bottom:10px;">
+          🚨 <strong>${r.component || "Component not listed"}</strong><br>
+          <span style="color:#bbb;">${r.summary || "No summary provided"}</span>
+        </li>
+      `).join("")}
+    </ul>
+  `;
+}
+
+const redFlagList = v.important_warnings && v.important_warnings.length > 0
+  ? `<ul>${v.important_warnings.map(w => `<li>⚠️ ${w}</li>`).join("")}</ul>`
+  : "<p style='color:#bbb;'>No contract red flags detected.</p>";
+
+document.getElementById("redFlags").innerHTML = `
+  <h3 style="color:#ff5252;">⚠️ Risk & Safety Alerts</h3>
+  
+  <h4 style="margin-top:15px;">🚨 Safety Recalls</h4>
+  ${recallList}
+
+  <h4 style="margin-top:20px;">⚠️ Contract Red Flags</h4>
+  ${redFlagList}
+`;
+
+}
+function useSuggestion(text) {
+  document.getElementById("chatInput").value = text;
+  sendMessage();
+}
+function showFairness() {
+  if (!currentAnalysis) return;
+
+  const Score = currentAnalysis.fairness_score || "--";
+  const risk = currentAnalysis.risk_level || "Unknown";
+  const color = currentAnalysis.risk_color || "#888";
+
+  document.getElementById("miniScore").textContent = Score;
+  document.getElementById("miniRisk").textContent = risk;
+  document.getElementById("miniFairness").style.borderColor = color;
+}
+async function uploadFile() {
+  const formData = new FormData();
+  formData.append("file", fileInput.files[0]);
+
+  const res = await fetch("http://127.0.0.1:8000/upload", {
+    method: "POST",
+    body: formData
+  });
+
+  const data = await res.json();
+
+  // store globally for chatbot
+  uploadedContractText = data.text_preview || "";
+  currentAnalysis = data.analysis;
+
+  console.log("Contract stored for chat:", uploadedContractText.length);
+}
+function formatAI(text) {
+  return text
+    .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>")
+    .replace(/\n/g, "<br>");
+}
+async function sendMessage() {
+  const input = document.getElementById("chatInput");
+  const msg = input.value.trim();
+  const chatBox = document.getElementById("chatBox");
+
+  if (!msg || !currentAnalysis) {
+      alert("Please upload a contract first!");
+      return;
+  }
+
+  // user message
+  chatBox.innerHTML += `
+    <div style="margin-bottom:10px; text-align:right;">
+      <span style="background:#00b4ff; padding:8px 12px; border-radius:12px;">
+        ${msg}
+      </span>
+    </div>`;
+
+  // loading bubble
+  chatBox.innerHTML += `
+    <div id="loadingMsg" style="margin-bottom:10px;">
+      <span style="background:#222; padding:8px 12px; border-radius:12px;">
+        LeaseGuard AI is typing...
+      </span>
+    </div>`;
+
+  chatBox.scrollTop = chatBox.scrollHeight;
+  input.value = "";
+
+  try {
+    const res = await fetch("http://127.0.0.1:8000/chat/message", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        message: msg,
+        contract_text: uploadedContractText
+      })
+    });
+
+    const data = await res.json();
+
+    // remove loading bubble
+    document.getElementById("loadingMsg").remove();
+
+    // bot reply
+    chatBox.innerHTML += `
+      <div style="margin-bottom:10px;">
+        <span style="background:#222; padding:8px 12px; border-radius:12px; display:inline-block; border:1px solid #333;">
+          ${formatAI(data.reply)}
+        </span>
+      </div>`;
+
+  } catch (e) {
+    document.getElementById("loadingMsg").remove();
+    chatBox.innerHTML += `<div style="color:red;">Connection error.</div>`;
+  }
+
+  chatBox.scrollTo({
+  top: chatBox.scrollHeight,
+  behavior: "smooth"
+});
+}
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = "login.html";
+    }
+
+    showTab(0);
+  </script>
+</body>
+</html>
