@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+python-multipart
+pytesseract
+pillow
+pdfplumber
+pdf2image
+mysql-connector-python
+groq
+python-dotenv
+
+# pip install -r requirements.txt     
