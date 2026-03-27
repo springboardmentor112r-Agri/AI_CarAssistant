@@ -10,7 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import google.generativeai as genai
 
 # 🔑 Gemini API Key
-genai.configure(api_key="AIzaSyBEmwAPfiMdJuNJcwXYiVZ1y9EtPxXPm4U")
+genai.configure(api_key="API_KEY")
 
 # ✅ Working model
 model = genai.GenerativeModel("gemini-2.5-flash")
