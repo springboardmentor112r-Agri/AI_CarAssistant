@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LeaseGuardAI - Sign Up</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #0a0a0a, #1a1a2e); color:#fff; min-height:100vh; display:flex; align-items:center; justify-content:center; }
+    .container { background:rgba(26,26,26,0.95); border:1px solid #333; border-radius:20px; padding:50px 40px; width:100%; max-width:440px; text-align:center; }
+    .logo { font-size:42px; font-weight:700; margin-bottom:10px; }
+    .logo span { color:#00b4ff; }
+    .input-field { width:100%; padding:16px 20px; background:#222; border:1px solid #444; border-radius:12px; color:white; margin-bottom:15px; }
+    .btn { width:100%; padding:16px; background:#00b4ff; color:white; border:none; border-radius:12px; font-size:18px; cursor:pointer; margin-top:20px; }
+    .error { color:#ff5252; margin:10px 0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo"><span>🔷</span> LeaseGuardAI<span>🤖</span></div>
+    <h2>Create Account</h2>
+
+    <div id="errorMsg" class="error"></div>
+
+    <input type="text" id="name" class="input-field" placeholder="Full Name" />
+    <input type="email" id="email" class="input-field" placeholder="Email" />
+    <input type="password" id="password" class="input-field" placeholder="Password" />
+
+    <button class="btn" onclick="signUp()">Create Account</button>
+  </div>
+
+  <script>
+    const API_BASE = "http://127.0.0.1:8000";
+
+    async function signUp() {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const errorMsg = document.getElementById("errorMsg");
+
+      if (!email || !password) {
+        errorMsg.textContent = "Email and password are required";
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_BASE}/auth/signup`, {
+          method: "POST",
+          headers: {"Content-Type": "application/x-www-form-urlencoded"},
+          body: new URLSearchParams({ email, password })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          alert("✅ Account created! Please login now.");
+          window.location.href = "login.html";
+        } else {
+          errorMsg.textContent = data.detail || "Signup failed";
+        }
+      } catch(e) {
+        errorMsg.textContent = "Cannot connect to server. Is backend running?";
+      }
+    }
+  </script>
+</body>
+</html>
