@@ -53,6 +53,7 @@ Users can upload a contract (PDF or image), and the system extracts key details,
 
 ## 📁 Project Structure
 
+```
 car_contract_ai/
 ├── backend/
 │   ├── main.py
@@ -61,8 +62,7 @@ car_contract_ai/
 │   ├── home.html
 │   └── index.html
 └── README.md
-
----
+```
 
 ## 🚀 How to Run
 
@@ -91,23 +91,23 @@ http://localhost:5500/home.html
 
 ## 📊 Example Output
 
+```json
 {
-"analysis": {
-"monthly_payment": "₹62,500",
-"lease_term": "48 months",
-"risks": ["Excess mileage fee"]
-},
-"evaluation": {
-"risk_level": "Medium",
-"fairness_score": 65
-},
-"suggestions": [
-"Try negotiating the monthly payment",
-"Ask for a higher mileage limit"
-]
+  "analysis": {
+    "monthly_payment": "₹62,500",
+    "lease_term": "48 months",
+    "risks": ["Excess mileage fee"]
+  },
+  "evaluation": {
+    "risk_level": "Medium",
+    "fairness_score": 65
+  },
+  "suggestions": [
+    "Try negotiating the monthly payment",
+    "Ask for a higher mileage limit"
+  ]
 }
-
----
+```
 
 ## ⚠️ Disclaimer
 
