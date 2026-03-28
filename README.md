@@ -12,8 +12,6 @@
 | Sign In | Dark navy + orange login page with animated floating car |
 | Sign Up | Public registration — no invite required |
 | Extract SLA | PDF upload → AI extraction → Table / JSON view + 4 charts |
-| VIN Report | 17-char counter, NHTSA lookup, recall history |
-| Negotiate | AI chatbot with quick-prompt chips and chat bubbles |
 
 ---
 
@@ -163,7 +161,6 @@ The app opens at **http://localhost:8501**
 
 | Email | Password | Notes |
 |---|---|---|
-| `Akhil@test.com` | `password123` | Primary demo account |
 | `demo@demo.com` | `demo123` | Secondary demo account |
 
 Or click **Sign up** to create your own account — registration is open to all users.
