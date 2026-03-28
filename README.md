@@ -51,6 +51,7 @@ Upload a car lease document and let Claude AI extract every detail automatically
 - Toggle between Table and `{ } JSON` view
 - `📥 Export JSON` download button
 
+---
 
 ### 🔍 Tab 2 — VIN Report
 Look up any vehicle by its VIN number using the free NHTSA public API.
