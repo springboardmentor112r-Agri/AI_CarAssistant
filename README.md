@@ -1,97 +1,137 @@
-AI Car Lease/Loan Contract Review Assistant
- Overview
-This project is an AI-based system designed to analyze car lease or loan contracts. It extracts important financial and legal information from contract documents and provides structured insights, risk evaluation, and decision support to help users make informed choices.
+# AI Car Lease / Loan Contract Assistant
 
-Features
+## About this project
 
-Contract Analysis
-- Upload contract PDF
-- Extract key details:
-  - Interest Rate (APR)
-  - Monthly Payment
-  - Lease Duration
-  - VIN Number
-  - Penalty clauses
+When I first looked at a car lease or loan contract, I realized how difficult it is to understand. These documents are long, full of legal terms, and most people don’t really know what they are signing.
 
- Risk & Decision Analysis
-- Contract Quality Score
-- Risk Percentage and Risk Level (Low / Moderate / High)
-- Financial Risk and Legal Risk categorization
-- Final Verdict (Good Deal / Caution / Not Recommended)
+The goal is simple:  
+Take a complex contract and explain it in a way anyone can understand.
 
- Intelligent Insights
-- Red Flag detection (penalty, termination, etc.)
-- Explainable output ("Why this result")
-- Key Issue identification
-- Decision Guide for users
+## What problem I am solving
 
- Negotiation Support
-- Smart suggestions for improving contract terms
+Many people:
+- Don’t understand interest rates properly  
+- Miss penalty clauses  
+- Don’t know if a deal is good or bad
 
-Contract Comparison
-- Compare two contracts
-- Identify better contract based on APR
-- Provide reasoning
+Because of this, they can end up making poor financial decisions.
 
-Conversational Assistant
-- Simple chatbot to answer queries about contract terms
+## My idea
+
+The idea behind this project is to act like a personal assistant for car contracts.
+
+Instead of reading everything manually, the user can:
+1. Upload the contract  
+2. Let the system analyze it  
+3. Get a clear explanation and decision  
 
 
+## What the system does
 
-Complete Workflow
-
-1. User uploads a contract PDF
-2. System extracts text using PyPDF2
-3. Important values are identified using pattern matching:
-   - APR
-   - Payment
-   - Duration
-   - VIN
-   - Penalties
-4. Data is structured into a readable format
-5. Risk analysis is performed using rule-based logic
-6. Red flags and key issues are identified
-7. Suggestions and decision guidance are generated
-8. Output is displayed via FastAPI Swagger UI
+### Contract Analysis
+The user uploads a PDF contract.  
+The system extracts:
+- Interest rate (APR)
+- Monthly payment
+- Duration
+- VIN number
+- Penalties
 
 
-Tech Stack
-
-- Python
-- FastAPI
-- PyPDF2
-- Regex (pattern-based extraction)
-- Swagger UI (API interface)
+### Risk Analysis
+The system evaluates how risky the contract is:
+- Contract Quality Score (out of 100)
+- Risk percentage
+- Risk level (Low, Moderate, High)
 
 
-
- Sample Output
-
-- APR: 9.25%
-- Monthly Payment: ₹18,500
-- Risk Level: Moderate
-- Contract Quality Score: 80
-- Final Verdict: Proceed with Caution
-
- Demo Video
+### Decision Support
+The system helps the user decide:
+- Final verdict (Good Deal / Proceed with Caution / Not Recommended)
+- Explanation of result
+- Suggestions for improvement
+- Decision guide
 
 
-System Design Approach
-
-- Focus on backend intelligence and contract understanding
-- Rule-based analysis for risk evaluation
-- Explainable outputs for better user understanding
-- Designed as a scalable system that can integrate AI models
-
- Future Scope
-
-- Integration with Large Language Models (LLMs)
-- VIN-based vehicle data APIs
-- Real-time vehicle price estimation
-- Full frontend (web/mobile application)
-- Advanced negotiation chatbot
+### Contract Comparison
+- Upload two contracts  
+- System compares them  
+- Suggests the better contract  
 
 
+### Chat Assistant
+User can ask questions like:
+- What is APR?
+- What is risk?
+- Is this contract good?
 
-Swagger UI is used as the frontend interface for interaction and demonstration.
+The chatbot gives simple answers and can also use the analyzed contract.
+
+
+## How it works (simple flow)
+
+1. User uploads contract  
+2. System reads PDF using PyPDF2  
+3. Important data is extracted using regex  
+4. Risk is calculated using rule-based logic  
+5. Insights and suggestions are generated  
+6. Results are shown in the frontend  
+
+
+## System Workflow
+
+1. Upload contract  
+2. Extract text  
+3. Extract key values  
+4. Calculate risk  
+5. Generate insights  
+6. Display results  
+
+## API Endpoints
+
+- `/analyze/` → Analyze contract  
+- `/compare/` → Compare contracts  
+- `/chat/` → Chat assistant  
+
+
+## Technologies used
+
+- Python  
+- FastAPI  
+- PyPDF2  
+- Regex  
+- HTML, CSS, JavaScript  
+
+## How to run
+
+### Step 1: Run backend
+uvicorn main:app --reload
+
+
+### Step 2: Open frontend
+Open `index.html` in your browser
+
+## What makes this project useful
+
+- Makes complex contracts easy to understand  
+- Saves time  
+- Helps users make better decisions  
+- Highlights hidden risks  
+
+
+## Future improvements
+
+- Use AI models for better understanding  
+- Add real vehicle data using VIN  
+- Improve chatbot intelligence  
+- Build full mobile/web application  
+
+
+## My contribution
+
+- Designed the idea  
+- Built backend logic  
+- Created frontend UI  
+- Implemented risk analysis system  
+- Added chatbot functionality  
 
