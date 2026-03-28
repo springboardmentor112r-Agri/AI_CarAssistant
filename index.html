@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Lease AI Platform</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: #0f172a;
+  color: white;
+}
+
+/* NAVBAR */
+.navbar {
+  background: #020617;
+  padding: 15px 25px;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+/* TABS */
+.tabs {
+  display: flex;
+  justify-content: center;
+  background: #020617;
+}
+
+.tab {
+  padding: 12px 20px;
+  cursor: pointer;
+}
+
+.tab:hover {
+  background: #1e293b;
+}
+
+/* MAIN */
+.main {
+  display: flex;
+  justify-content: center;
+  padding: 30px;
+}
+
+/* PANEL */
+.panel {
+  display: none;
+  width: 700px;
+}
+
+/* CARD */
+.card {
+  background: #1e293b;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+/* BUTTON */
+button {
+  width: 100%;
+  padding: 10px;
+  background: #3b82f6;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* INPUT */
+input {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+/* RESULT GRID */
+.result-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+/* BOX */
+.box {
+  background: #020617;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+/* BADGE */
+.badge {
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.high { background: red; }
+.moderate { background: orange; }
+.low { background: green; }
+
+</style>
+</head>
+
+<body>
+
+<div class="navbar">Lease AI Contract Platform</div>
+
+<div class="tabs">
+  <div class="tab" onclick="show('analyze')">Analyze</div>
+  <div class="tab" onclick="show('compare')">Compare</div>
+  <div class="tab" onclick="show('chat')">Chat</div>
+</div>
+
+<div class="main">
+
+  <!-- ANALYZE -->
+  <div id="analyze" class="panel">
+    <div class="card">
+      <h3>Upload Contract</h3>
+      <input type="file" id="file1">
+      <button onclick="analyze()">Analyze</button>
+    </div>
+
+    <div class="card">
+      <h3>Analysis Report</h3>
+      <div id="result1"></div>
+    </div>
+  </div>
+
+  <!-- COMPARE -->
+  <div id="compare" class="panel">
+    <div class="card">
+      <h3>Upload Two Contracts</h3>
+      <input type="file" id="file2">
+      <input type="file" id="file3">
+      <button onclick="compare()">Compare</button>
+    </div>
+
+    <div class="card">
+      <h3>Comparison Result</h3>
+      <div id="result2"></div>
+    </div>
+  </div>
+
+  <!-- CHAT -->
+  <div id="chat" class="panel">
+    <div class="card">
+      <h3>AI Assistant</h3>
+      <input type="text" id="query" placeholder="Ask something...">
+      <button onclick="chat()">Ask</button>
+      <div id="result3"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+
+// SHOW PANELS
+function show(id) {
+  document.querySelectorAll(".panel").forEach(p => p.style.display = "none");
+  document.getElementById(id).style.display = "block";
+}
+
+// DEFAULT
+show("analyze");
+
+// ANALYZE
+async function analyze() {
+  const file = document.getElementById("file1").files[0];
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const res = await fetch("http://127.0.0.1:8000/analyze/", {
+    method: "POST",
+    body: formData
+  });
+
+  const data = await res.json();
+
+  let riskClass = data["Risk Level"].toLowerCase();
+
+  document.getElementById("result1").innerHTML = `
+    <div class="result-grid">
+      <div class="box"><b>Risk:</b> <span class="badge ${riskClass}">${data["Risk Level"]}</span></div>
+      <div class="box"><b>Score:</b> ${data["Contract Quality Score"]}</div>
+      <div class="box"><b>Verdict:</b> ${data["Final Verdict"]}</div>
+      <div class="box"><b>APR:</b> ${data["APR"]}</div>
+      <div class="box"><b>Payment:</b> ${data["Payment"]}</div>
+      <div class="box"><b>Duration:</b> ${data["Duration"]}</div>
+    </div>
+  `;
+}
+
+// COMPARE
+async function compare() {
+  const f1 = document.getElementById("file2").files[0];
+  const f2 = document.getElementById("file3").files[0];
+
+  const formData = new FormData();
+  formData.append("file1", f1);
+  formData.append("file2", f2);
+
+  const res = await fetch("http://127.0.0.1:8000/compare/", {
+    method: "POST",
+    body: formData
+  });
+
+  const data = await res.json();
+
+  document.getElementById("result2").innerHTML = `
+    <div class="box"><b>Better Contract:</b> ${data["Better Contract"]}</div>
+  `;
+}
+
+// CHAT
+async function chat() {
+  const q = document.getElementById("query").value;
+
+  const res = await fetch(`http://127.0.0.1:8000/chat/?query=${q}`);
+  const data = await res.json();
+
+  document.getElementById("result3").innerHTML = `
+    <div class="box">${data["response"]}</div>
+  `;
+}
+
+</script>
+
+</body>
+</html>
