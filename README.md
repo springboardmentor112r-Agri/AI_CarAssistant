@@ -24,9 +24,6 @@
 - **Sign Up** — anyone can register (name, email, password, confirm)
 - Passwords hashed with SHA-256; user store in session state (swap to a DB for production)
 - Auto sign-in immediately after successful registration
-- Two seeded demo accounts for instant testing
-- **No role restrictions** — every authenticated user has full access to all features
-
 ---
 
 ### 📄 Tab 1 — Extract SLA
@@ -163,7 +160,6 @@ The app opens at **http://localhost:8501**
 
 | Email | Password | Notes |
 |---|---|---|
-| `Akhil@test.com` | `password123` | Primary demo account |
 | `demo@demo.com` | `demo123` | Secondary demo account |
 
 Or click **Sign up** to create your own account — registration is open to all users.
