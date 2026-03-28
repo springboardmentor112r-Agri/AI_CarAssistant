@@ -1,0 +1,4 @@
+PROJECT REQUIREMENTS
+FastAPI - Create backened APIs
+Uvicorn - Run the server
+PyPDF2 - Read PDF files
