@@ -143,5 +143,3 @@ Open `index.html` in browser
 This system improves transparency in car lease/loan agreements by providing automated analysis, risk evaluation, and decision support, enabling users to make informed financial choices.
 
 
-Bhavya S
-
