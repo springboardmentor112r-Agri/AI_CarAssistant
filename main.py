@@ -16,9 +16,10 @@ app.add_middleware(
 
 last_analysis = {}
 
+
 @app.get("/")
 def home():
-    return {"message": "AI Contract Intelligence System Running"}
+    return {"message": "DealGuard AI Running"}
 
 
 def extract_text(file_bytes: bytes) -> str:
@@ -79,7 +80,7 @@ def calculate_risk(data: Dict):
     return score, risk
 
 
-def get_risk_level(risk: int):
+def risk_level(risk: int):
     if risk > 50:
         return "High"
     elif risk > 20:
@@ -87,7 +88,7 @@ def get_risk_level(risk: int):
     return "Low"
 
 
-def get_verdict(risk: int):
+def verdict(risk: int):
     if risk > 50:
         return "Not Recommended"
     elif risk > 25:
@@ -95,28 +96,46 @@ def get_verdict(risk: int):
     return "Good Deal"
 
 
-def generate_insights(data: Dict, risk_level: str):
+def insights(data: Dict, level: str):
     explanation = []
     suggestions = []
 
     if data["APR"]:
-        explanation.append("High APR increases loan cost")
+        explanation.append("Higher APR increases loan cost")
         suggestions.append("Negotiate lower interest rate")
 
     if data["Penalties"]:
         explanation.append("Penalty clauses increase financial burden")
-        suggestions.append("Reduce or remove penalties")
+        suggestions.append("Reduce penalty clauses")
+
+    if data["RedFlags"]:
+        explanation.append("Risky legal terms detected")
 
     if not data["Duration"]:
         suggestions.append("Ensure contract duration is defined")
 
     decision = (
-        "Avoid this contract" if risk_level == "High"
-        else "Review carefully" if risk_level == "Moderate"
+        "Avoid this contract" if level == "High"
+        else "Review carefully" if level == "Moderate"
         else "Safe to proceed"
     )
 
     return explanation, suggestions, decision
+
+
+def summary(data: Dict):
+    return f"Contract with APR {data['APR']} and duration {data['Duration']} shows {len(data['RedFlags'])} risk indicators."
+
+
+def breakdown(data: Dict):
+    items = []
+    if data["APR"]:
+        items.append("APR impacts total cost")
+    if data["Penalties"]:
+        items.append("Penalties increase burden")
+    if data["RedFlags"]:
+        items.append("Legal risks detected")
+    return items
 
 
 @app.post("/analyze/")
@@ -127,24 +146,31 @@ async def analyze(file: UploadFile):
     data = extract_data(text)
 
     score, risk = calculate_risk(data)
-    risk_level = get_risk_level(risk)
-    verdict = get_verdict(risk)
+    level = risk_level(risk)
+    v = verdict(risk)
 
-    explanation, suggestions, decision = generate_insights(data, risk_level)
+    explanation, suggestions, decision = insights(data, level)
 
     result = {
         "APR": data["APR"] or ["Not Found"],
         "Payment": data["Payment"] or ["Not Found"],
         "Duration": data["Duration"] or ["Not Found"],
         "VIN": data["VIN"] or ["Not Found"],
+
         "Contract Quality Score": score,
         "Risk %": risk,
-        "Risk Level": risk_level,
-        "Final Verdict": verdict,
+        "Risk Level": level,
+
+        "Final Verdict": v,
         "Decision Guide": decision,
+
         "Why This Result": explanation,
         "Suggestions": suggestions,
         "Red Flags": data["RedFlags"] or ["None"],
+
+        "Summary": summary(data),
+        "Risk Breakdown": breakdown(data),
+
         "Confidence Level": "High" if len(text) > 500 else "Medium"
     }
 
@@ -167,7 +193,7 @@ async def compare(file1: UploadFile, file2: UploadFile):
 
     return {
         "Better Contract": better,
-        "Reason": "Lower APR indicates lower financial burden"
+        "Reason": "Lower APR means lower financial cost"
     }
 
 
@@ -177,25 +203,18 @@ def chat(query: str):
 
     if last_analysis:
         if "risk" in q:
-            return {"response": f"The contract risk level is {last_analysis['Risk Level']} with {last_analysis['Risk %']} percent risk."}
+            return {"response": f"Risk level is {last_analysis['Risk Level']} with {last_analysis['Risk %']} percent risk"}
 
-        if "verdict" in q or "good" in q:
-            return {"response": f"The system suggests: {last_analysis['Final Verdict']}"}
-
-        if "issue" in q:
-            return {"response": f"Key issues include: {last_analysis['Red Flags']}"}
+        if "good" in q or "verdict" in q:
+            return {"response": f"System suggests: {last_analysis['Final Verdict']}"}
 
         if "suggest" in q:
             return {"response": f"Suggestions: {last_analysis['Suggestions']}"}
 
+        if "summary" in q:
+            return {"response": last_analysis["Summary"]}
+
     if "apr" in q:
-        return {"response": "APR is the annual interest rate applied to the loan."}
+        return {"response": "APR is the yearly interest rate"}
 
-    if "penalty" in q:
-        return {"response": "Penalties are extra charges for violations in contract terms."}
-
-    if "compare" in q:
-        return {"response": "The better contract has lower APR and fewer penalties."}
-
-    return {"response": "Ask about risk, APR, penalties, or contract evaluation."}
-   
+    return {"response": "Ask about risk, APR, or contract quality"}
