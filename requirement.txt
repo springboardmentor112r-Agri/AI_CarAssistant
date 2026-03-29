@@ -1,4 +1,4 @@
 PROJECT REQUIREMENTS
-FastAPI - Create backened APIs
+FastAPI - backened framework
 Uvicorn - Run the server
-PyPDF2 - Read PDF files
+PyPDF2 - PDF text extraction
