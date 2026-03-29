@@ -126,7 +126,15 @@ Open `index.html` in your browser
 - Improve chatbot intelligence  
 - Build full mobile/web application  
 
+## Advanced Features
 
+- Visual risk indicator (progress bar)
+- Smart contract summary generation
+- Risk breakdown explanation
+- Context-aware chatbot responses
+- Downloadable analysis report
+- Clean and user-friendly interface
+  
 ## My contribution
 
 - Designed the idea  
@@ -134,4 +142,3 @@ Open `index.html` in your browser
 - Created frontend UI  
 - Implemented risk analysis system  
 - Added chatbot functionality  
-
