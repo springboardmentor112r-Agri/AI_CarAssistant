@@ -1,5 +1,3 @@
-:
-
 🚗 Car Lease Agreement Analyzer — AI Agent
 Team Member: Ayisha Parli
 Branch: AI_carAssistant-Ayisha
@@ -30,7 +28,7 @@ Structured Output + Interactive Chatbot
 
 ⚠️ Risk Detection — Identifies red flags and unusual clauses
 
-📊 Fairness Score — 0-100 score showing how fair the deal is
+📊 Fairness Score — 0–100 score showing how fair the deal is
 
 💬 Plain Language Summary — Simple explanation anyone can understand
 
@@ -101,7 +99,7 @@ npm install
 npm run dev
 Environment Variables (backend/.env)
 
-Code
+bash
 DATABASE_URL=your_postgresql_url
 LLM_API_KEY=your_llm_api_key
 SECRET_KEY=your_secret_key
