@@ -1,249 +1,160 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Car Lease AI Platform</title>
+<title>DealGuard AI</title>
 
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+body{
+  font-family:Segoe UI;
+  background:#0b1220;
+  color:white;
+  margin:0;
 }
 
-body {
-  font-family: "Segoe UI", sans-serif;
-  background: #0b1220;
-  color: #e2e8f0;
+.nav{
+  padding:15px;
+  background:#020617;
+  font-size:20px;
 }
 
-.navbar {
-  height: 60px;
-  background: #020617;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 25px;
-  border-bottom: 1px solid #1e293b;
+.tabs{
+  display:flex;
+  gap:10px;
+  padding:20px;
 }
 
-.logo {
-  font-size: 20px;
-  font-weight: 600;
+.tab{
+  padding:10px 20px;
+  background:#1e293b;
+  cursor:pointer;
+  border-radius:8px;
 }
 
-.container {
-  display: flex;
+.active{
+  background:#2563eb;
 }
 
-.sidebar {
-  width: 220px;
-  height: calc(100vh - 60px);
-  background: #020617;
-  padding-top: 20px;
+.card{
+  background:#111827;
+  padding:20px;
+  margin:20px;
+  border-radius:10px;
 }
 
-.sidebar div {
-  padding: 15px 20px;
-  cursor: pointer;
-  color: #94a3b8;
+input,button{
+  width:100%;
+  padding:10px;
+  margin-top:10px;
 }
 
-.sidebar div:hover {
-  background: #1e293b;
-  color: white;
+.bar{
+  background:#1e293b;
+  border-radius:10px;
 }
 
-
-.main {
-  flex: 1;
-  padding: 30px;
+.fill{
+  padding:10px;
+  border-radius:10px;
+  text-align:center;
 }
 
-.card {
-  background: #111827;
-  padding: 20px;
-  border-radius: 12px;
-  margin-bottom: 20px;
-  border: 1px solid #1f2937;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
-}
-
-.box {
-  background: #020617;
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid #1e293b;
-}
-
-
-button {
-  width: 100%;
-  padding: 10px;
-  background: #2563eb;
-  border: none;
-  border-radius: 6px;
-  color: white;
-  cursor: pointer;
-  font-weight: 500;
-}
-
-button:hover {
-  background: #1d4ed8;
-}
-
-input {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
-  border-radius: 6px;
-  border: 1px solid #1e293b;
-  background: #020617;
-  color: white;
-}
-
-.panel {
-  display: none;
-}
+.panel{display:none;}
 </style>
-
 </head>
 
 <body>
 
-<div class="navbar">
-  <div class="logo">Car Lease AI</div>
+<div class="nav">DealGuard AI</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="show('a',this)">Analyze</div>
+  <div class="tab" onclick="show('c',this)">Compare</div>
+  <div class="tab" onclick="show('chat',this)">Chat</div>
 </div>
 
-<div class="container">
-
-<div class="sidebar">
-  <div onclick="show('analyze')">Analyze Contract</div>
-  <div onclick="show('compare')">Compare Contracts</div>
-  <div onclick="show('chat')">Assistant</div>
+<div id="a" class="panel">
+<div class="card">
+<input type="file" id="f">
+<button onclick="analyze()">Analyze</button>
+</div>
+<div class="card" id="r"></div>
 </div>
 
-<div class="main">
-
-<div id="analyze" class="panel">
-  <div class="card">
-    <h3>Upload Contract</h3>
-    <input type="file" id="file1">
-    <button onclick="analyze()">Analyze</button>
-  </div>
-
-  <div class="card">
-    <h3>Analysis Report</h3>
-    <div id="result1"></div>
-  </div>
+<div id="c" class="panel">
+<div class="card">
+<input type="file" id="f1">
+<input type="file" id="f2">
+<button onclick="compare()">Compare</button>
+</div>
+<div class="card" id="rc"></div>
 </div>
 
-<div id="compare" class="panel">
-  <div class="card">
-    <h3>Upload Contracts</h3>
-    <input type="file" id="file2">
-    <input type="file" id="file3">
-    <button onclick="compare()">Compare</button>
-  </div>
-
-  <div class="card">
-    <div id="result2"></div>
-  </div>
-</div>
-
-<!-- CHAT -->
 <div id="chat" class="panel">
-  <div class="card">
-    <h3>Assistant</h3>
-    <input type="text" id="query">
-    <button onclick="chat()">Ask</button>
-    <div id="result3"></div>
-  </div>
-</div>
-
+<div class="card">
+<input id="q">
+<button onclick="chat()">Ask</button>
+<div id="res"></div>
 </div>
 </div>
 
 <script>
 
-// SWITCH
-function show(id){
-  document.querySelectorAll(".panel").forEach(p => p.style.display="none");
-  document.getElementById(id).style.display="block";
+function show(id,el){
+document.querySelectorAll(".panel").forEach(p=>p.style.display="none");
+document.getElementById(id).style.display="block";
+document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+el.classList.add("active");
 }
 
-show("analyze");
-
+show("a",document.querySelector(".tab"));
 
 async function analyze(){
-  const file = document.getElementById("file1").files[0];
-  const fd = new FormData();
-  fd.append("file", file);
+let fd=new FormData();
+fd.append("file",document.getElementById("f").files[0]);
 
-  const res = await fetch("http://127.0.0.1:8000/analyze/", {
-    method: "POST",
-    body: fd
-  });
+document.getElementById("r").innerHTML="Processing...";
 
-  const d = await res.json();
+let res=await fetch("http://127.0.0.1:8000/analyze/",{method:"POST",body:fd});
+let d=await res.json();
 
-  document.getElementById("result1").innerHTML = `
-    <div class="grid">
-      <div class="box">APR: ${d["APR"]}</div>
-      <div class="box">Payment: ${d["Payment"]}</div>
-      <div class="box">Duration: ${d["Duration"]}</div>
-      <div class="box">VIN: ${d["VIN"]}</div>
+let color=d["Risk Level"]=="High"?"red":d["Risk Level"]=="Moderate"?"orange":"green";
 
-      <div class="box">Score: ${d["Contract Quality Score"]}</div>
-      <div class="box">Risk: ${d["Risk Level"]}</div>
-      <div class="box">Financial Risk: ${d["Financial Risk"]}</div>
-      <div class="box">Legal Risk: ${d["Legal Risk"]}</div>
+document.getElementById("r").innerHTML=`
+APR: ${d["APR"]}<br>
+Score: ${d["Contract Quality Score"]}<br>
+Risk: <span style="color:${color}">${d["Risk Level"]}</span>
 
-      <div class="box">Verdict: ${d["Final Verdict"]}</div>
-      <div class="box">Key Issue: ${d["Key Issue"]}</div>
-    </div>
+<div class="bar">
+<div class="fill" style="width:${d["Risk %"]}%;background:${color}">
+${d["Risk %"]}%
+</div>
+</div>
 
-    <p>Reason: ${d["Why This Result"]}</p>
-    <p>Suggestions: ${d["Suggestions"]}</p>
-    <p>Decision: ${d["Decision Guide"]}</p>
-  `;
+Summary: ${d["Summary"]}<br>
+Suggestions: ${d["Suggestions"]}<br>
+`;
 }
-
 
 async function compare(){
-  const f1 = document.getElementById("file2").files[0];
-  const f2 = document.getElementById("file3").files[0];
+let fd=new FormData();
+fd.append("file1",document.getElementById("f1").files[0]);
+fd.append("file2",document.getElementById("f2").files[0]);
 
-  const fd = new FormData();
-  fd.append("file1", f1);
-  fd.append("file2", f2);
+let res=await fetch("http://127.0.0.1:8000/compare/",{method:"POST",body:fd});
+let d=await res.json();
 
-  const res = await fetch("http://127.0.0.1:8000/compare/", {
-    method: "POST",
-    body: fd
-  });
-
-  const d = await res.json();
-
-  document.getElementById("result2").innerHTML = `
-    <p>Contract 1 APR: ${d["Contract 1 APR"]}</p>
-    <p>Contract 2 APR: ${d["Contract 2 APR"]}</p>
-    <p>Better: ${d["Better Contract"]}</p>
-  `;
+document.getElementById("rc").innerHTML=`
+Better: ${d["Better Contract"]}<br>
+Reason: ${d["Reason"]}
+`;
 }
 
-
 async function chat(){
-  const q = document.getElementById("query").value;
+let q=document.getElementById("q").value;
+let res=await fetch(`http://127.0.0.1:8000/chat/?query=${q}`);
+let d=await res.json();
 
-  const res = await fetch(`http://127.0.0.1:8000/chat/?query=${q}`);
-  const d = await res.json();
-
-  document.getElementById("result3").innerHTML = `<p>${d["response"]}</p>`;
+document.getElementById("res").innerHTML=d["response"];
 }
 
 </script>
