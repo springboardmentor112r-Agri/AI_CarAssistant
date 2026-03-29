@@ -1,70 +1,160 @@
-# Getting Started with Create React App
+:
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+🚗 Car Lease Agreement Analyzer — AI Agent
+Team Member: Ayisha Parli
+Branch: AI_carAssistant-Ayisha
+Project: Infosys Springboard — AI Car Assistant
 
-## Available Scripts
+📌 Project Overview
+An AI-powered full-stack web application that analyzes car lease and loan agreements. Users can upload a contract document and instantly receive a structured analysis including key financial terms, risk highlights, negotiation suggestions, and an interactive chatbot.
 
-In the project directory, you can run:
+🧠 System Architecture
+User Uploads Document (PDF / Scanned PDF / Image / Text)
 
-### `npm start`
+OCR Module (PyMuPDF + Tesseract)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Contract Understanding Module (LLM Integration)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Decision Logic Module (Risk Detection + Fairness Score)
 
-### `npm test`
+VIN Verification (NHTSA Public API)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Structured Output + Interactive Chatbot
 
-### `npm run build`
+✨ Features
+📄 Smart Document Upload — Accepts PDF, scanned PDF, images (JPG/PNG), and plain text
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+🔍 OCR Extraction — Extracts raw text from any document format
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+🤖 AI Contract Analysis — LLM extracts all key SLA fields
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+⚠️ Risk Detection — Identifies red flags and unusual clauses
 
-### `npm run eject`
+📊 Fairness Score — 0-100 score showing how fair the deal is
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+💬 Plain Language Summary — Simple explanation anyone can understand
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+🔧 Negotiation Suggestions — AI-powered tips to get better terms
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+🚗 VIN Lookup — Verify vehicle details and check recall history
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+💡 Interactive Chatbot — Ask questions like “Is this interest rate high?”
 
-## Learn More
+📈 Deal Comparison — Compare two contracts side by side
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+🛠️ Tech Stack
+Backend
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+FastAPI — Python web framework
 
-### Code Splitting
+LLM Integration (Gemini / Groq)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+PyMuPDF + Tesseract — OCR for text extraction
 
-### Analyzing the Bundle Size
+SQLAlchemy + PostgreSQL — Database
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+NHTSA Public API — VIN verification
 
-### Making a Progressive Web App
+Frontend
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+React 18 + TypeScript — UI framework
 
-### Advanced Configuration
+Tailwind CSS — Styling
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Zustand — State management
 
-### Deployment
+React Query — API data fetching
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+📁 Project Structure
+Code
+AI_CarAssistant/
+├── backend/
+│   ├── app/
+│   │   ├── api/routes/      # Auth, Contracts, VIN, Negotiation
+│   │   ├── core/            # Config, Database, Security
+│   │   ├── models/          # Database models
+│   │   ├── schemas/         # Pydantic schemas
+│   │   ├── services/        # OCR, LLM, VIN services
+│   │   └── main.py          # FastAPI app entry point
+│   └── requirements.txt
+├── frontend/
+│   ├── src/
+│   │   ├── pages/           # UI pages
+│   │   ├── components/      # Reusable components
+│   │   ├── api/             # API client
+│   │   ├── store/           # State management
+│   │   └── types/           # TypeScript types
+│   └── package.json
+└── README.md
+🚀 How to Run
+Backend
 
-### `npm run build` fails to minify
+bash
+cd backend
+pip install -r requirements.txt
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+Frontend
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+bash
+cd frontend
+npm install
+npm run dev
+Environment Variables (backend/.env)
+
+Code
+DATABASE_URL=your_postgresql_url
+LLM_API_KEY=your_llm_api_key
+SECRET_KEY=your_secret_key
+📊 Module Breakdown
+Module	Technology	Purpose
+OCR	PyMuPDF + Tesseract	Extract text from documents
+LLM	Gemini / Groq	Understand contract content
+Decision Logic	Python + LLM	Detect risks & fairness scoring
+VIN Verification	NHTSA API	Validate vehicle information
+Chatbot	LLM + FastAPI	Answer contract questions
+Frontend	React + TypeScript	User interface
+Database	PostgreSQL	Store contracts & analysis
+
+🧪 Test Cases
+Module	Test	Expected Result
+Upload	PDF contract	Text extracted successfully
+Upload	Scanned image	OCR extracts text
+LLM	Contract with APR	APR extracted correctly
+LLM	Contract with VIN	VIN identified and verified
+Risk	High APR contract	Red flag shown
+VIN	Valid 17-char VIN	Vehicle details fetched
+Chatbot	"What is my monthly payment?"	Correct amount returned
+Chatbot	"Is this interest rate high?"	AI comparison given
+
+👩‍💻 Developer
+Ayisha Parli  
+Infosys Springboard AI Program
+Branch: AI_carAssistant-Ayisha
+
+📌 Pull Request Description — paste when creating PR
+🚗 Car Lease Agreement Analyzer — Complete Implementation
+
+What I built:  
+This PR contains the complete implementation of the Car Lease Agreement Analyzer AI Agent.
+
+Modules Implemented:  
+✅ OCR Module — PyMuPDF + Tesseract for PDF/image/text extraction
+✅ Contract Understanding Module — LLM Integration
+✅ Decision Logic Module — Risk detection, fairness scoring
+✅ VIN Verification — NHTSA public API integration
+✅ Interactive Chatbot — On results page, answers contract questions
+✅ Full Frontend — React + TypeScript + Tailwind CSS
+✅ REST API — FastAPI with JWT authentication
+✅ Database — PostgreSQL
+
+How to test:
+
+Upload a sample lease PDF
+
+Wait ~30 seconds for AI analysis
+
+Review extracted fields, red flags, and fairness score
+
+Ask chatbot “Is this interest rate high?”
+
+Try VIN lookup with any 17-character VIN
