@@ -1,5 +1,3 @@
-:
-
 🚗 Car Lease Agreement Analyzer — AI Agent
 Team Member: Ayisha Parli
 Branch: AI_carAssistant-Ayisha
