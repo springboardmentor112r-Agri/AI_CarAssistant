@@ -77,15 +77,19 @@ Ask questions like:
 
 
 ## System Workflow
-User Upload
-↓
-PDF Text Extraction (PyPDF2)
-↓
-Data Extraction (Regex)
-↓
-Risk Analysis Engine
-↓
-Insights + Decision Output
+###  User Upload
+       ↓
+
+### PDF Text Extraction (PyPDF2)
+       ↓
+
+### Data Extraction (Regex)
+       ↓
+
+### Risk Analysis Engine
+       ↓
+
+### Insights + Decision Output
 
 
 
@@ -129,6 +133,6 @@ Created UI + frontend logic
 Implemented chatbot
 
 ## API Endpoints
-/analyze/ → Analyze contract
-/compare/ → Compare two contracts
-/chat/ → Chat assistant
+ ### /analyze/ → Analyze contract
+###  /compare/ → Compare two contracts
+###  /chat/ → Chat assistant
