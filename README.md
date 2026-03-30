@@ -133,6 +133,6 @@ Created UI + frontend logic
 Implemented chatbot
 
 ## API Endpoints
- ### /analyze/ → Analyze contract
-###  /compare/ → Compare two contracts
-###  /chat/ → Chat assistant
+  /analyze/ → Analyze contract 
+  /compare/ → Compare two contracts
+  /chat/ → Chat assistant
