@@ -1,156 +1,134 @@
 # AI Car Lease / Loan Contract Assistant
 
-## About this project
+##  About the Project
+Understanding car lease and loan contracts is difficult. These documents are long, filled with legal jargon, and often hide important financial details.
 
-I realized how difficult it is to understand. These documents are long, full of legal terms, and most people don’t really know what they are signing.
-
-
-The goal is simple:  
-Take a complex contract and explain it in a way anyone can understand.
+This project solves that problem by acting as an **AI-powered assistant** that simplifies contracts and helps users make better decisions.
 
 
 
-## What problem I am solving
+##  Problem Statement
+Many users:
+- Don’t fully understand **interest rates (APR)**
+- Overlook **penalties and hidden charges**
+- Cannot judge if a deal is **good or risky**
 
-Many people:
-- Don’t understand interest rates properly  
-- Miss penalty clauses  
-- Don’t know if a deal is good or bad  
-
-Because of this, they can end up making poor financial decisions.
-
-
-
-## My idea
-
-The idea behind this project is to act like a personal assistant for car contracts.
-
-Instead of reading everything manually, the user can:
-1. Upload the contract  
-2. Let the system analyze it  
-3. Get a clear explanation and decision  
+ Result: Poor financial decisions and unexpected costs
 
 
 
-## What the system does
+## Solution
+An intelligent system that:
+- Extracts key data from contracts
+- Analyzes financial risk
+- Explains everything in simple language
+- Helps users decide confidently
+
+
+
+## Core Features
 
 ### Contract Analysis
-The user uploads a PDF contract.  
-The system extracts:
-- Interest rate (APR)
-- Monthly payment
-- Duration
-- VIN number
-- Penalties
+- Upload PDF contract
+- Extract:
+  - APR (interest rate)
+  - Monthly payment
+  - Duration
+  - VIN number
 
 
 
-### Risk Analysis
-The system evaluates how risky the contract is:
-- Contract Quality Score (out of 100)
+###  Risk Analysis
+- Contract score (0–100)
 - Risk percentage
-- Risk level (Low, Moderate, High)
+- Risk level:
+  - Low
+  - Moderate
+  - High
 
 
 
-### Decision Support
-The system helps the user decide:
-- Final verdict (Good Deal / Proceed with Caution / Not Recommended)
-- Explanation of result
-- Suggestions for improvement
-- Decision guide
+###  Decision Support
+- Final verdict:
+  -  Good Deal  
+  -  Proceed with Caution  
+  -  Not Recommended  
+- Reasons + Suggestions
+- Clear decision guide
 
 
 
-### Contract Comparison
-- Upload two contracts  
-- System compares them  
-- Suggests the better contract  
+###  Contract Comparison
+- Upload 2 contracts
+- System compares:
+  - Risk score
+  - Financial terms
+- Suggests better option
 
 
-
-### Chat Assistant
-User can ask questions like:
+###  Chat Assistant
+Ask questions like:
 - What is APR?
 - What is risk?
-- Is this contract good?
+- Is this a good deal?
 
-The chatbot gives simple answers and can also use the analyzed contract.
-
-
-
-## How it works (simple flow)
-
-1. User uploads contract  
-2. System reads PDF using PyPDF2  
-3. Important data is extracted using regex  
-4. Risk is calculated using rule-based logic  
-5. Insights and suggestions are generated  
-6. Results are shown in the frontend  
+ Instant simple explanations
 
 
 
 ## System Workflow
+User Upload
+↓
+PDF Text Extraction (PyPDF2)
+↓
+Data Extraction (Regex)
+↓
+Risk Analysis Engine
+↓
+Insights + Decision Output
 
-1. Upload contract  
-2. Extract text  
-3. Extract key values  
-4. Calculate risk  
-5. Generate insights  
-6. Display results  
 
 
+## Tech Stack
+
+- **Backend:** Python, FastAPI  
+- **PDF Processing:** PyPDF2  
+- **Logic:** Regex + Rule-based system  
+- **Frontend:** HTML, CSS, JavaScript  
+
+
+
+## How to Run
+
+###  Start Backend
+ uvicorn main:app --reload
+
+ ### Open Frontend
+  Open index.html in browser
+
+## Why This Project Matters
+Simplifies complex contracts
+Saves time
+Increases financial awareness
+Highlights hidden risks
+Helps users avoid bad deals
+
+
+## Future Improvements
+ AI-based contract understanding (LLMs)
+ VIN API integration (vehicle details)
+ Smart visual dashboards
+ User login system
+ Full web/mobile deployment
+ 
+## My Contribution
+Designed complete idea & system flow
+Built FastAPI backend
+Developed risk analysis engine
+Created UI + frontend logic
+Implemented chatbot
 
 ## API Endpoints
-
-- `/analyze/` → Analyze contract  
-- `/compare/` → Compare contracts  
-- `/chat/` → Chat assistant  
-
-
-
-## Technologies used
-
-- Python  
-- FastAPI  
-- PyPDF2  
-- Regex  
-- HTML, CSS, JavaScript  
-
-
-
-## How to run
-
-### Step 1: Run backend
-uvicorn main:app --reload
-
-### Step 2: Open frontend
-Open `index.html` in your browser
-
-
-## What makes this project useful
-
-- Makes complex contracts easy to understand  
-- Saves time  
-- Helps users make better decisions  
-- Highlights hidden risks  
-
-
-
-## Future improvements
-
-- Use AI models for better understanding  
-- Add real vehicle data using VIN  
-- Improve chatbot intelligence  
-- Build full mobile/web application  
-
-
-
-## My contribution
-
-- Designed the idea  
-- Built backend logic  
-- Created frontend UI  
-- Implemented risk analysis system  
-- Added chatbot functionality  
-
+/analyze/ → Analyze contract
+/compare/ → Compare two contracts
+/chat/ → Chat assistant
