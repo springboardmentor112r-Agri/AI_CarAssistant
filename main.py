@@ -1,11 +1,11 @@
-from fastapi import FastAPI, UploadFile, HTTPException
+from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 import PyPDF2
 import re
-from typing import Dict, List
 
 app = FastAPI()
 
+#  CORS (IMPORTANT FOR FRONTEND)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -14,207 +14,146 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-last_analysis = {}
+#  PDF TEXT EXTRACTION 
+def extract_text(file):
+    reader = PyPDF2.PdfReader(file.file)
+    text = ""
+    for page in reader.pages:
+        text += page.extract_text() or ""
+    return text
 
 
-@app.get("/")
-def home():
-    return {"message": "DealGuard AI Running"}
+#  DATA EXTRACTION 
+def extract_data(text):
+    apr = re.search(r'(\d+(\.\d+)?)\s*%', text)
+    monthly = re.search(r'(\d{2,6})\s*/?\s*month', text.lower())
+    duration = re.search(r'(\d{1,3})\s*months', text.lower())
+    vin = re.search(r'\b[A-HJ-NPR-Z0-9]{17}\b', text)
 
-
-def extract_text(file_bytes: bytes) -> str:
-    try:
-        with open("temp.pdf", "wb") as f:
-            f.write(file_bytes)
-
-        reader = PyPDF2.PdfReader("temp.pdf")
-        text = ""
-
-        for page in reader.pages:
-            content = page.extract_text()
-            if content:
-                text += content + " "
-
-        return text.strip()
-    except:
-        raise HTTPException(status_code=500, detail="PDF processing failed")
-
-
-def extract_data(text: str) -> Dict:
     return {
-        "APR": re.findall(r'\d+\.?\d*%', text),
-        "Payment": re.findall(r'[\$₹]\s?\d+(?:,\d+)*', text),
-        "Duration": re.findall(r'\d+\s*(?:months|years)', text, re.IGNORECASE),
-        "VIN": re.findall(r'[A-HJ-NPR-Z0-9]{17}', text),
-        "Penalties": re.findall(r'penalty.*', text, re.IGNORECASE),
-        "RedFlags": re.findall(r'penalty|termination|default|repossession', text, re.IGNORECASE)
+        "apr": float(apr.group(1)) if apr else None,
+        "monthly_payment": int(monthly.group(1)) if monthly else None,
+        "duration": int(duration.group(1)) if duration else None,
+        "vin": vin.group(0) if vin else None
     }
 
 
-def get_apr_value(apr_list: List[str]):
-    try:
-        return float(apr_list[0].replace('%', ''))
-    except:
-        return None
+# RED FLAG DETECTION
+def find_red_flags(text):
+    flags = []
+    keywords = ["penalty", "late fee", "default", "interest", "charge"]
+
+    sentences = text.split(".")
+
+    for line in sentences:
+        for word in keywords:
+            if word in line.lower():
+                flags.append(line.strip())
+                break
+
+    return flags[:5] if flags else ["No major red flags detected"]
 
 
-def calculate_risk(data: Dict):
+# RISK ANALYSIS
+def analyze_risk(data):
     score = 100
-    apr_value = get_apr_value(data["APR"])
-
-    if apr_value:
-        if apr_value > 12:
-            score -= 30
-        elif apr_value > 8:
-            score -= 15
-
-    if data["Penalties"]:
-        score -= 10
-
-    if data["RedFlags"]:
-        score -= 10
-
-    score = max(score, 0)
-    risk = 100 - score
-
-    return score, risk
-
-
-def risk_level(risk: int):
-    if risk > 50:
-        return "High"
-    elif risk > 20:
-        return "Moderate"
-    return "Low"
-
-
-def verdict(risk: int):
-    if risk > 50:
-        return "Not Recommended"
-    elif risk > 25:
-        return "Proceed with Caution"
-    return "Good Deal"
-
-
-def insights(data: Dict, level: str):
-    explanation = []
+    reasons = []
     suggestions = []
 
-    if data["APR"]:
-        explanation.append("Higher APR increases loan cost")
-        suggestions.append("Negotiate lower interest rate")
+    if data["apr"] and data["apr"] > 10:
+        score -= 25
+        reasons.append("High interest rate")
+        suggestions.append("Try negotiating a lower APR")
 
-    if data["Penalties"]:
-        explanation.append("Penalty clauses increase financial burden")
-        suggestions.append("Reduce penalty clauses")
+    if data["duration"] and data["duration"] > 60:
+        score -= 20
+        reasons.append("Long loan duration")
+        suggestions.append("Choose shorter duration")
 
-    if data["RedFlags"]:
-        explanation.append("Risky legal terms detected")
+    if data["monthly_payment"] and data["monthly_payment"] > 20000:
+        score -= 15
+        reasons.append("High monthly payment")
+        suggestions.append("Ensure EMI fits your budget")
 
-    if not data["Duration"]:
-        suggestions.append("Ensure contract duration is defined")
+    if not reasons:
+        reasons.append("No major risks detected")
+        suggestions.append("Contract looks balanced")
 
-    decision = (
-        "Avoid this contract" if level == "High"
-        else "Review carefully" if level == "Moderate"
-        else "Safe to proceed"
-    )
+    risk_percent = 100 - score
 
-    return explanation, suggestions, decision
-
-
-def summary(data: Dict):
-    return f"Contract with APR {data['APR']} and duration {data['Duration']} shows {len(data['RedFlags'])} risk indicators."
-
-
-def breakdown(data: Dict):
-    items = []
-    if data["APR"]:
-        items.append("APR impacts total cost")
-    if data["Penalties"]:
-        items.append("Penalties increase burden")
-    if data["RedFlags"]:
-        items.append("Legal risks detected")
-    return items
-
-
-@app.post("/analyze/")
-async def analyze(file: UploadFile):
-    global last_analysis
-
-    text = extract_text(await file.read())
-    data = extract_data(text)
-
-    score, risk = calculate_risk(data)
-    level = risk_level(risk)
-    v = verdict(risk)
-
-    explanation, suggestions, decision = insights(data, level)
-
-    result = {
-        "APR": data["APR"] or ["Not Found"],
-        "Payment": data["Payment"] or ["Not Found"],
-        "Duration": data["Duration"] or ["Not Found"],
-        "VIN": data["VIN"] or ["Not Found"],
-
-        "Contract Quality Score": score,
-        "Risk %": risk,
-        "Risk Level": level,
-
-        "Final Verdict": v,
-        "Decision Guide": decision,
-
-        "Why This Result": explanation,
-        "Suggestions": suggestions,
-        "Red Flags": data["RedFlags"] or ["None"],
-
-        "Summary": summary(data),
-        "Risk Breakdown": breakdown(data),
-
-        "Confidence Level": "High" if len(text) > 500 else "Medium"
-    }
-
-    last_analysis = result
-    return result
-
-
-@app.post("/compare/")
-async def compare(file1: UploadFile, file2: UploadFile):
-    text1 = extract_text(await file1.read())
-    text2 = extract_text(await file2.read())
-
-    apr1 = get_apr_value(re.findall(r'\d+\.?\d*%', text1))
-    apr2 = get_apr_value(re.findall(r'\d+\.?\d*%', text2))
-
-    if apr1 is None or apr2 is None:
-        better = "Unable to determine"
+    if score > 75:
+        verdict = "Good Deal"
+        level = "Low Risk"
+        guide = "This contract is financially safe and balanced."
+    elif score > 50:
+        verdict = "Proceed with Caution"
+        level = "Moderate Risk"
+        guide = "Some conditions may increase cost. Review carefully."
     else:
-        better = "Contract 1" if apr1 < apr2 else "Contract 2"
+        verdict = "Not Recommended"
+        level = "High Risk"
+        guide = "This contract has significant financial risk."
 
     return {
-        "Better Contract": better,
-        "Reason": "Lower APR means lower financial cost"
+        "score": score,
+        "risk_percent": risk_percent,
+        "risk_level": level,
+        "verdict": verdict,
+        "reasons": reasons,
+        "suggestions": suggestions,
+        "decision_guide": guide
     }
 
 
-@app.get("/chat/")
-def chat(query: str):
+#  ANALYZE 
+@app.post("/analyze/")
+async def analyze(file: UploadFile = File(...)):
+    text = extract_text(file)
+
+    data = extract_data(text)
+    risk = analyze_risk(data)
+    flags = find_red_flags(text)
+
+    return {
+        "analysis": risk,
+        "red_flags": flags
+    }
+
+
+#  COMPARE 
+@app.post("/compare/")
+async def compare(file1: UploadFile = File(...), file2: UploadFile = File(...)):
+    t1 = extract_text(file1)
+    t2 = extract_text(file2)
+
+    r1 = analyze_risk(extract_data(t1))
+    r2 = analyze_risk(extract_data(t2))
+
+    if r1["score"] > r2["score"]:
+        better = "Contract 1"
+        reason = "Higher score and lower financial risk"
+    else:
+        better = "Contract 2"
+        reason = "Better financial terms and lower risk"
+
+    return {
+        "better": better,
+        "reason": reason
+    }
+
+
+# CHAT 
+@app.post("/chat/")
+async def chat(query: str = Form(...)):
     q = query.lower()
 
-    if last_analysis:
-        if "risk" in q:
-            return {"response": f"Risk level is {last_analysis['Risk Level']} with {last_analysis['Risk %']} percent risk"}
-
-        if "good" in q or "verdict" in q:
-            return {"response": f"System suggests: {last_analysis['Final Verdict']}"}
-
-        if "suggest" in q:
-            return {"response": f"Suggestions: {last_analysis['Suggestions']}"}
-
-        if "summary" in q:
-            return {"response": last_analysis["Summary"]}
-
     if "apr" in q:
-        return {"response": "APR is the yearly interest rate"}
-
-    return {"response": "Ask about risk, APR, or contract quality"}
+        return {"response": "APR is the annual interest rate of the loan."}
+    elif "risk" in q:
+        return {"response": "Risk shows how financially safe or unsafe the contract is."}
+    elif "good" in q:
+        return {"response": "A good contract has low APR, short duration, and affordable EMI."}
+    elif "penalty" in q:
+        return {"response": "Penalty clauses include late fees and extra charges."}
+    else:
+        return {"response": "Ask about APR, risk, penalties, or contract quality."}
