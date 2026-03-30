@@ -1,160 +1,215 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>DealGuard AI</title>
+<title>AI Contract Assistant</title>
 
 <style>
-body{
-  font-family:Segoe UI;
-  background:#0b1220;
-  color:white;
-  margin:0;
+body {
+  margin: 0;
+  font-family: "Segoe UI";
+  background: #0b1220;
+  color: #e2e8f0;
 }
 
-.nav{
-  padding:15px;
-  background:#020617;
-  font-size:20px;
+/* NAVBAR */
+.navbar {
+  background: #020617;
+  padding: 15px 25px;
+  font-size: 22px;
+  font-weight: bold;
 }
 
-.tabs{
-  display:flex;
-  gap:10px;
-  padding:20px;
+/* CONTAINER */
+.container {
+  padding: 25px;
 }
 
-.tab{
-  padding:10px 20px;
-  background:#1e293b;
-  cursor:pointer;
-  border-radius:8px;
+/* CARD */
+.card {
+  background: #111827;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
 }
 
-.active{
-  background:#2563eb;
+/* BUTTON */
+button {
+  padding: 10px 18px;
+  background: #6366f1;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 10px;
 }
 
-.card{
-  background:#111827;
-  padding:20px;
-  margin:20px;
-  border-radius:10px;
+/* INPUT */
+input {
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 6px;
+  border: none;
 }
 
-input,button{
-  width:100%;
-  padding:10px;
-  margin-top:10px;
+/* HEADINGS */
+h2 {
+  margin-bottom: 10px;
 }
 
-.bar{
-  background:#1e293b;
-  border-radius:10px;
+/* RESULT BOX */
+.result-box {
+  margin-top: 15px;
+  padding: 12px;
+  background: #020617;
+  border-radius: 8px;
 }
 
-.fill{
-  padding:10px;
-  border-radius:10px;
-  text-align:center;
+/* TAGS */
+.tag {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 6px;
+  margin-right: 5px;
 }
 
-.panel{display:none;}
+.good { background: #16a34a; }
+.warn { background: #eab308; color:black; }
+.bad { background: #dc2626; }
+
 </style>
 </head>
 
 <body>
 
-<div class="nav">DealGuard AI</div>
+<div class="navbar">🚗 AI Contract Assistant</div>
 
-<div class="tabs">
-  <div class="tab active" onclick="show('a',this)">Analyze</div>
-  <div class="tab" onclick="show('c',this)">Compare</div>
-  <div class="tab" onclick="show('chat',this)">Chat</div>
-</div>
+<div class="container">
 
-<div id="a" class="panel">
+<!-- ANALYZE -->
 <div class="card">
-<input type="file" id="f">
-<button onclick="analyze()">Analyze</button>
-</div>
-<div class="card" id="r"></div>
+<h2>📄 Analyze Contract</h2>
+
+<input type="file" id="file"><br>
+<button onclick="analyze()">🔍 Analyze Contract</button>
+
+<div id="result" class="result-box"></div>
 </div>
 
-<div id="c" class="panel">
+<!-- COMPARE -->
 <div class="card">
-<input type="file" id="f1">
-<input type="file" id="f2">
-<button onclick="compare()">Compare</button>
-</div>
-<div class="card" id="rc"></div>
+<h2>⚖️ Compare Contracts</h2>
+
+<input type="file" id="file1"><br>
+<input type="file" id="file2"><br>
+
+<button onclick="compare()">📊 Compare</button>
+
+<div id="compareResult" class="result-box"></div>
 </div>
 
-<div id="chat" class="panel">
+<!-- CHAT -->
 <div class="card">
-<input id="q">
-<button onclick="chat()">Ask</button>
-<div id="res"></div>
+<h2>💬 Chat Assistant</h2>
+
+<input type="text" id="chatInput" placeholder="Ask about APR, risk...">
+<button onclick="chat()">🤖 Ask</button>
+
+<div id="chatOutput" class="result-box"></div>
 </div>
+
 </div>
 
 <script>
 
-function show(id,el){
-document.querySelectorAll(".panel").forEach(p=>p.style.display="none");
-document.getElementById(id).style.display="block";
-document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-el.classList.add("active");
+function verdictTag(verdict) {
+  if (verdict === "Good Deal") {
+    return '<span class="tag good">✅ Good</span>';
+  } else if (verdict === "Proceed with Caution") {
+    return '<span class="tag warn">⚠️ Caution</span>';
+  } else {
+    return '<span class="tag bad">❌ Risky</span>';
+  }
 }
 
-show("a",document.querySelector(".tab"));
+async function analyze() {
+  let f = document.getElementById("file").files[0];
+  if (!f) return alert("⚠️ Please upload a contract");
 
-async function analyze(){
-let fd=new FormData();
-fd.append("file",document.getElementById("f").files[0]);
+  let fd = new FormData();
+  fd.append("file", f);
 
-document.getElementById("r").innerHTML="Processing...";
+  let res = await fetch("http://127.0.0.1:8000/analyze/", {
+    method: "POST",
+    body: fd
+  });
 
-let res=await fetch("http://127.0.0.1:8000/analyze/",{method:"POST",body:fd});
-let d=await res.json();
+  let d = await res.json();
 
-let color=d["Risk Level"]=="High"?"red":d["Risk Level"]=="Moderate"?"orange":"green";
+  document.getElementById("result").innerHTML = `
+    <h3>📊 Analysis Result</h3>
 
-document.getElementById("r").innerHTML=`
-APR: ${d["APR"]}<br>
-Score: ${d["Contract Quality Score"]}<br>
-Risk: <span style="color:${color}">${d["Risk Level"]}</span>
+    <p>⭐ <b>Score:</b> ${d.analysis.score}</p>
+    <p>📉 <b>Risk:</b> ${d.analysis.risk_percent}% (${d.analysis.risk_level})</p>
 
-<div class="bar">
-<div class="fill" style="width:${d["Risk %"]}%;background:${color}">
-${d["Risk %"]}%
-</div>
-</div>
+    <p>🏁 <b>Verdict:</b> ${verdictTag(d.analysis.verdict)}</p>
 
-Summary: ${d["Summary"]}<br>
-Suggestions: ${d["Suggestions"]}<br>
-`;
+    <p>🧠 <b>Guide:</b> ${d.analysis.decision_guide}</p>
+
+    <hr>
+
+    <p>⚠️ <b>Reasons:</b><br>
+    ${d.analysis.reasons.map(r => "• " + r).join("<br>")}</p>
+
+    <p>💡 <b>Suggestions:</b><br>
+    ${d.analysis.suggestions.map(s => "✔ " + s).join("<br>")}</p>
+
+    <p>🚨 <b>Red Flags:</b><br>
+    ${d.red_flags.map(f => "🔴 " + f).join("<br>")}</p>
+  `;
 }
 
-async function compare(){
-let fd=new FormData();
-fd.append("file1",document.getElementById("f1").files[0]);
-fd.append("file2",document.getElementById("f2").files[0]);
+async function compare() {
+  let f1 = document.getElementById("file1").files[0];
+  let f2 = document.getElementById("file2").files[0];
 
-let res=await fetch("http://127.0.0.1:8000/compare/",{method:"POST",body:fd});
-let d=await res.json();
+  if (!f1 || !f2) return alert("⚠️ Upload both contracts");
 
-document.getElementById("rc").innerHTML=`
-Better: ${d["Better Contract"]}<br>
-Reason: ${d["Reason"]}
-`;
+  let fd = new FormData();
+  fd.append("file1", f1);
+  fd.append("file2", f2);
+
+  let res = await fetch("http://127.0.0.1:8000/compare/", {
+    method: "POST",
+    body: fd
+  });
+
+  let d = await res.json();
+
+  document.getElementById("compareResult").innerHTML = `
+    <h3>📊 Comparison Result</h3>
+
+    <p>🏆 <b>Better:</b> ${d.better}</p>
+    <p>📌 <b>Reason:</b> ${d.reason}</p>
+  `;
 }
 
-async function chat(){
-let q=document.getElementById("q").value;
-let res=await fetch(`http://127.0.0.1:8000/chat/?query=${q}`);
-let d=await res.json();
+async function chat() {
+  let input = document.getElementById("chatInput").value;
 
-document.getElementById("res").innerHTML=d["response"];
+  let fd = new FormData();
+  fd.append("query", input);
+
+  let res = await fetch("http://127.0.0.1:8000/chat/", {
+    method: "POST",
+    body: fd
+  });
+
+  let d = await res.json();
+
+  document.getElementById("chatOutput").innerHTML = `
+    🤖 ${d.response}
+  `;
 }
 
 </script>
