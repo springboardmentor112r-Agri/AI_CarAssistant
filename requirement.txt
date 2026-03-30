@@ -1,4 +1,11 @@
 PROJECT REQUIREMENTS
-FastAPI - backened framework
-Uvicorn - Run the server
-PyPDF2 - PDF text extraction
+fastapi==0.111.0
+uvicorn==0.30.1
+python-multipart==0.0.9
+PyPDF2==3.0.1
+
+fastapi → Backend API framework
+uvicorn → Server to run FastAPI
+python-multipart → Handles file uploads
+PyPDF2 → Reads PDF contracts
+
