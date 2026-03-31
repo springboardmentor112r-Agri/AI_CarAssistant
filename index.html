@@ -185,7 +185,7 @@ async function compare() {
   fd.append("file1", f1);
   fd.append("file2", f2);
 
-  let res = await fetch("http://127.0.0.1:8000/compare/", {
+  let res = await fetch("https://your-backend.onrender.com/compare/", {
     method: "POST",
     body: fd
   });
