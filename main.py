@@ -2,8 +2,13 @@ from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 import PyPDF2
 import re
+last_contract_data={}
 
 app = FastAPI()
+
+@app.get("/")
+def home():
+    return {"message": "Server is running successfully"}
 
 #  CORS (IMPORTANT FOR FRONTEND)
 app.add_middleware(
@@ -13,6 +18,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
 
 #  PDF TEXT EXTRACTION 
 def extract_text(file):
@@ -108,16 +115,24 @@ def analyze_risk(data):
 #  ANALYZE 
 @app.post("/analyze/")
 async def analyze(file: UploadFile = File(...)):
+    global last_contract_data
+
     text = extract_text(file)
 
     data = extract_data(text)
     risk = analyze_risk(data)
     flags = find_red_flags(text)
 
+    last_contract_data = {
+        "data": data,
+        "risk": risk,
+        "flags": flags
+    }
+
     return {
         "analysis": risk,
         "red_flags": flags
-    }
+    }    
 
 
 #  COMPARE 
@@ -143,17 +158,41 @@ async def compare(file1: UploadFile = File(...), file2: UploadFile = File(...)):
 
 
 # CHAT 
+
+import random
+
 @app.post("/chat/")
 async def chat(query: str = Form(...)):
+    global last_contract_data
+
     q = query.lower()
 
+    if not last_contract_data:
+        return {"response": "Please upload and analyze a contract first."}
+
+    data = last_contract_data["data"]
+    risk = last_contract_data["risk"]
+
     if "apr" in q:
-        return {"response": "APR is the annual interest rate of the loan."}
+        return {"response": f"Your contract APR is {data['apr'] or 'not found'}%."}
+
     elif "risk" in q:
-        return {"response": "Risk shows how financially safe or unsafe the contract is."}
-    elif "good" in q:
-        return {"response": "A good contract has low APR, short duration, and affordable EMI."}
+        return {"response": f"Risk is {risk['risk_percent']}% ({risk['risk_level']})."}
+
+    elif "emi" in q or "monthly" in q:
+        return {"response": f"Monthly payment is ₹{data['monthly_payment'] or 'not found'}."}
+
+    elif "duration" in q:
+        return {"response": f"Loan duration is {data['duration'] or 'not found'} months."}
+
+    elif "good" in q or "buy" in q:
+        return {"response": f"{risk['verdict']} — {risk['decision_guide']}"}
+
     elif "penalty" in q:
-        return {"response": "Penalty clauses include late fees and extra charges."}
+        return {"response": ", ".join(last_contract_data["flags"])}
+
     else:
-        return {"response": "Ask about APR, risk, penalties, or contract quality."}
+        return {"response": f"Score is {risk['score']} with {risk['risk_level']} risk."}
+
+
+
