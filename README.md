@@ -4,7 +4,7 @@
 **🎯 Project:** Car Lease/Loan Contract Review and Negotiation AI Assistant 
 
 ---
-## Demo
+
 <h2 align="center">🎥 Watch Project Demo</h2>
 
 <p align="center">
@@ -12,7 +12,8 @@
     <img src="https://img.youtube.com/vi/bIUThngRR6c/0.jpg" width="700">
   </a>
 </p>
----
+
+
 ## 📌 Project Overview
 
 An AI-powered web application that simplifies car lease agreements by extracting key details, evaluating fairness, identifying risks, and providing intelligent negotiation assistance through an interactive chatbot.
