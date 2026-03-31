@@ -1,4 +1,4 @@
-# 🚗 AI Lease Contract Analyzer & Negotiation Assistant
+# 🚗 AI Car Lease Contract Analyzer & Negotiation Assistant
 
 **👩‍💻 Done By:** Nikitha Nair  
 **🎯 Project:** Car Lease/Loan Contract Review and Negotiation AI Assistant 
