@@ -112,9 +112,19 @@ Insights + Decision Output
 
 
 ##  Deployment
-
+    locally run
+    uvicorn main:app --reload
     Backend API: http://127.0.0.1:8000
     Frontend: Open `index.html` in browser
+
+    
+    create in render using fork repo(backened)
+    https://ai-carassistant-2.onrender.com
+
+    NOTE: for creating in vercel replace http://127.0.0.1:8000 in index.html with https://your-backend.onrender.com
+    create in vercel using fork repo(frontend)
+    ai-car-assistant-d9bwk6d7c-bhavyadevdebugs-projects.vercel.app
+
 
 (Note: Can be deployed using platforms like Render, Railway, or Vercel)
 
