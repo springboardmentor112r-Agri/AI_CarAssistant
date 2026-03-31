@@ -111,23 +111,60 @@ Insights + Decision Output
 
 
 
-##  Deployment
-    locally run
-    uvicorn main:app --reload
-    Backend API: http://127.0.0.1:8000
-    Frontend: Open `index.html` in browser
+## Deployment
 
-    
-    create in render using fork repo(backened)
-    https://ai-carassistant-2.onrender.com
+### Local Setup
 
-    NOTE: for creating in vercel replace http://127.0.0.1:8000 in index.html with https://your-backend.onrender.com
-    create in vercel using fork repo(frontend)
-    ai-car-assistant-d9bwk6d7c-bhavyadevdebugs-projects.vercel.app
+Run backend locally:
 
+```
+uvicorn main:app --reload
+```
 
+* Backend API: http://127.0.0.1:8000
+* Frontend: Open `index.html` in browser
 (Note: Can be deployed using platforms like Render, Railway, or Vercel)
 
+###  Live Deployment
+
+####  Backend (Render)
+
+https://ai-carassistant-2.onrender.com
+
+####  Frontend (Vercel)
+
+https://ai-car-assistant-d9bwk6d7c-bhavyadevdebugs-projects.vercel.app
+
+
+### Important Note
+
+Before deploying frontend, update API URLs in `index.html`:
+
+ Old (local):
+
+```
+http://127.0.0.1:8000
+```
+
+New (deployed backend):
+
+```
+https://ai-carassistant-2.onrender.com
+```
+
+
+
+### 🔗 Integration
+
+The frontend communicates with the backend using REST API endpoints:
+* `/analyze/` → Analyze contract
+* `/compare/` → Compare two contracts
+* `/chat/` → Chat assistant
+  
+
+
+### 
+Deployment is done using forked repositories for hosting purposes. The functionality remains the same as the original project.
 
 
 ## Screenshots / Demo
@@ -161,13 +198,6 @@ Insights + Decision Output
 * Created frontend UI using HTML, CSS, JavaScript
 * Integrated frontend with backend APIs
 * Implemented chatbot using keyword-based responses
-
-
-##  API Endpoints
-
-* `/analyze/` → Analyze contract
-* `/compare/` → Compare two contracts
-* `/chat/` → Chat assistant
 
 
 ## Future Improvements
