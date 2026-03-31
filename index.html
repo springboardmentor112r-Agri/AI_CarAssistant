@@ -11,7 +11,6 @@ body {
   color: #e2e8f0;
 }
 
-/* NAVBAR */
 .navbar {
   background: #020617;
   padding: 15px 25px;
@@ -19,21 +18,17 @@ body {
   font-weight: bold;
 }
 
-/* CONTAINER */
 .container {
   padding: 25px;
 }
 
-/* CARD */
 .card {
   background: #111827;
   padding: 20px;
   margin-bottom: 20px;
   border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.3);
 }
 
-/* BUTTON */
 button {
   padding: 10px 18px;
   background: #6366f1;
@@ -44,7 +39,6 @@ button {
   margin-top: 10px;
 }
 
-/* INPUT */
 input {
   padding: 10px;
   margin: 8px 0;
@@ -52,12 +46,6 @@ input {
   border: none;
 }
 
-/* HEADINGS */
-h2 {
-  margin-bottom: 10px;
-}
-
-/* RESULT BOX */
 .result-box {
   margin-top: 15px;
   padding: 12px;
@@ -65,18 +53,46 @@ h2 {
   border-radius: 8px;
 }
 
-/* TAGS */
+
 .tag {
   display: inline-block;
   padding: 5px 10px;
   border-radius: 6px;
   margin-right: 5px;
 }
-
 .good { background: #16a34a; }
 .warn { background: #eab308; color:black; }
 .bad { background: #dc2626; }
 
+
+.chat-box {
+  margin-top: 15px;
+  padding: 10px;
+  background: #020617;
+  border-radius: 8px;
+  height: 250px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.msg {
+  max-width: 70%;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+.user {
+  background: #6366f1;
+  align-self: flex-end;
+}
+
+.bot {
+  background: #1f2937;
+  align-self: flex-start;
+}
 </style>
 </head>
 
@@ -86,36 +102,29 @@ h2 {
 
 <div class="container">
 
-<!-- ANALYZE -->
+
 <div class="card">
 <h2>📄 Analyze Contract</h2>
-
 <input type="file" id="file"><br>
 <button onclick="analyze()">🔍 Analyze Contract</button>
-
 <div id="result" class="result-box"></div>
 </div>
 
-<!-- COMPARE -->
+
 <div class="card">
 <h2>⚖️ Compare Contracts</h2>
-
 <input type="file" id="file1"><br>
 <input type="file" id="file2"><br>
-
 <button onclick="compare()">📊 Compare</button>
-
 <div id="compareResult" class="result-box"></div>
 </div>
 
-<!-- CHAT -->
 <div class="card">
-<h2>💬 Chat Assistant</h2>
-
+<h2>💬 Chat Assistant (Analyze contract first)</h2>
 <input type="text" id="chatInput" placeholder="Ask about APR, risk...">
 <button onclick="chat()">🤖 Ask</button>
 
-<div id="chatOutput" class="result-box"></div>
+<div id="chatBox" class="chat-box"></div>
 </div>
 
 </div>
@@ -148,12 +157,9 @@ async function analyze() {
 
   document.getElementById("result").innerHTML = `
     <h3>📊 Analysis Result</h3>
-
     <p>⭐ <b>Score:</b> ${d.analysis.score}</p>
     <p>📉 <b>Risk:</b> ${d.analysis.risk_percent}% (${d.analysis.risk_level})</p>
-
     <p>🏁 <b>Verdict:</b> ${verdictTag(d.analysis.verdict)}</p>
-
     <p>🧠 <b>Guide:</b> ${d.analysis.decision_guide}</p>
 
     <hr>
@@ -188,17 +194,31 @@ async function compare() {
 
   document.getElementById("compareResult").innerHTML = `
     <h3>📊 Comparison Result</h3>
-
     <p>🏆 <b>Better:</b> ${d.better}</p>
     <p>📌 <b>Reason:</b> ${d.reason}</p>
   `;
 }
 
 async function chat() {
-  let input = document.getElementById("chatInput").value;
+  let input = document.getElementById("chatInput");
+  let message = input.value;
+
+  if (!message) {
+    return alert("⚠️ Please enter a question");
+  }
+
+  let chatBox = document.getElementById("chatBox");
+
+  
+  let userMsg = document.createElement("div");
+  userMsg.className = "msg user";
+  userMsg.innerText = message;
+  chatBox.appendChild(userMsg);
+
+  chatBox.scrollTop = chatBox.scrollHeight;
 
   let fd = new FormData();
-  fd.append("query", input);
+  fd.append("query", message);
 
   let res = await fetch("http://127.0.0.1:8000/chat/", {
     method: "POST",
@@ -207,10 +227,24 @@ async function chat() {
 
   let d = await res.json();
 
-  document.getElementById("chatOutput").innerHTML = `
-    🤖 ${d.response}
-  `;
+  
+  let botMsg = document.createElement("div");
+  botMsg.className = "msg bot";
+  botMsg.innerText = d.response;
+  chatBox.appendChild(botMsg);
+
+  chatBox.scrollTop = chatBox.scrollHeight;
+
+  input.value = "";
 }
+
+
+document.getElementById("chatInput")
+  .addEventListener("keypress", function(e) {
+    if (e.key === "Enter") {
+      chat();
+    }
+});
 
 </script>
 
