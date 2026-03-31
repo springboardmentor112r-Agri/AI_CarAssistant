@@ -124,21 +124,22 @@ Frontend: Open `index.html` in browser
 
 ###  Contract Analysis Output
 
-![Analysis](analysis.png)
+![Analysis](ANALYSIS.png)
 
 ###  Contract Comparison
 
-![Compare](compare.png)
+![Compare](COMPARE.png)
 
 ### Chat Assistant
 
-![Chat](chat.png)
+![Chat](CHAT1.png)
+![Chat](CHAT2.png)
+![Chat](CHAT3.png)
+![Chat](CHAT4.png)
 
 
 
 ##  Demo Video
-
-(Add your Google Drive / YouTube link here)
 
 
 
