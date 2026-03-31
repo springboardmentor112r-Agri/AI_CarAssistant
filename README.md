@@ -113,8 +113,8 @@ Insights + Decision Output
 
 ##  Deployment
 
-Backend API: http://127.0.0.1:8000
-Frontend: Open `index.html` in browser
+    Backend API: http://127.0.0.1:8000
+    Frontend: Open `index.html` in browser
 
 (Note: Can be deployed using platforms like Render, Railway, or Vercel)
 
@@ -159,7 +159,6 @@ Frontend: Open `index.html` in browser
 * `/compare/` → Compare two contracts
 * `/chat/` → Chat assistant
 
----
 
 ## Future Improvements
 
