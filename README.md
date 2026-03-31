@@ -68,13 +68,14 @@ An intelligent system that:
 
 ###  Chat Assistant
 Ask questions like:
-- What is APR?
-- What is risk?
+- What is the APR?
+- What is the risk?
+- What is the monthly payment?
+- What is the duration?
 - Is this a good deal?
+- Any penalty?
 
- Instant simple explanations
-
-
+The chatbot works using extracted contract data and responds based on keyword matching.
 
 ## System Workflow
     User Upload
