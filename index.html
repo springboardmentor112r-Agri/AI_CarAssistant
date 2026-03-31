@@ -148,7 +148,7 @@ async function analyze() {
   let fd = new FormData();
   fd.append("file", f);
 
-  let res = await fetch("http://127.0.0.1:8000/analyze/", {
+  let res = await fetch("https://your-backend.onrender.com/analyze/", {
     method: "POST",
     body: fd
   });
@@ -220,7 +220,7 @@ async function chat() {
   let fd = new FormData();
   fd.append("query", message);
 
-  let res = await fetch("http://127.0.0.1:8000/chat/", {
+  let res = await fetch("https://your-backend.onrender.com/chat/", {
     method: "POST",
     body: fd
   });
