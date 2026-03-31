@@ -15,7 +15,7 @@ Next, launch the frontend as follows :
 ### 1\. Clone the Repository
 
 ```bash
-git clone https://github.com/PavithraSageer/AI_CarAssistant.git
+git clone https://github.com/springboardmentor112r-Agri/AI_CarAssistant.git
 cd AI_CarAssistant
 git checkout AI_CarAssistant-Pavithra
 -----
