@@ -102,7 +102,7 @@ Insights + Decision Output
 
 
 
-## 🛠 Tech Stack
+## Tech Stack
 
 * **Backend:** Python, FastAPI
 * **PDF Processing:** PyPDF2
@@ -137,9 +137,6 @@ Frontend: Open `index.html` in browser
 ![Chat](CHAT3.png)
 ![Chat](CHAT4.png)
 
-
-
-##  Demo Video
 
 
 
