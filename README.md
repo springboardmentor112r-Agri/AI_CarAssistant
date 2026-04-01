@@ -6,6 +6,25 @@
 
 ---
 
+## 🚀 Live Deployment
+- **Web Application:** [https://car-lease-frontend.onrender.com](https://car-lease-frontend.onrender.com)
+- **API Documentation:** [https://car-lease-.onrender.com/docs](https://car-lease-.onrender.com/docs)
+
+---
+
+## 🧪 Quick Test Guide (For Reviewers)
+To test the AI logic on the frontend, follow these 3 simple steps:
+
+1. **Sign Up:** Create a test account (e.g., `test@gmail.com`). 
+   *Note: If the site is "sleeping," the first load may take 1 minute.*
+2. **Upload a Test Case:** You don't need a real PDF. Simply upload a `.txt` file with this text:
+   > "2024 Mazda CX-5. Monthly: $700. Term: 36 mo. APR: 19%. MSRP: $32,000."
+3. **Verify AI Results:** - Check if the AI correctly flags the **19% APR** as a **"High Risk / Red Flag"**.
+   - Open the **Chatbot** and ask: *"Is this a good deal for this car?"*
+   - Go to the **VIN Tab** and enter `1GCVK64C0FZ123456` to see live vehicle data.
+
+---
+
 ## 📌 Project Overview
 
 An AI-powered full-stack web application that analyzes car lease and loan agreements. Users can upload a contract document and instantly receive a structured analysis including key financial terms, risk highlights, negotiation suggestions, and an interactive chatbot.
