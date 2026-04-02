@@ -46,6 +46,18 @@ The application is fully containerized and deployed. You can interact with the A
 | **User Interface** | React + Vite + Tailwind | [Open Web App ↗️](https://ai-car-frontend.onrender.com) |
 | **API Service** | FastAPI + SQLAlchemy | [Check API Health ↗️](https://ai-car-backend-new.onrender.com/health) |
 
+### 📺 Video Walkthrough
+<details>
+  <summary><b>▶️ Click here to watch the 1-minute Feature Demo</b></summary>
+  <br>
+  
+   [https://github.com/user-attachments/assets/80ce8808-f3aa-48c2-bf81-5626f39bf639]
+
+
+  
+  *The video demonstrates: User Authentication, PDF Upload, and AI Contract Analysis.*
+</details>
+
 > [!IMPORTANT]
 > **Cold Start Warning:** This project is hosted on Render's Free Tier. If the app hasn't been used recently, the server "spins down." Please allow **30-60 seconds** for the first request to process while the server wakes up.
 
