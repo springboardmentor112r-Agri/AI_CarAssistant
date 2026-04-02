@@ -1,0 +1,17 @@
+.page { min-height: 100vh; background: var(--bg); }
+
+.layout {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 28px 20px;
+  display: grid;
+  grid-template-columns: 1fr 370px;
+  gap: 22px;
+  align-items: start;
+}
+
+.left, .right { display: flex; flex-direction: column; gap: 18px; }
+
+@media (max-width: 820px) {
+  .layout { grid-template-columns: 1fr; }
+}

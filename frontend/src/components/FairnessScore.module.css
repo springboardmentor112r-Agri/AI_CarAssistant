@@ -1,0 +1,23 @@
+.panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px;
+  animation: fadeIn 0.35s ease;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.title { font-size: 15px; font-weight: 700; margin-bottom: 16px; }
+.wrap  { display: flex; align-items: center; gap: 20px; }
+.circle { position: relative; flex-shrink: 0; width: 110px; height: 110px; }
+.scoreText {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+.num { font-size: 28px; font-weight: 800; line-height: 1; }
+.sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.details h3 { font-size: 15px; margin-bottom: 6px; }
+.details p  { font-size: 13px; color: var(--muted); line-height: 1.5; }

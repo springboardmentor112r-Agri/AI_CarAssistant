@@ -1,0 +1,89 @@
+.panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px;
+  position: sticky;
+  top: 80px;
+}
+.title {
+  font-size: 15px; font-weight: 700;
+  margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+.pill {
+  font-size: 11px; font-weight: 500;
+  padding: 2px 8px; border-radius: 20px;
+  background: var(--accent-dim); color: var(--accent);
+}
+.score {
+  font-size: 11px; color: var(--muted);
+  margin-left: auto;
+}
+.messages {
+  height: 370px; overflow-y: auto;
+  display: flex; flex-direction: column;
+  gap: 10px; padding-right: 4px;
+  margin-bottom: 12px;
+}
+.messages::-webkit-scrollbar { width: 4px; }
+.messages::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 99px; }
+
+.ai, .user {
+  max-width: 92%;
+  padding: 10px 13px;
+  border-radius: 12px;
+  font-size: 13px; line-height: 1.55;
+}
+.ai {
+  align-self: flex-start;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-bottom-left-radius: 4px;
+}
+.user {
+  align-self: flex-end;
+  background: var(--accent);
+  color: #000; font-weight: 500;
+  border-bottom-right-radius: 4px;
+}
+.typing {
+  display: flex; gap: 4px; align-items: center;
+  padding: 2px 0;
+}
+.typing span {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--muted);
+  animation: bounce 1s infinite;
+}
+.typing span:nth-child(2) { animation-delay: 0.15s; }
+.typing span:nth-child(3) { animation-delay: 0.30s; }
+@keyframes bounce {
+  0%, 60%, 100% { transform: translateY(0); }
+  30%            { transform: translateY(-5px); }
+}
+
+.chips {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  margin-bottom: 10px;
+}
+.chip {
+  padding: 5px 10px;
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: 20px;
+  font-size: 12px; color: var(--muted);
+  transition: all 0.2s;
+}
+.chip:hover { border-color: var(--accent); color: var(--accent); }
+
+.inputRow { display: flex; gap: 8px; }
+.input { flex: 1; }
+.sendBtn {
+  padding: 11px 16px;
+  background: var(--accent); color: #000;
+  border: none; border-radius: var(--radius-sm);
+  font-size: 16px;
+}
+.sendBtn:hover:not(:disabled) { background: var(--accent2); }
+.sendBtn:disabled { opacity: 0.5; cursor: not-allowed; }

@@ -1,0 +1,31 @@
+.nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 28px;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 100;
+}
+.logo { display: flex; align-items: center; gap: 10px; }
+.icon {
+  width: 34px; height: 34px;
+  background: var(--accent);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+.logo span { font-size: 18px; font-weight: 800; }
+.right { display: flex; align-items: center; gap: 10px; }
+.avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: var(--accent-dim);
+  border: 1px solid var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; color: var(--accent);
+}
+.name { font-size: 14px; color: var(--muted); }
+.logout {
+  padding: 6px 14px;
+  background: none; border: 1px solid var(--border2);
+  border-radius: 6px; color: var(--muted); font-size: 13px;
+}
+.logout:hover { border-color: var(--danger); color: var(--danger); }
