@@ -140,12 +140,6 @@ The app opens at **http://localhost:8501**
 
 ---
 
-## Demo Video Link
-
- https://github.com/springboardmentor112r-Agri/AI_CarAssistant/releases/download/v1.0/Car.Lease.Analyzer.-.Brave.2026-04-02.15-18-54.mp4
- 
----
-
 ## 🔑 Demo Accounts
 
 | Email | Password | Notes |
