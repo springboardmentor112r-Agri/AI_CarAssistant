@@ -31,6 +31,25 @@ The approach follows a 6-step pipeline:
 6. **Results and Chatbot** — Complete analysis displayed on dashboard with AI chatbot ready for follow-up questions
 
 ---
+## 🚀 Live Deployment & Demo
+
+The application is fully containerized and deployed. You can interact with the AI assistant through the live links below.
+
+### 🌐 Application Status
+![Frontend Status](https://img.shields.io/badge/Frontend-Live-success?style=for-the-badge&logo=react&logoColor=white)
+![Backend Status](https://img.shields.io/badge/Backend-Active-blue?style=for-the-badge&logo=fastapi&logoColor=white)
+![Database](https://img.shields.io/badge/Database-Neon_Postgres-00e599?style=for-the-badge&logo=postgresql&logoColor=white)
+
+### 🔗 Access Links
+| Component | Technology Stack | Access Link |
+| :--- | :--- | :--- |
+| **User Interface** | React + Vite + Tailwind | [Open Web App ↗️](https://ai-car-frontend.onrender.com) |
+| **API Service** | FastAPI + SQLAlchemy | [Check API Health ↗️](https://ai-car-backend-new.onrender.com/health) |
+
+> [!IMPORTANT]
+> **Cold Start Warning:** This project is hosted on Render's Free Tier. If the app hasn't been used recently, the server "spins down." Please allow **30-60 seconds** for the first request to process while the server wakes up.
+
+---
 
 ## 🌟 Key Features
 
