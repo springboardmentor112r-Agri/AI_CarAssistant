@@ -48,7 +48,7 @@ The application is fully containerized and deployed. You can interact with the A
 
 ### 📺 Video Walkthrough
 <details>
-  <summary><b>▶️ Click here to watch the 1-minute Feature Demo</b></summary>
+  <summary><b>▶️ Click here to watch the 3-minute Feature Demo</b></summary>
   <br>
   
    [https://github.com/user-attachments/assets/80ce8808-f3aa-48c2-bf81-5626f39bf639]
