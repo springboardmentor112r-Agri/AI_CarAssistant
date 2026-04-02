@@ -5,8 +5,7 @@
 
 ---
 
-## 📸 Demo Video
-
+## 📸 Screenshot
 
 | Screen | Description |
 |---|---|
@@ -152,6 +151,11 @@ The app opens at **http://localhost:8501**
 
 ---
 
+## Demo Video
+
+
+---
+
 ## 🔑 Demo Accounts
 
 | Email | Password | Notes |
@@ -160,38 +164,6 @@ The app opens at **http://localhost:8501**
 | `demo@demo.com` | `demo123` | Secondary demo account |
 
 Or click **Sign up** to create your own account — registration is open to all users.
----
-
-
-## 📦 Dependencies
-
-| Package | Version | Purpose |
-|---|---|---|
-| `streamlit` | ≥ 1.32.0 | UI framework — all pages, tabs, widgets |
-| `anthropic` | ≥ 0.25.0 | Claude AI SDK — SLA extraction + chat |
-| `python-dotenv` | ≥ 1.0.0 | Load `.env` variables |
-| `plotly` | ≥ 5.20.0 | Radar, bar, donut, comparison charts |
-| `requests` | ≥ 2.31.0 | NHTSA VIN decode + recall API calls |
-| `Pillow` | ≥ 10.0.0 | Image preview for uploaded lease photos |
-
----
-
-## 🎨 Design System
-
-| Element | Value |
-|---|---|
-| Background | `#0F172A` → `#1E1533` gradient (dark navy) |
-| Primary accent | `#F97316` (orange) |
-| Accent dark | `#EA580C` |
-| Text primary | `#F1F5F9` |
-| Text muted | `#94A3B8` |
-| Success | `#22C55E` |
-| Warning | `#F59E0B` |
-| Danger | `#EF4444` |
-| Font UI | Inter (300–900) |
-| Font mono | JetBrains Mono |
-| Border radius | 10px (inputs), 12–14px (cards) |
-
 ---
 
 ## 🌐 NHTSA API (Free — No Key Needed)
