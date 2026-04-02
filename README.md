@@ -7,8 +7,13 @@
 ---
 
 ## 🚀 Live Deployment
-- **Web Application:** [https://car-lease-frontend.onrender.com](https://car-lease-frontend.onrender.com)
-- **API Documentation:** [https://car-lease-.onrender.com/docs](https://car-lease-.onrender.com/docs)
+- **Website:** [👉 CLICK HERE TO LAUNCH: AI Car Assistant 👈](https://car-lease-frontend-jzqi.onrender.com)
+
+---
+
+## ⚡ IMPORTANT: Performance Note for Reviewers
+> **⚠️ Free Tier Hosting:** This application is hosted on Render's Free Tier. If the site has not been accessed recently, the server will "sleep." 
+> **Please allow 60–90 seconds** for the initial page load and the **Sign-In** process as the backend wakes up.
 
 ---
 
