@@ -5,18 +5,6 @@
 
 ---
 
-## 📸 Screenshot
-
-| Screen | Description |
-|---|---|
-| Sign In | Dark navy + orange login page with animated floating car |
-| Sign Up | Public registration — no invite required |
-| Extract SLA | PDF upload → AI extraction → Table / JSON view + 4 charts |
-| VIN Report | 17-char counter, NHTSA lookup, recall history |
-| Negotiate | AI chatbot with quick-prompt chips and chat bubbles |
-
----
-
 ## ✨ Features
 
 ### 🔐 Authentication (Public — Open to All)
@@ -24,6 +12,7 @@
 - **Sign Up** — anyone can register (name, email, password, confirm)
 - Passwords hashed with SHA-256; user store in session state (swap to a DB for production)
 - Auto sign-in immediately after successful registration
+  
 ---
 
 ### 📄 Tab 1 — Extract SLA
@@ -151,9 +140,10 @@ The app opens at **http://localhost:8501**
 
 ---
 
-## Demo Video
+## Demo Video Link
 
-
+ https://github.com/springboardmentor112r-Agri/AI_CarAssistant/releases/download/v1.0/Car.Lease.Analyzer.-.Brave.2026-04-02.15-18-54.mp4
+ 
 ---
 
 ## 🔑 Demo Accounts
