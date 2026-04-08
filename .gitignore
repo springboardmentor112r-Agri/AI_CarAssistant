@@ -1,0 +1,35 @@
+# Virtual Environments
+backend/venv/
+venv/
+ENV/
+env/
+
+# Dependency Directories
+frontend/node_modules/
+node_modules/
+
+# Next.js Build Output
+frontend/.next/
+.next/
+
+# Python Cache
+**/__pycache__/
+*.py[cod]
+*$py.class
+
+# Database
+backend/car_lease_app.db
+*.sqlite3
+*.db
+
+# Uploads
+backend/uploads/
+uploads/
+
+# IDE
+.vscode/
+.idea/
+.DS_Store
+
+# Zip files
+*.zip
