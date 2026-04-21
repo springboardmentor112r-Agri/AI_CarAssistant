@@ -1,70 +1,54 @@
-🚗 Car Lease Agreement Analyzer — AI Agent
-Team Member: Ayisha Parli
-Branch: AI_carAssistant-Ayisha
-Project: Infosys Springboard — AI Car Assistant
+# 🚗 Car Lease Agreement Analyzer
 
-📌 Project Overview
-An AI-powered full-stack web application that analyzes car lease and loan agreements. Users can upload a contract document and instantly receive a structured analysis including key financial terms, risk highlights, negotiation suggestions, and an interactive chatbot.
+> AI-powered full-stack web application that analyzes car lease and loan agreements — built for Infosys Springboard AI Car Assistant Project.
 
-🧠 System Architecture
-User Uploads Document (PDF / Scanned PDF / Image / Text)
+**Developer:** Ayisha Parli | **Branch:** `AI_carAssistant-Ayisha`
 
-OCR Module (PyMuPDF + Tesseract)
+---
 
-Contract Understanding Module (LLM Integration)
+## 📌 Overview
 
-Decision Logic Module (Risk Detection + Fairness Score)
+Upload any car lease or loan contract and instantly receive a structured analysis including key financial terms, risk highlights, negotiation suggestions, and an interactive chatbot.
 
-VIN Verification (NHTSA Public API)
+---
 
-Structured Output + Interactive Chatbot
+## ✨ Features
 
-✨ Features
-📄 Smart Document Upload — Accepts PDF, scanned PDF, images (JPG/PNG), and plain text
+| | Feature | Description |
+|---|---|---|
+| 📄 | Smart Document Upload | Accepts PDF, scanned PDF, images (JPG/PNG), and plain text |
+| 🔍 | OCR Extraction | Extracts raw text from any document format |
+| 🤖 | AI Contract Analysis | LLM extracts all key SLA fields |
+| ⚠️ | Risk Detection | Identifies red flags and unusual clauses |
+| 📊 | Fairness Score | 0–100 score showing how fair the deal is |
+| 💬 | Plain Language Summary | Simple explanation anyone can understand |
+| 🔧 | Negotiation Suggestions | AI-powered tips to get better terms |
+| 🚗 | VIN Lookup | Verify vehicle details and check recall history |
+| 💡 | Interactive Chatbot | Ask questions like "Is this interest rate high?" |
+| 📈 | Deal Comparison | Compare two contracts side by side |
 
-🔍 OCR Extraction — Extracts raw text from any document format
+---
 
-🤖 AI Contract Analysis — LLM extracts all key SLA fields
+## 🛠️ Tech Stack
 
-⚠️ Risk Detection — Identifies red flags and unusual clauses
+### Backend
+- **FastAPI** — Python web framework
+- **Gemini / Groq** — LLM integration
+- **PyMuPDF + Tesseract** — OCR for text extraction
+- **SQLAlchemy + PostgreSQL** — Database
+- **NHTSA Public API** — VIN verification
 
-📊 Fairness Score — 0–100 score showing how fair the deal is
+### Frontend
+- **React 18 + TypeScript** — UI framework
+- **Tailwind CSS** — Styling
+- **Zustand** — State management
+- **React Query** — API data fetching
 
-💬 Plain Language Summary — Simple explanation anyone can understand
+---
 
-🔧 Negotiation Suggestions — AI-powered tips to get better terms
-
-🚗 VIN Lookup — Verify vehicle details and check recall history
-
-💡 Interactive Chatbot — Ask questions like “Is this interest rate high?”
-
-📈 Deal Comparison — Compare two contracts side by side
-
-🛠️ Tech Stack
-Backend
-
-FastAPI — Python web framework
-
-LLM Integration (Gemini / Groq)
-
-PyMuPDF + Tesseract — OCR for text extraction
-
-SQLAlchemy + PostgreSQL — Database
-
-NHTSA Public API — VIN verification
-
-Frontend
-
-React 18 + TypeScript — UI framework
-
-Tailwind CSS — Styling
-
-Zustand — State management
-
-React Query — API data fetching
-
-📁 Project Structure
+## 📁 Project Structure
 Code
+AI_CarAssistant/
 AI_CarAssistant/
 ├── backend/
 │   ├── app/
@@ -84,75 +68,96 @@ AI_CarAssistant/
 │   │   └── types/           # TypeScript types
 │   └── package.json
 └── README.md
-🚀 How to Run
-Backend
+---
 
-bash
+## 🚀 Getting Started
+
+### Backend
+
+```bash
 cd backend
 pip install -r requirements.txt
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-Frontend
+```
 
-bash
+### Frontend
+
+```bash
 cd frontend
 npm install
 npm run dev
-Environment Variables (backend/.env)
+```
 
-bash
+### Environment Variables
+
+Create `backend/.env`:
+
+```env
 DATABASE_URL=your_postgresql_url
 LLM_API_KEY=your_llm_api_key
 SECRET_KEY=your_secret_key
-📊 Module Breakdown
-Module	Technology	Purpose
-OCR	PyMuPDF + Tesseract	Extract text from documents
-LLM	Gemini / Groq	Understand contract content
-Decision Logic	Python + LLM	Detect risks & fairness scoring
-VIN Verification	NHTSA API	Validate vehicle information
-Chatbot	LLM + FastAPI	Answer contract questions
-Frontend	React + TypeScript	User interface
-Database	PostgreSQL	Store contracts & analysis
+```
 
-🧪 Test Cases
-Module	Test	Expected Result
-Upload	PDF contract	Text extracted successfully
-Upload	Scanned image	OCR extracts text
-LLM	Contract with APR	APR extracted correctly
-LLM	Contract with VIN	VIN identified and verified
-Risk	High APR contract	Red flag shown
-VIN	Valid 17-char VIN	Vehicle details fetched
-Chatbot	"What is my monthly payment?"	Correct amount returned
-Chatbot	"Is this interest rate high?"	AI comparison given
+---
 
-👩‍💻 Developer
-Ayisha Parli  
-Infosys Springboard AI Program
-Branch: AI_carAssistant-Ayisha
+## 🧠 System Architecture
+User Uploads Document (PDF / Scanned PDF / Image / Text)
+↓
+OCR Module (PyMuPDF + Tesseract)
+↓
+Contract Understanding Module (LLM Integration)
+↓
+Decision Logic (Risk Detection + Fairness Score)
+↓
+VIN Verification (NHTSA Public API)
+↓
+Structured Output + Interactive Chatbot
+---
 
-📌 Pull Request Description — paste when creating PR
-🚗 Car Lease Agreement Analyzer — Complete Implementation
+## 📊 Module Breakdown
 
-What I built:  
-This PR contains the complete implementation of the Car Lease Agreement Analyzer AI Agent.
+| Module | Technology | Purpose |
+|---|---|---|
+| OCR | PyMuPDF + Tesseract | Extract text from documents |
+| LLM | Gemini / Groq | Understand contract content |
+| Decision Logic | Python + LLM | Detect risks & fairness scoring |
+| VIN Verification | NHTSA API | Validate vehicle information |
+| Chatbot | LLM + FastAPI | Answer contract questions |
+| Frontend | React + TypeScript | User interface |
+| Database | PostgreSQL | Store contracts & analysis |
 
-Modules Implemented:  
-✅ OCR Module — PyMuPDF + Tesseract for PDF/image/text extraction
-✅ Contract Understanding Module — LLM Integration
-✅ Decision Logic Module — Risk detection, fairness scoring
-✅ VIN Verification — NHTSA public API integration
-✅ Interactive Chatbot — On results page, answers contract questions
-✅ Full Frontend — React + TypeScript + Tailwind CSS
-✅ REST API — FastAPI with JWT authentication
-✅ Database — PostgreSQL
+---
 
-How to test:
+## 🧪 Test Cases
 
-Upload a sample lease PDF
+| Module | Input | Expected Result |
+|---|---|---|
+| Upload | PDF contract | Text extracted successfully |
+| Upload | Scanned image | OCR extracts text |
+| LLM | Contract with APR | APR extracted correctly |
+| LLM | Contract with VIN | VIN identified and verified |
+| Risk | High APR contract | Red flag shown |
+| VIN | Valid 17-char VIN | Vehicle details fetched |
+| Chatbot | "What is my monthly payment?" | Correct amount returned |
+| Chatbot | "Is this interest rate high?" | AI comparison given |
 
-Wait ~30 seconds for AI analysis
+---
 
-Review extracted fields, red flags, and fairness score
+## ✅ Modules Implemented
 
-Ask chatbot “Is this interest rate high?”
+- [x] OCR Module — PyMuPDF + Tesseract for PDF/image/text extraction
+- [x] Contract Understanding Module — LLM Integration
+- [x] Decision Logic Module — Risk detection, fairness scoring
+- [x] VIN Verification — NHTSA public API integration
+- [x] Interactive Chatbot — Answers contract questions on results page
+- [x] Full Frontend — React + TypeScript + Tailwind CSS
+- [x] REST API — FastAPI with JWT authentication
+- [x] Database — PostgreSQL
 
-Try VIN lookup with any 17-character VIN
+---
+
+## 👩‍💻 Developer
+
+**Ayisha Parli**  
+Infosys Springboard AI Program  
+Branch: `AI_carAssistant-Ayisha`
