@@ -47,8 +47,6 @@ Upload any car lease or loan contract and instantly receive a structured analysi
 ---
 
 ## 📁 Project Structure
-Code
-AI_CarAssistant/
 AI_CarAssistant/
 ├── backend/
 │   ├── app/
